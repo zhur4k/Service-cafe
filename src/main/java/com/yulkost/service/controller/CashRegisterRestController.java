@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class CashRegisterRestController {
-
-    @PostMapping("/submitOrder")
-    public String SubmitOrder(@RequestBody OrderData orderData){
-        return "Заказ успешно сохранен!";
-    }
-    
+//
+//    @PostMapping("/submitOrder")
+//    public String SubmitOrder(@RequestBody OrderData orderData){
+//        return "Заказ успешно сохранен!";
+//    }
+//
 
 }
