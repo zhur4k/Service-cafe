@@ -1,0 +1,9 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/yulkost
+    username: root
+    password: 19804731205
