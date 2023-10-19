@@ -234,8 +234,26 @@
         function submitOrder() {
             const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
 
-            // Ваш код для отправки заказа на сервер с использованием Java Spring
-            // Включая валидацию и обработку заказа и выбора способа оплаты
+            // Создаем объект заказа
+            const orderData = {
+                paymentMethod: paymentMethod,
+                items: order, // Массив с товарами в заказе
+                total: parseFloat(document.getElementById("total").textContent)
+            };
+
+            // Отправляем заказ на сервер
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/submitOrder', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    alert('Заказ успешно отправлен!');
+                    // Очищаем корзину после успешной отправки
+                    clearOrder();
+                }
+            };
+
+            xhr.send(JSON.stringify(orderData));
         }
     </script>
 </body>

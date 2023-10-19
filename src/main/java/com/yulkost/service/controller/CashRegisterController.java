@@ -9,7 +9,6 @@ public class CashRegisterController {
 
     @GetMapping("/cash_register")
     public String CashRegister(Model model){
-        return "CashRegister";
+        return "cashRegister";
     }
-
 }
