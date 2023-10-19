@@ -4,109 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Кассовое приложение для кафе</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-            background-color: #f0f0f0;
-        }
-        .left {
-            width: 40%;
-            margin-right: 20px;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-        }
-        .right {
-            width: 50%;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Выравнивание по центру */
-        }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        .category {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            cursor: pointer;
-            color: #333;
-            background-size: cover;
-            padding: 20px;
-            border-radius: 16px; /* Скругление углов */
-            background-repeat: no-repeat;
-            text-align: center;
-            transition: background-color 0.2s;
-        }
-        .category:hover {
-            background-color: #f2f2f2;
-        }
-        .products {
-            display: none;
-        }
-        .product {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin: 10px 0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            background-color: #fff;
-            transition: background-color 0.2s;
-            border-radius: 16px; /* Скругление углов */
-        }
-        .product img {
-            width: 60px;
-            height: 60px;
-            margin-right: 10px;
-        }
-        .product-info {
-            flex: 1;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border-radius: 16px; /* Скругление углов */
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .total {
-            font-weight: bold;
-        }
-        .button {
-            padding: 10px 20px;
-            font-size: 18px;
-            border-color: black;
-            border: 12px;
-            border-radius: 8px; /* Скругление углов */
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background-color 0.2s;
-        }
-        .drinks {
-            background-image: url("drinks.jpg");
-        }
-
-        .pizza {
-            background-image: url("pizza.jpg");
-        }
-    </style>
+    <link rel="stylesheet" href="/css/CashRegister.css">
 </head>
 <body>
     <div class="left">
@@ -121,7 +19,7 @@
                     <p>Цена: $2.5</p>
                 </div>
             </div>
-            <div class "product" onclick="addProduct('Чай', 1.8)">
+            <div class="product" onclick="addProduct('Чай', 1.8)">
                 <img src="tea.jpg" alt="Чай">
                 <div class="product-info">
                     <h3>Чай</h3>
@@ -145,6 +43,7 @@
 
     <div class="right">
         <h1>Заказ</h1>
+         <div class="order-list">
         <table>
             <thead>
                 <tr>
@@ -158,6 +57,7 @@
             <tbody id="order-items">
             </tbody>
         </table>
+               </div>
         <h3 class="total">Итого: <span id="total">0</span></h3>
         <button type="button" onclick="clearOrder()" class="button">Очистить корзину</button> <!-- Добавленная кнопка -->
         <h2>Выберите способ оплаты:</h2>
@@ -169,92 +69,6 @@
         </label>
         <button type="button" onclick="submitOrder()" class="button">Оплатить</button> <!-- Улучшенная кнопка оплаты -->
     </div>
-    
-    <script>
-        let order = [];
-
-        function toggleCategory(category) {
-            const products = document.getElementById(category);
-            products.style.display = products.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function addProduct(productName, price) {
-            const quantity = 1;
-            order.push({ item: productName, price, quantity });
-            displayOrder();
-        }
-
-        function displayOrder() {
-            const orderItems = document.getElementById("order-items");
-            orderItems.innerHTML = "";
-            let total = 0;
-
-            order.forEach((item, index) => {
-                const row = document.createElement("tr");
-                const itemCell = document.createElement("td");
-                const priceCell = document.createElement("td");
-                const quantityCell = document.createElement("td");
-                const totalCell = document.createElement("td");
-                const removeCell = document.createElement("td");
-                const removeButton = document.createElement("button");
-
-                itemCell.textContent = item.item;
-                priceCell.textContent = item.price.toFixed(2);
-                quantityCell.textContent = item.quantity;
-                const itemTotal = (item.price * item.quantity).toFixed(2);
-                totalCell.textContent = itemTotal;
-                removeButton.textContent = "Удалить";
-                removeButton.addEventListener("click", () => removeItem(index));
-
-                row.appendChild(itemCell);
-                row.appendChild(priceCell);
-                row.appendChild(quantityCell);
-                row.appendChild(totalCell);
-                removeCell.appendChild(removeButton);
-                row.appendChild(removeCell);
-
-                orderItems.appendChild(row);
-
-                total += parseFloat(itemTotal);
-            });
-
-            document.getElementById("total").textContent = total.toFixed(2);
-        }
-
-        function removeItem(index) {
-            order.splice(index, 1);
-            displayOrder();
-        }
-
-        function clearOrder() {
-            order = [];
-            displayOrder();
-        }
-
-        function submitOrder() {
-            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-
-            // Создаем объект заказа
-            const orderData = {
-                paymentMethod: paymentMethod,
-                items: order, // Массив с товарами в заказе
-                total: parseFloat(document.getElementById("total").textContent)
-            };
-
-            // Отправляем заказ на сервер
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/submitOrder', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    alert('Заказ успешно отправлен!');
-                    // Очищаем корзину после успешной отправки
-                    clearOrder();
-                }
-            };
-
-            xhr.send(JSON.stringify(orderData));
-        }
-    </script>
+    <script src="/js/CashRegister.js"></script>
 </body>
 </html>

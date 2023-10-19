@@ -1,0 +1,106 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+.left {
+    width: 40%;
+    margin-right: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+}
+.right {
+    width: 50%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Выравнивание по центру */
+}
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+form {
+    margin-bottom: 20px;
+}
+.category {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    cursor: pointer;
+    color: #333;
+    background-size: cover;
+    padding: 20px;
+    border-radius: 16px; /* Скругление углов */
+    background-repeat: no-repeat;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+.category:hover {
+    background-color: #f2f2f2;
+}
+.products {
+    display: none;
+}
+.product {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    transition: background-color 0.2s;
+    border-radius: 16px; /* Скругление углов */
+}
+.product img {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+}
+.product-info {
+    flex: 1;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 16px; /* Скругление углов */
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+th {
+    background-color: #f2f2f2;
+}
+.total {
+    font-weight: bold;
+}
+.button {
+    padding: 10px 20px;
+    font-size: 18px;
+    border-color: black;
+    border: 12px;
+    border-radius: 8px; /* Скругление углов */
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s;
+}
+.drinks {
+    background-image: url("drinks.jpg");
+}
+
+.pizza {
+    background-image: url("pizza.jpg");
+}
+.order-list {
+    height: 300px;
+    max-height: 300px; /* Вы можете настроить максимальную высоту по своему усмотрению */
+    overflow-y: auto; /* Добавление вертикального скролла при необходимости */
+}
