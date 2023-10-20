@@ -15,7 +15,7 @@ public class CheckController {
     @PostMapping("/sendCheck")
     public ResponseEntity<String> sendSalesCheck(@RequestBody String json) {
         // URL, на который будет отправлен запрос
-        String url = "http://example.com/cgi/chk";
+        String url = "http://exale.com/cgi/chk";
 
         // Заголовки HTTP-запроса
         HttpHeaders headers = new HttpHeaders();
@@ -27,7 +27,7 @@ public class CheckController {
         // Отправляем POST-запрос на сервер
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
-
+        System.out.println("4");
         return response;
 
     }

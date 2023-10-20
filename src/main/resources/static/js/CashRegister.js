@@ -1,4 +1,4 @@
-let order = [];
+let products = [];
 
 function toggleCategory(category) {
     const products = document.getElementById(category);
@@ -7,7 +7,7 @@ function toggleCategory(category) {
 
 function addProduct(productName, price) {
     const quantity = 1;
-    order.push({ item: productName, price, quantity });
+    products.push({ item: productName, price, quantity });
     displayOrder();
 }
 
@@ -16,7 +16,7 @@ function displayOrder() {
     orderItems.innerHTML = "";
     let total = 0;
 
-    order.forEach((item, index) => {
+    products.forEach((item, index) => {
         const row = document.createElement("tr");
         const itemCell = document.createElement("td");
         const priceCell = document.createElement("td");
@@ -49,12 +49,12 @@ function displayOrder() {
 }
 
 function removeItem(index) {
-    order.splice(index, 1);
+    products.splice(index, 1);
     displayOrder();
 }
 
 function clearOrder() {
-    order = [];
+    products = [];
     displayOrder();
 }
 
@@ -62,23 +62,29 @@ function submitOrder() {
     const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
 
     // Создаем объект заказа
-    const orderData = {
+    const order = {
         paymentMethod: paymentMethod,
-        items: order, // Массив с товарами в заказе
+        items: products, // Массив с товарами в заказе
         total: parseFloat(document.getElementById("total").textContent)
     };
 
-    // Отправляем заказ на сервер
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/submitOrder', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            alert('Заказ успешно отправлен!');
-            // Очищаем корзину после успешной отправки
-            clearOrder();
-        }
-    };
+        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 
-    xhr.send(JSON.stringify(orderData));
+        // Отправляем заказ на сервер
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/submitOrder', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                console.log('Статус ответа:', xhr.status);
+                if (xhr.status === 200) {
+                    console.log('Заказ успешно отправлен!');
+                    // Очищаем корзину после успешной отправки
+                    clearOrder();
+                }
+            }
+        };
+        xhr.send(JSON.stringify(order));
 }
