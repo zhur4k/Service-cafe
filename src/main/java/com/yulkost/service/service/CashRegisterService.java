@@ -1,5 +1,6 @@
 package com.yulkost.service.service;
 
+import com.yulkost.service.model.Orders;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -11,10 +12,12 @@ import org.springframework.web.client.RestTemplate;
 public class CashRegisterService {
 
     private final String CASH_REGISTER_ID ="http://169.254.35.154" ;
-    public String SendCheck(){
-        String json = "{\"F\":[{\"C\":{\"cm\":\"Кассир: Светлана\"}}" +
+    public String SendFCheck(Orders order){
+        String json = "{\"F\":[" +
+                "{\"C\":{\"cm\":\"Кассир: Светлана\"}}" +
                 ",{\"S\":{\"code\":\"1234567890121\",\"name\":\"Конфета\",\"qty\":\"1.000\"\"price\":\"0.01\",\"sum\":\"0.01\"}}" +
-                ",{\"P\":{}}]}";
+                ",{\"P\":{}}" +
+                "]}";
 
         return SendJson(json, "/cgi/chk");
     }
