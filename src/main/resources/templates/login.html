@@ -1,19 +1,47 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
-    <title>Spring Security Example </title>
+  <meta  name="viewport" content=" width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="/css/login.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
 </head>
-<body>
-<div th:if="${param.error}">
-    Invalid username and password.
-</div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>
-<form th:action="@{/login}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
-</body>
-</html>
+    <body class="conteiner-m">
+        <div class="conteiner-f">
+            
+            <div class="exit">
+                <a href="/"><img class="exit-btn" src="/images/exit.png" alt=""/></a>
+            </div>
+            
+            <div class="name">Вход</div>
+            
+            <div class="form">
+                <form th:action="@{/login}" method="post">
+                    
+                    <div class="form-cont">
+                        <div class="form-t">Телефон</div>
+                        <input type="text"  name = "username" class="forminp" placeholder="+375298645128" maxlength="13" required>
+                    </div>
+                    
+                    <div class="form-cont">
+                        <div class="form-t">Пароль</div>
+                        <input type="password" name = "password" class="forminp" placeholder="············"  maxlength="20" required>
+                    </div>
+                    <div class="form-err" th:if="${param.error}">
+                        Неправильный логин или пароль.
+                    </div>
+                    <div class="form-cont">
+                        <button class="btn-ok">Подтвердить</button>
+                    </div>
+                    
+                </form>
+            </div>
+            
+            <div class="f">
+                <a class="reg" href="/registration">Регистрация</a>
+                <a class="btn-z" href="/registration">Забыли пароль?</a>
+            </div>
+        </div>
+    </body>
+</html>        
