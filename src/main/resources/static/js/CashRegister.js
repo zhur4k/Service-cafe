@@ -1,4 +1,4 @@
-let products = [];
+products = [];
 
 function toggleCategory(category) {
     const products = document.getElementById(category);
@@ -87,4 +87,6 @@ function submitOrder() {
             }
         };
         xhr.send(JSON.stringify(order));
+
+
 }

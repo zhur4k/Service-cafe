@@ -92,13 +92,6 @@ th {
     margin-top: 10px;
     transition: background-color 0.2s;
 }
-.drinks {
-    background-image: url("drinks.jpg");
-}
-
-.pizza {
-    background-image: url("pizza.jpg");
-}
 .order-list {
     height: 300px;
     max-height: 300px; /* Вы можете настроить максимальную высоту по своему усмотрению */

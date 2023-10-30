@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 public class CashRegisterService {
 
     private final String CASH_REGISTER_ID ="http://169.254.35.154" ;
-    public String SendFCheck(Orders order){
+    public Boolean SendFCheck(Orders order){
         String json = "{\"F\":[" +
                 "{\"C\":{\"cm\":\"Кассир: Светлана\"}}" +
                 ",{\"S\":{\"code\":\"1234567890121\",\"name\":\"Конфета\",\"qty\":\"1.000\"\"price\":\"0.01\",\"sum\":\"0.01\"}}" +
@@ -22,7 +22,7 @@ public class CashRegisterService {
         return SendJson(json, "/cgi/chk");
     }
 
-    private String SendJson(String json,String url){
+    private Boolean SendJson(String json,String url) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -33,6 +33,6 @@ public class CashRegisterService {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(CASH_REGISTER_ID +url, request, String.class);
         System.out.println("Ответ от сервера: " + response.getBody());
-        return "Запрос успешно выполнен!";
+        return true;
     }
 }

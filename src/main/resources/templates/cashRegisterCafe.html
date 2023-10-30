@@ -9,39 +9,21 @@
     <link rel="stylesheet" href="/css/CashRegister.css">
 </head>
 <body>
-    <div class="left">
-        <h1>Выбор товаров</h1>
-        
-        <div class="category drinks" onclick="toggleCategory('drinks')">Напитки</div>
-        <div class="products" id="drinks">
-            <div class="product" onclick="addProduct('Кофе', 2.5)">
-                <img src="coffee.jpg" alt="Кофе">
-                <div class="product-info">
-                    <h3>Кофе</h3>
-                    <p>Цена: $2.5</p>
-                </div>
+<div class="left">
+    <h1>Выбор товаров</h1>
+    <div th:each="categories : ${categories}" class="category" th:attr="data-category=${categories.categoriesName}" onclick="toggleCategory('${categories.categoriesName}')">
+        <span th:text="__${categories.categoriesName}__"></span>
+    </div>
+    <div th:each="categories : ${categories}" class="products" id="${categories.categoriesName}">
+        <div th:each="item : ${categories.items}" class="product" th:attr="data-name=__${item.nameOfItem}__, data-price=__${item.price}__" onclick="addProduct('__${item.nameOfItem}__', __${item.price}__)">
+<!--            <img th:src="'/' + __${item.image}__" th:alt="__${item.nameOfItem}__">-->
+            <div class="product-info">
+                <h3 th:text="__${item.nameOfItem}__"></h3>
+                <p th:text="'Цена: $' + __${item.price}__"></p>
             </div>
-            <div class="product" onclick="addProduct('Чай', 1.8)">
-                <img src="tea.jpg" alt="Чай">
-                <div class="product-info">
-                    <h3>Чай</h3>
-                    <p>Цена: $1.8</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="category pizza" onclick="toggleCategory('pizza')">Пицца</div>
-        <div class="products" id="pizza">
-            <div class="product" onclick="addProduct('Пицца Пепперони', 12.0)">
-                <img src="pizza.jpg" alt="Пицца">
-                <div class="product-info">
-                    <h3>Пицца Пепперони</h3>
-                    <p>Цена: $12.0</p>
-                </div>
-            </div>
-            <!-- Добавьте другие товары в категории здесь -->
         </div>
     </div>
+</div>
 
     <div class="right">
         <h1>Заказ</h1>

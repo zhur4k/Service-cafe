@@ -14,8 +14,12 @@ public class Items {
     private Long id;
     @Column(length = 13)
     private String code;
-    private String name;
+    private String nameOfItem;
     private int price;
+    @ManyToOne()
+    @JoinColumn(name = "categories_id", referencedColumnName = "id")
+    private Categories categories;
+
     @OneToMany()
     @JoinColumn(name = "product_weight_id", referencedColumnName = "id")
     private List<ProductWeight> productsWeight = new ArrayList<>();
