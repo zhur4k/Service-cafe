@@ -13,5 +13,5 @@ public class OrderItems {
 
     @OneToOne()
     @JoinColumn(name = "order_item_id", referencedColumnName = "id")
-    private Items item;
+    private Items items;
 }

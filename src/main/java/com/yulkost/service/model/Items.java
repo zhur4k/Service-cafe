@@ -14,7 +14,7 @@ public class Items {
     private Long id;
     @Column(length = 13)
     private String code;
-    private String nameOfItem;
+    private String nameOfItems;
     private int price;
     @ManyToOne()
     @JoinColumn(name = "categories_id", referencedColumnName = "id")

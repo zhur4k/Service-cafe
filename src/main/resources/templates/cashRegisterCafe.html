@@ -15,9 +15,9 @@
         <div style=" width : 100%" th:text="${categories.categoriesName}" th:attr="onclick=|toggleCategory('${categories.categoriesName}')|"></div>
 
     <div class="products" th:id="${categories.categoriesName}">
-        <div th:each="item : ${categories.items}" class="product" th:attr="onclick=|addProduct('${item.nameOfItem}', '${item.price}')|">
+        <div th:each="item : ${categories.items}" class="product" th:attr="onclick=|addProduct('${item.nameOfItems}', '${item.price}')|">
             <div class="product-info">
-                <h3 th:text="${item.nameOfItem}"></h3>
+                <h3 th:text="${item.nameOfItems}"></h3>
                 <p th:text="'Цена: $' + ${item.priceToPage}"></p>
             </div>
         </div>

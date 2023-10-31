@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,8 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String cashier;
-    private Boolean paymentMethod;
-    private Date date;
+    private String paymentMethod;
+    private LocalDateTime date;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private List<OrderItems> orderItems = new ArrayList<>();

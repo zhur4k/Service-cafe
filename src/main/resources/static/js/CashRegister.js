@@ -1,4 +1,4 @@
-products = [];
+orderItems =[];
 
 function toggleCategory(category) {
     const products = document.getElementById(category);
@@ -6,18 +6,27 @@ function toggleCategory(category) {
 }
 
 function addProduct(productName, pric) {
-    const quantity = 1;
-    const price = Number(pric)/100;
-    products.push({ item: productName, price, quantity });
+    const price = Number(pric) / 100;
+    // Поиск продукта в массиве по имени
+    const existingProduct = orderItems.find(orderItem => orderItem.items.nameOfItems === productName);
+
+    if (existingProduct) {
+        // Если продукт с таким именем уже существует, увеличиваем количество
+        existingProduct.quantity += 1;
+    } else {
+        // Иначе создаем новый продукт
+        orderItems.push({ quantity: 1, items: { price: price ,nameOfItems: productName } });
+    }
+
     displayOrder();
 }
 
-function displayOrder() {
-    const orderItems = document.getElementById("order-items");
-    orderItems.innerHTML = "";
+    function displayOrder() {
+    const orderItemsd = document.getElementById("order-items");
+    orderItemsd.innerHTML = "";
     let total = 0;
 
-    products.forEach((item, index) => {
+    orderItems.forEach((item, index) => {
         const row = document.createElement("tr");
         const itemCell = document.createElement("td");
         const priceCell = document.createElement("td");
@@ -26,10 +35,10 @@ function displayOrder() {
         const removeCell = document.createElement("td");
         const removeButton = document.createElement("button");
 
-        itemCell.textContent = item.item;
-        priceCell.textContent = item.price.toFixed(2);
+        itemCell.textContent = item.items.nameOfItems;
+        priceCell.textContent = item.items.price.toFixed(2);
         quantityCell.textContent = item.quantity;
-        const itemTotal = (item.price * item.quantity).toFixed(2);
+        const itemTotal = (item.items.price * item.quantity).toFixed(2);
         totalCell.textContent = itemTotal;
         removeButton.textContent = "Удалить";
         removeButton.addEventListener("click", () => removeItem(index));
@@ -41,7 +50,7 @@ function displayOrder() {
         removeCell.appendChild(removeButton);
         row.appendChild(removeCell);
 
-        orderItems.appendChild(row);
+        orderItemsd.appendChild(row);
 
         total += parseFloat(itemTotal);
     });
@@ -50,23 +59,21 @@ function displayOrder() {
 }
 
 function removeItem(index) {
-    products.splice(index, 1);
+    orderItems.splice(index, 1);
     displayOrder();
 }
 
 function clearOrder() {
-    products = [];
+    orderItems = [];
     displayOrder();
 }
 
 function submitOrder() {
     const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-
     // Создаем объект заказа
     const order = {
         paymentMethod: paymentMethod,
-        items: products, // Массив с товарами в заказе
-        total: parseFloat(document.getElementById("total").textContent)
+        orderItems: orderItems, // Массив с информацией о товарах в заказе
     };
 
         const csrfToken = document.querySelector('meta[name="_csrf"]').content;

@@ -22,4 +22,8 @@ public class ItemsService {
     public Iterable<Items> findAll(){
         return itemsRepository.findAll();
     }
+
+    public Items findByNameOfItem(String nameOfItems) {
+        return itemsRepository.findByNameOfItems(nameOfItems);
+    }
 }

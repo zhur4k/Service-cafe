@@ -21,10 +21,10 @@ public class CashRegisterRestController {
     @PostMapping("/submitOrder")
     public String SubmitOrder(@RequestBody Orders order) {
 
-        if(cashRegisterService.SendFCheck(order)){
+//        if(cashRegisterService.SendFCheck(order)){
             ordersService.save(order);
-            return "true";
-        }
-        return "false";
+//            return "true";
+//        }
+        return "true";
     }
 }

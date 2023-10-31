@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class CashRegisterController {
-public ItemsService itemsService;
+    public ItemsService itemsService;
 
     public CashRegisterController(ItemsService itemsService) {
         this.itemsService = itemsService;
