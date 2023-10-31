@@ -23,4 +23,9 @@ public class Items {
     @OneToMany()
     @JoinColumn(name = "product_weight_id", referencedColumnName = "id")
     private List<ProductWeight> productsWeight = new ArrayList<>();
+
+    public String getPriceToPage() {
+        double pr = (double) price;
+        return Double.toString(pr/100);
+    }
 }

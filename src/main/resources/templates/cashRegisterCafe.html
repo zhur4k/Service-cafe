@@ -11,20 +11,20 @@
 <body>
 <div class="left">
     <h1>Выбор товаров</h1>
-    <div th:each="categories : ${categories}" class="category" th:attr="data-category=${categories.categoriesName}" onclick="toggleCategory('${categories.categoriesName}')">
-        <span th:text="__${categories.categoriesName}__"></span>
-    </div>
-    <div th:each="categories : ${categories}" class="products" id="${categories.categoriesName}">
-        <div th:each="item : ${categories.items}" class="product" th:attr="data-name=__${item.nameOfItem}__, data-price=__${item.price}__" onclick="addProduct('__${item.nameOfItem}__', __${item.price}__)">
-<!--            <img th:src="'/' + __${item.image}__" th:alt="__${item.nameOfItem}__">-->
+    <div class="category" th:each="categories : ${category}" >
+        <div style=" width : 100%" th:text="${categories.categoriesName}" th:attr="onclick=|toggleCategory('${categories.categoriesName}')|"></div>
+
+    <div class="products" th:id="${categories.categoriesName}">
+        <div th:each="item : ${categories.items}" class="product" th:attr="onclick=|addProduct('${item.nameOfItem}', '${item.price}')|">
             <div class="product-info">
-                <h3 th:text="__${item.nameOfItem}__"></h3>
-                <p th:text="'Цена: $' + __${item.price}__"></p>
+                <h3 th:text="${item.nameOfItem}"></h3>
+                <p th:text="'Цена: $' + ${item.priceToPage}"></p>
             </div>
         </div>
     </div>
-</div>
+    </div>
 
+</div>
     <div class="right">
         <h1>Заказ</h1>
          <div class="order-list">

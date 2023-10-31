@@ -5,8 +5,9 @@ function toggleCategory(category) {
     products.style.display = products.style.display === 'block' ? 'none' : 'block';
 }
 
-function addProduct(productName, price) {
+function addProduct(productName, pric) {
     const quantity = 1;
+    const price = Number(pric)/100;
     products.push({ item: productName, price, quantity });
     displayOrder();
 }

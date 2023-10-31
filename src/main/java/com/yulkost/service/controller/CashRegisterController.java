@@ -15,7 +15,11 @@ public ItemsService itemsService;
 
     @GetMapping("/cash_register")
     public String CashRegister(Model model){
-        model.addAttribute("categories" ,itemsService.findAllCategories());
+        model.addAttribute("category" ,itemsService.findAllCategories());
         return "cashRegisterCafe";
+    }
+    @GetMapping("/cash_register2")
+    public String CashRegister2(Model model){
+        return "cashRegister";
     }
 }
