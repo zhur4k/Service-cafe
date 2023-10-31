@@ -1,5 +1,6 @@
 package com.yulkost.service.service;
 
+import com.yulkost.service.model.OrderItems;
 import com.yulkost.service.model.Orders;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,13 +14,15 @@ public class CashRegisterService {
 
     private final String CASH_REGISTER_ID ="http://169.254.35.154" ;
     public Boolean SendFCheck(Orders order){
-        String json = "{\"F\":[" +
-                "{\"C\":{\"cm\":\"Кассир: Светлана\"}}" +
-                ",{\"S\":{\"code\":\"1234567890121\",\"name\":\"Конфета\",\"qty\":\"1.000\"\"price\":\"0.01\",\"sum\":\"0.01\"}}" +
-                ",{\"P\":{}}" +
-                "]}";
+        StringBuilder json = new StringBuilder("{\"F\":[" +
+                "{\"C\":{\"cm\":\"Кассир:"+order.getCashier()+"\"}}");
+        for (OrderItems orderItem :order.getOrderItems()) {
+            json.append(",{\"S\":{\"code\":\"").append(orderItem.getItems().getCode()).append("\",\"name\":\"").append(orderItem.getItems().getNameOfItems()).append("\",").append("\"qty\":\"").append(orderItem.getQuantity()).append("\"\"price\":\"").append(orderItem.getItems().getPriceToPage()).append("\"}}");
+        }
+                json.append(",{\"P\":{}}");
+        json.append("]}");
 
-        return SendJson(json, "/cgi/chk");
+        return SendJson(json.toString(), "/cgi/chk");
     }
 
     private Boolean SendJson(String json,String url) {
