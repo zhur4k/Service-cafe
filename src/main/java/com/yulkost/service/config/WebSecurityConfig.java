@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-    private UserService userService;
+    private final UserService userService;
 
     public WebSecurityConfig(UserService userService) {
         this.userService = userService;
@@ -25,8 +25,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/").permitAll()
                         .requestMatchers("/**").hasAnyAuthority("ADMIN")
+                        .requestMatchers("/").hasAnyAuthority("CASHIER")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

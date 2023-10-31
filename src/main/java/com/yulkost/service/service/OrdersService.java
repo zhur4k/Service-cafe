@@ -23,6 +23,8 @@ public class OrdersService {
     }
 
     public void save(Orders order){
+        if(order.getOrderItems().isEmpty())
+            return;
         Orders newOrder = new Orders();
         newOrder.setDate(LocalDateTime.now());
         newOrder.setPaymentMethod(order.getPaymentMethod());

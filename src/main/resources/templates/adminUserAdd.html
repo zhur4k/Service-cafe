@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/adminUsersEdit.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
+</head>
+<body class="container-mo">
+<form th:action="@{/admin/users/add}"  method="post">
+    <header>
+        <div class="end">
+            <div class="ends">
+                <button class="btn-oko">Добавить</button>
+            </div>
+        </div>
+    </header>
+    <div class="container-fo">
+        <table>
+            <tr>
+                <th>Имя</th>
+                <th>Логин</th>
+                <th>Пароль</th>
+                <th>Активность</th>
+                <th>Роль</th>
+            </tr>
+            <tr >
+                <td><input th:name="name"/></td>
+                <td><input th:name="login"/></td>
+                <td><input th:name="password"/></td>
+                <td><input th:name="active"/></td>
+                <td><input th:name="roles"/></td>
+            </tr>
+        </table>
+    </div>
+</form>
+<footer></footer>
+</body>
+</html>

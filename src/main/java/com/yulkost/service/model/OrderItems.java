@@ -12,6 +12,6 @@ public class OrderItems {
     private int quantity;
 
     @ManyToOne
-    @JoinColumn(name = "order_item_id", referencedColumnName = "id")
+    @JoinColumn(name = "items_id", referencedColumnName = "id")
     private Items items;
 }

@@ -28,17 +28,7 @@ public class UserService implements UserDetailsService {
         }
         return activeUserInfo;
     }
-    public boolean registryUser(User user){
-        User userFromDB =  findByLogin(user.getLogin());
-        if(userFromDB != null) {
-            return false;
-        }
-        user.setActive(true);
-        user.setRoles(Collections.singleton(Role.USER));
-        saveUser(user);
-        return true;
-    }
-    public User saveUser(User user) {
+    public User save(User user) {
         return userRepository.save(user);
     }
 

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/adminUsersEdit.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
+</head>
+<body class="container-mo">
+<form th:action="@{/admin/users}" th:object="${form}" method="post">
+    <header>
+        <div class="end">
+            <div class="ends">
+                <a href="/admin/users/add" class="btnchange">Добавить</a>
+                <button class="btn-oko">Изменить</button>
+            </div>
+        </div>
+    </header>
+    <div class="container-fo">
+        <table>
+            <tr>
+                <th>id</th>
+                <th>Имя</th>
+                <th>Логин</th>
+                <th>Пароль</th>
+                <th>Активность</th>
+                <th>Роль</th>
+            </tr>
+            <tr th:each="user, itemStat : ${form.users}">
+                <td><input th:name="|users[${itemStat.index}].id|" th:value="${user.getId()}" readonly /></td>
+                <td><input th:name="|users[${itemStat.index}].name|" th:value="${user.getName()}" /></td>
+                <td><input th:name="|users[${itemStat.index}].login|" th:value="${user.getName()}" /></td>
+                <td><input th:name="|users[${itemStat.index}].password|" th:value="${user.getPassword()}" /></td>
+                <td><input th:name="|users[${itemStat.index}].active|" th:value="${user.isActive()}" /></td>
+                <td><input th:name="|users[${itemStat.index}].roles|" th:value="${user.getRoles()[0]}" /></td>
+            </tr>
+        </table>
+    </div>
+</form>
+<footer></footer>
+</body>
+</html>

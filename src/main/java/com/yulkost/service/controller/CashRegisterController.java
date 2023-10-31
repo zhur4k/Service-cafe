@@ -13,13 +13,9 @@ public class CashRegisterController {
         this.itemsService = itemsService;
     }
 
-    @GetMapping("/cash_register")
+    @GetMapping("/")
     public String CashRegister(Model model){
         model.addAttribute("category" ,itemsService.findAllCategories());
         return "cashRegisterCafe";
-    }
-    @GetMapping("/cash_register2")
-    public String CashRegister2(Model model){
-        return "cashRegister";
     }
 }
