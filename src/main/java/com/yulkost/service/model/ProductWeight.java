@@ -10,7 +10,7 @@ public class ProductWeight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int weight;
-    @OneToOne()
+    @OneToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     Products product;
 }

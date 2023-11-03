@@ -16,11 +16,12 @@ public class Items {
     private String code;
     private String nameOfItems;
     private int price;
-    @ManyToOne()
+
+    @ManyToOne
     @JoinColumn(name = "categories_id", referencedColumnName = "id")
     private Categories categories;
 
-    @OneToMany()
+    @OneToMany
     @JoinColumn(name = "product_weight_id", referencedColumnName = "id")
     private List<ProductWeight> productsWeight = new ArrayList<>();
 

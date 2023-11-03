@@ -22,7 +22,9 @@ public class CashRegisterService {
                 json.append(",{\"P\":{}}");
         json.append("]}");
 
-        return SendJson(json.toString(), "/cgi/chk");
+//        return SendJson(json.toString(), "/cgi/chk");\
+        System.out.println(json);
+        return true;
     }
 
     private Boolean SendJson(String json,String url) {

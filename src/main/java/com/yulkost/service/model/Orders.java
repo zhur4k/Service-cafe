@@ -17,7 +17,7 @@ public class Orders {
     private String cashier;
     private String paymentMethod;
     private LocalDateTime date;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private List<OrderItems> orderItems = new ArrayList<>();
     }

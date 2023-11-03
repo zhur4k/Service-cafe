@@ -8,11 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
 </head>
 <body class="container-mo">
-<form th:action="@{/admin/users}" th:object="${form}" method="post">
+<form th:action="@{/admin/categories}" th:object="${form}" method="post">
     <header>
         <div class="end">
             <div class="ends">
-                <a href="/admin/users/add" class="btnchange">Добавить</a>
+                <a href="/admin/categories/add" class="btnchange">Добавить</a>
                 <button class="btn-oko">Изменить</button>
                 <a href="/admin" class="btnchange">Выйти</a>
             </div>
@@ -23,18 +23,10 @@
             <tr>
                 <th>id</th>
                 <th>Имя</th>
-                <th>Логин</th>
-                <th>Пароль</th>
-                <th>Активность</th>
-                <th>Роль</th>
             </tr>
-            <tr th:each="user, itemStat : ${form.users}">
-                <td><input th:name="|users[${itemStat.index}].id|" th:value="${user.getId()}" readonly /></td>
-                <td><input th:name="|users[${itemStat.index}].name|" th:value="${user.getName()}" /></td>
-                <td><input th:name="|users[${itemStat.index}].login|" th:value="${user.getUsername()}" /></td>
-                <td><input th:name="|users[${itemStat.index}].password|" th:value="${user.getPassword()}" /></td>
-                <td><input th:name="|users[${itemStat.index}].active|" th:value="${user.isActive()}" /></td>
-                <td><input th:name="|users[${itemStat.index}].roles|" th:value="${user.getRoles()[0]}" /></td>
+            <tr th:each="categories, itemStat : ${form.category}">
+                <td><input th:name="|category[${itemStat.index}].id|" th:value="${categories.getId()}" readonly /></td>
+                <td><input th:name="|category[${itemStat.index}].categoriesName|" th:value="${categories.getCategoriesName()}"/></td>
             </tr>
         </table>
     </div>

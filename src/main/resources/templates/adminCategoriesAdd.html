@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
 </head>
 <body class="container-mo">
-<form th:action="@{/admin/users/add}"  method="post">
+<form th:action="@{/admin/categories/add}"  method="post">
     <header>
         <div class="end">
             <div class="ends">
@@ -21,20 +21,13 @@
         <table>
             <tr>
                 <th>Имя</th>
-                <th>Логин</th>
-                <th>Пароль</th>
-                <th>Активность</th>
-                <th>Роль</th>
             </tr>
             <tr >
-                <td><input th:name="name"/></td>
-                <td><input th:name="login"/></td>
-                <td><input th:name="password"/></td>
-                <td><input th:name="active"/></td>
-                <td><input th:name="roles"/></td>
+                <td><input th:name="categoriesName"/></td>
             </tr>
         </table>
     </div>
 </form>
+<footer></footer>
 </body>
 </html>

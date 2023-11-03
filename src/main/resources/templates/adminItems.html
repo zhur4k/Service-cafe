@@ -8,11 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
 </head>
 <body class="container-mo">
-<form th:action="@{/admin/users}" th:object="${form}" method="post">
+<form th:action="@{/admin/items}" th:object="${form}" method="post">
     <header>
         <div class="end">
             <div class="ends">
-                <a href="/admin/users/add" class="btnchange">Добавить</a>
+                <a href="/admin/items/add" class="btnchange">Добавить</a>
                 <button class="btn-oko">Изменить</button>
                 <a href="/admin" class="btnchange">Выйти</a>
             </div>
@@ -22,22 +22,22 @@
         <table>
             <tr>
                 <th>id</th>
+                <th>Код</th>
                 <th>Имя</th>
-                <th>Логин</th>
-                <th>Пароль</th>
-                <th>Активность</th>
-                <th>Роль</th>
+                <th>Цена</th>
+                <th>Категория</th>
             </tr>
-            <tr th:each="user, itemStat : ${form.users}">
-                <td><input th:name="|users[${itemStat.index}].id|" th:value="${user.getId()}" readonly /></td>
-                <td><input th:name="|users[${itemStat.index}].name|" th:value="${user.getName()}" /></td>
-                <td><input th:name="|users[${itemStat.index}].login|" th:value="${user.getUsername()}" /></td>
-                <td><input th:name="|users[${itemStat.index}].password|" th:value="${user.getPassword()}" /></td>
-                <td><input th:name="|users[${itemStat.index}].active|" th:value="${user.isActive()}" /></td>
-                <td><input th:name="|users[${itemStat.index}].roles|" th:value="${user.getRoles()[0]}" /></td>
+            <tr th:each="item, itemStat : ${form.items}">
+                <td><input th:name="|items[${itemStat.index}].id|" th:value="${item.getId()}" readonly /></td>
+                <td><input th:name="|items[${itemStat.index}].code|" th:value="${item.getCode()}"/></td>
+                <td><input th:name="|items[${itemStat.index}].nameOfItems|" th:value="${item.getNameOfItems()}"/></td>
+                <td><input th:name="|items[${itemStat.index}].price|" th:value="${item.getPrice()}"/></td>
+                <td><input th:name="|items[${itemStat.index}].category|" th:value="${item.getCategories().getCategoriesName()}"/></td>
+
             </tr>
         </table>
     </div>
 </form>
+<footer></footer>
 </body>
 </html>

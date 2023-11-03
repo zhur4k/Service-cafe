@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/adminUsersEdit.css">
@@ -20,21 +20,20 @@
     <div class="container-fo">
         <table>
             <tr>
+                <th>Код</th>
                 <th>Имя</th>
-                <th>Логин</th>
-                <th>Пароль</th>
-                <th>Активность</th>
-                <th>Роль</th>
+                <th>Цена</th>
+                <th>Категория</th>
             </tr>
             <tr >
-                <td><input th:name="name"/></td>
-                <td><input th:name="login"/></td>
-                <td><input th:name="password"/></td>
-                <td><input th:name="active"/></td>
-                <td><input th:name="roles"/></td>
+                <td><input th:name="code"/></td>
+                <td><input th:name="nameOfItems"/></td>
+                <td><input th:name="price"/></td>
+                <td><input th:name="categories"/></td>
             </tr>
         </table>
     </div>
 </form>
+<footer></footer>
 </body>
 </html>

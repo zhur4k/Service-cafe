@@ -25,10 +25,10 @@ public class CashRegisterRestController {
         order.setCashier(user.getName());
         Orders orderToSave= ordersService.OrderFromPageToOrders(order);
 
-//        if(cashRegisterService.SendFCheck(orderToSave)){
+        if(cashRegisterService.SendFCheck(orderToSave)){
             ordersService.save(orderToSave);
-//            return "true";
-//        }
-        return "true";
+            return "true";
+        }
+        return "false";
     }
 }

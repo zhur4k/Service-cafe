@@ -35,9 +35,6 @@ public class UserService implements UserDetailsService {
     public User findByLogin(String login) {
         return userRepository.findByLogin(login);
     }
-    public Iterable<User> getAllUsers() {
-        return userRepository.findAll();
-    }
     public List<User> findAll() {
         return userRepository.findAll();
     }
