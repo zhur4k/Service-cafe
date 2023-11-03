@@ -22,23 +22,26 @@ public class OrdersService {
         this.orderItemsRepository = orderItemsRepository;
     }
 
-    public void save(Orders order){
+    public Orders OrderFromPageToOrders(Orders order){
         if(order.getOrderItems().isEmpty())
-            return;
+            return null;
         Orders newOrder = new Orders();
         newOrder.setDate(LocalDateTime.now());
         newOrder.setPaymentMethod(order.getPaymentMethod());
+        newOrder.setCashier(order.getCashier());
         List<OrderItems> orderItems = new ArrayList<>();
 
         for (int i = 0; i < order.getOrderItems().size(); i++) {
             OrderItems orderItem = new OrderItems();
             orderItem.setItems(itemsService.findByNameOfItem(order.getOrderItems().get(i).getItems().getNameOfItems()));
             orderItem.setQuantity(order.getOrderItems().get(i).getQuantity());
-
             orderItems.add(orderItem);
         }
 
         newOrder.setOrderItems(orderItems);
-        ordersRepository.save(newOrder);
+        return newOrder;
+    }
+        public void save(Orders order){
+        ordersRepository.save(order);
     }
 }
