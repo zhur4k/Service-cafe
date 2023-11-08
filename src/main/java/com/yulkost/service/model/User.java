@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.*;
+
 import java.util.Collection;
 import java.util.Set;
 
@@ -26,10 +27,15 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+//    public void setRoles(String role) {
+//        Set<Role> roleSet = new HashSet<>();
+//        roleSet.add(Role.valueOf(role));
+//        this.roles = roleSet;
+//    }
+
     public User() {
         super();
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

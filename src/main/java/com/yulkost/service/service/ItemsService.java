@@ -29,6 +29,7 @@ public class ItemsService {
         itemsRepository.saveAll(itemsRepository.saveAllAndFlush(items));}
 
     public void save(Items item) {
-        save(item);
+        item.getCategories().getItems().add(item);
+        itemsRepository.save(item);
     }
 }

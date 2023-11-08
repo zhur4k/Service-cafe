@@ -8,12 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
 </head>
 <body class="container-mo">
-<form th:action="@{/admin/users/add}"  method="post">
+<form th:action="@{/admin/items/add}"  method="post">
     <header>
         <div class="end">
             <div class="ends">
                 <button class="btn-oko">Добавить</button>
-                <a href="/admin" class="btnchange">Выйти</a>
+                <a href="/admin/items" class="btnchange">Выйти</a>
             </div>
         </div>
     </header>
@@ -28,12 +28,17 @@
             <tr >
                 <td><input th:name="code"/></td>
                 <td><input th:name="nameOfItems"/></td>
-                <td><input th:name="price"/></td>
-                <td><input th:name="categories"/></td>
+                <td><input type="number" step="0.01" th:name="priceToPage"/></td>
+                <td>
+                    <select th:name="categories">
+                        <option th:each="categor: ${category}" th:value="${categor.getId()}"
+                            th:text="${categor.getCategoriesName()}"
+                        ></option>
+                    </select>
+                </td>
             </tr>
         </table>
     </div>
 </form>
-<footer></footer>
 </body>
 </html>

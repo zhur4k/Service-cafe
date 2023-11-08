@@ -13,7 +13,7 @@
         <div class="end">
             <div class="ends">
                 <button class="btn-oko">Добавить</button>
-                <a href="/admin" class="btnchange">Выйти</a>
+                <a href="/admin/users" class="btnchange">Выйти</a>
             </div>
         </div>
     </header>
@@ -30,8 +30,18 @@
                 <td><input th:name="name"/></td>
                 <td><input th:name="login"/></td>
                 <td><input th:name="password"/></td>
-                <td><input th:name="active"/></td>
-                <td><input th:name="roles"/></td>
+                <td>
+                    <select th:name="active">
+                        <option th:value="true">Активен</option>
+                        <option th:value="false">Не активен</option>
+                    </select>
+                </td>
+                <td>
+                    <select th:name="roles">
+                        <option th:each="role: ${roles}" th:value="${role}"
+                                th:text="${role}"></option>
+                    </select>
+                </td>
             </tr>
         </table>
     </div>

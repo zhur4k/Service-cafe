@@ -35,7 +35,7 @@ public class CategoriesController {
     public String CategoriesEdit(Model model ,@ModelAttribute CategoriesEditDto form) {
         System.out.println(form.getCategory().get(0).getCategoriesName());
         categoriesService.saveAll(form.getCategory());
-        return "redirect:/admin"; }
+        return "redirect:/admin/categories"; }
 
     @GetMapping("/categories/add")
     public String CategoriesAdd(Model model) {
@@ -45,5 +45,5 @@ public class CategoriesController {
     public String CategoriesAdd(Model model , Categories categories) {
         System.out.println(categories.getCategoriesName());
         categoriesService.save(categories);
-        return "redirect:/admin"; }
+        return "redirect:/admin/categories"; }
 }

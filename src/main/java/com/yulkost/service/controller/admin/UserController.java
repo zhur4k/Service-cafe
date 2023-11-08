@@ -1,6 +1,7 @@
 package com.yulkost.service.controller.admin;
 
 import com.yulkost.service.dto.UserEditDto;
+import com.yulkost.service.model.Role;
 import com.yulkost.service.model.User;
 import com.yulkost.service.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -27,19 +28,21 @@ public class UserController {
         List<User> users = new ArrayList<>();
         userService.findAll().iterator().forEachRemaining(users::add);
         model.addAttribute("form", new UserEditDto(users));
+        model.addAttribute("roles", Role.values());
         return "adminUsers"; }
 
     @PostMapping("/users")
     public String UsersEdit(Model model ,@ModelAttribute UserEditDto form) {
         userService.saveAll(form.getUsers());
-        return "redirect:/admin"; }
+        return "redirect:/admin/users"; }
 
     @GetMapping("/users/add")
     public String UserAdd(Model model) {
+        model.addAttribute("roles", Role.values());
         return "adminUserAdd"; }
 
     @PostMapping("/users/add")
     public String UsersAdd(Model model ,User user) {
         userService.save(user);
-        return "redirect:/admin"; }
+        return "redirect:/admin/users"; }
 }

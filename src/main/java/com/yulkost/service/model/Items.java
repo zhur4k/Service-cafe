@@ -29,4 +29,7 @@ public class Items {
         double pr = (double) price;
         return Double.toString(pr/100);
     }
+    public void setPriceToPage(String price) {
+        this.price = (int)(Double.parseDouble(price)*100);;
+    }
 }
