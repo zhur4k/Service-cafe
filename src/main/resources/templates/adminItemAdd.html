@@ -26,11 +26,11 @@
                 <th>Категория</th>
             </tr>
             <tr >
-                <td><input th:name="code"/></td>
-                <td><input th:name="nameOfItems"/></td>
-                <td><input type="number" step="0.01" th:name="priceToPage"/></td>
+                <td><input th:name="code" required/></td>
+                <td><input th:name="nameOfItems" required/></td>
+                <td><input type="number" step="0.01" th:name="priceToPage" required/></td>
                 <td>
-                    <select th:name="categories">
+                    <select th:name="categories" required>
                         <option th:each="categor: ${category}" th:value="${categor.getId()}"
                             th:text="${categor.getCategoriesName()}"
                         ></option>

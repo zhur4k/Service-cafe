@@ -1,6 +1,6 @@
 package com.yulkost.service.config;
 
-import com.yulkost.service.bot.TelegramBot;
+import com.yulkost.service.bot.YulkostTelegramBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -11,9 +11,9 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @Component
 public class BotInitializer {
-    private final TelegramBot telegramBot;
+    private final YulkostTelegramBot telegramBot;
     @Autowired
-    public BotInitializer(TelegramBot telegramBot) {
+    public BotInitializer(YulkostTelegramBot telegramBot) {
         this.telegramBot = telegramBot;
     }
 

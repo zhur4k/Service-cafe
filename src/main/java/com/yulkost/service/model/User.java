@@ -19,6 +19,7 @@ public class User implements UserDetails {
     private String name;
     private String password;
     private String login;
+    private long chatId;
 
     private boolean active;
 
@@ -26,12 +27,6 @@ public class User implements UserDetails {
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
-
-//    public void setRoles(String role) {
-//        Set<Role> roleSet = new HashSet<>();
-//        roleSet.add(Role.valueOf(role));
-//        this.roles = roleSet;
-//    }
 
     public User() {
         super();

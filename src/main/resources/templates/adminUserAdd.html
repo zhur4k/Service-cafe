@@ -23,21 +23,23 @@
                 <th>Имя</th>
                 <th>Логин</th>
                 <th>Пароль</th>
+                <th>ChatId</th>
                 <th>Активность</th>
                 <th>Роль</th>
             </tr>
             <tr >
-                <td><input th:name="name"/></td>
-                <td><input th:name="login"/></td>
-                <td><input th:name="password"/></td>
+                <td><input th:name="name" required/></td>
+                <td><input th:name="login" required/></td>
+                <td><input th:name="password" required/></td>
+                <td><input th:name="chatId" required/></td>
                 <td>
-                    <select th:name="active">
+                    <select th:name="active" required>
                         <option th:value="true">Активен</option>
                         <option th:value="false">Не активен</option>
                     </select>
                 </td>
                 <td>
-                    <select th:name="roles">
+                    <select th:name="roles" required>
                         <option th:each="role: ${roles}" th:value="${role}"
                                 th:text="${role}"></option>
                     </select>

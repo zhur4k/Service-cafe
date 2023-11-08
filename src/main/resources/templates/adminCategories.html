@@ -26,7 +26,7 @@
             </tr>
             <tr th:each="categories, itemStat : ${form.category}">
                 <td><input th:name="|category[${itemStat.index}].id|" th:value="${categories.getId()}" readonly /></td>
-                <td><input th:name="|category[${itemStat.index}].categoriesName|" th:value="${categories.getCategoriesName()}"/></td>
+                <td><input th:name="|category[${itemStat.index}].categoriesName|" th:value="${categories.getCategoriesName()}" required/></td>
             </tr>
         </table>
     </div>

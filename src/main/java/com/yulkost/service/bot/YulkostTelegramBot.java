@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Slf4j
 @Component
-public class TelegramBot extends TelegramLongPollingBot{
+public class YulkostTelegramBot extends TelegramLongPollingBot{
     @Override
     public String getBotUsername() { return "yulkost_bot"; }
     @Override
@@ -26,26 +26,25 @@ public class TelegramBot extends TelegramLongPollingBot{
                 case "/start":
                     startBot(chatId, memberName);
                     break;
+                case "/id":
+                    ChatIdBot(chatId, memberName);
+                    break;
                 default: log.info("Unexpected message");
             }
         }
     }
-    public void sendMessage(String name, String password){
-        SendMessage message = new SendMessage();
-        message.setChatId("598857757");
-        message.setText("Имя: "+name +" Пароль: "+password);
-        try {
-            execute(message);
-            log.info("Reply sent");
-        } catch (TelegramApiException e){
-            log.error(e.getMessage());
-        }
-    }
     private void startBot(long chatId, String userName) {
+        sendMessage(chatId,"Привет, " + userName + "! Если тебе нужен твой ChatId нажми на /id");
+    }
+    private void ChatIdBot(long chatId, String userName) {
+        sendMessage(chatId,userName +" Ваш chatId:");
+        sendMessage(chatId, Long.toString(chatId));
+    }
+
+    public void sendMessage(long chatId, String text){
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText("Hello, " + userName + "! I'm a Telegram bot.");
-
+        message.setText(text);
         try {
             execute(message);
             log.info("Reply sent");
@@ -53,4 +52,5 @@ public class TelegramBot extends TelegramLongPollingBot{
             log.error(e.getMessage());
         }
     }
+
 }

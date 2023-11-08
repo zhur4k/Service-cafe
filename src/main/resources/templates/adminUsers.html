@@ -25,22 +25,24 @@
                 <th>Имя</th>
                 <th>Логин</th>
                 <th>Пароль</th>
+                <th>ChatId</th>
                 <th>Активность</th>
                 <th>Роль пользователя</th>
             </tr>
             <tr th:each="user, itemStat : ${form.users}">
                 <td><input th:name="|users[${itemStat.index}].id|" th:value="${user.getId()}" readonly /></td>
-                <td><input th:name="|users[${itemStat.index}].name|" th:value="${user.getName()}" /></td>
-                <td><input th:name="|users[${itemStat.index}].login|" th:value="${user.getUsername()}" /></td>
-                <td><input th:name="|users[${itemStat.index}].password|" th:value="${user.getPassword()}" /></td>
+                <td><input th:name="|users[${itemStat.index}].name|" th:value="${user.getName()}"  required/></td>
+                <td><input th:name="|users[${itemStat.index}].login|" th:value="${user.getUsername()}"  required/></td>
+                <td><input th:name="|users[${itemStat.index}].password|" th:value="${user.getPassword()}"  required/></td>
+                <td><input th:name="|users[${itemStat.index}].chatId|" th:value="${user.getChatId()}"  required/></td>
                 <td>
-                    <select th:name="|users[${itemStat.index}].active|">
+                    <select th:name="|users[${itemStat.index}].active|" required>
                         <option th:value="true" th:selected="${user.isActive()}">Активен</option>
                         <option th:value="false" th:selected="${!user.isActive()}">Не активен</option>
                     </select>
                 </td>
                 <td>
-                    <select th:name="|users[${itemStat.index}].roles|">
+                    <select th:name="|users[${itemStat.index}].roles|" required>
                         <option th:each="role: ${roles}" th:value="${role}"
                                 th:text="${role}"
                                 th:selected="${role} == ${user.getRoles()[0]}"></option>
