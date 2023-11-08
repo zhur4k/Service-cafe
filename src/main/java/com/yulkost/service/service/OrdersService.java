@@ -41,7 +41,8 @@ public class OrdersService {
         newOrder.setOrderItems(orderItems);
         return newOrder;
     }
-        public void save(Orders order){
-        ordersRepository.save(order);
-    }
+        public Orders save(Orders order){
+            orderItemsRepository.saveAll(order.getOrderItems());
+            return ordersRepository.save(order);
+        }
 }
