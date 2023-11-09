@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/adminUsersEdit.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
+</head>
+<body class="container-mo">
+<form th:action="@{/admin/units}" th:object="${form}" method="post">
+    <header>
+        <div class="end">
+            <div class="ends">
+                <a href="/admin/units/add" class="btnchange">Добавить</a>
+                <button class="btn-oko">Изменить</button>
+                <a href="/admin" class="btnchange">Выйти</a>
+            </div>
+        </div>
+    </header>
+    <div class="container-fo">
+        <table>
+            <tr>
+                <th>id</th>
+                <th>Имя</th>
+            </tr>
+            <tr th:each="unit, itemStat : ${form.units}">
+                <td><input th:name="|units[${itemStat.index}].id|" th:value="${unit.getId()}" readonly /></td>
+                <td><input th:name="|units[${itemStat.index}].name|" th:value="${unit.getName()}" required/></td>
+            </tr>
+        </table>
+    </div>
+</form>
+</body>
+</html>

@@ -43,7 +43,6 @@ public class CategoriesController {
 
     @PostMapping("/categories/add")
     public String CategoriesAdd(Model model , Categories categories) {
-        System.out.println(categories.getCategoriesName());
         categoriesService.save(categories);
         return "redirect:/admin/categories"; }
 }

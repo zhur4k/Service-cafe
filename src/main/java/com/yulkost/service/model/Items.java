@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -16,6 +17,10 @@ public class Items {
     private String code;
     private String nameOfItems;
     private int price;
+
+    @ManyToOne
+    @JoinColumn(name = "unit_id", referencedColumnName = "id")
+    private Units unit;
 
     @ManyToOne
     @JoinColumn(name = "categories_id", referencedColumnName = "id")
