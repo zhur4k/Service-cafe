@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="/css/admin.css">
@@ -15,6 +15,9 @@
       <li><a href="/admin/items">Товары</a></li>
       <li><a href="/admin/categories">Категории товаров</a></li>
       <li><a href="/admin/units">Единицы измерения товаров</a></li>
+      <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+      </form>
       <!--      <li><a href="/admin/inventory">Склад</a></li>-->
     </ul>
   </div>

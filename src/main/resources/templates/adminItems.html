@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/adminUsersEdit.css">
@@ -26,6 +26,7 @@
                 <th>Имя</th>
                 <th>Цена</th>
                 <th>Категория</th>
+                <th>Единицы измерения</th>
             </tr>
             <tr th:each="item, itemStat : ${form.items}">
                 <td><input th:name="|items[${itemStat.index}].id|" th:value="${item.getId()}" readonly /></td>
@@ -40,10 +41,17 @@
                         ></option>
                     </select>
                 </td>
+                <td>
+                    <select th:name="|items[${itemStat.index}].unit|" required>
+                        <option th:each="unit: ${units}" th:value="${unit.getId()}"
+                                th:text="${unit.getName()}"
+                                th:selected="${unit.getId()} == ${item.getUnit().getId()}"
+                        ></option>
+                    </select>
+                </td>
             </tr>
         </table>
     </div>
 </form>
-<footer></footer>
 </body>
 </html>

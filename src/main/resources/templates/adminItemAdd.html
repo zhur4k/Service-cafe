@@ -24,6 +24,7 @@
                 <th>Имя</th>
                 <th>Цена</th>
                 <th>Категория</th>
+                <th>Единицы измерения</th>
             </tr>
             <tr >
                 <td><input th:name="code" required/></td>
@@ -33,6 +34,13 @@
                     <select th:name="categories" required>
                         <option th:each="categor: ${category}" th:value="${categor.getId()}"
                             th:text="${categor.getCategoriesName()}"
+                        ></option>
+                    </select>
+                </td>
+                <td>
+                    <select th:name="unit" required>
+                        <option th:each="unit: ${units}" th:value="${unit.getId()}"
+                                th:text="${unit.getName()}"
                         ></option>
                     </select>
                 </td>
