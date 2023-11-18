@@ -16,6 +16,7 @@ public class Items {
     @Column(length = 13)
     private String code;
     private String nameOfItems;
+    private Boolean view;
     private int price;
 
     @ManyToOne

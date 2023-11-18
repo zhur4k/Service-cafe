@@ -15,4 +15,13 @@ public class Categories {
     private String categoriesName;
     @OneToMany(mappedBy = "categories")
     private List<Items> items = new ArrayList<>();
+
+    public List<Items> getItemsToPage() {
+       List<Items> items1 = new ArrayList<>();
+        for (Items item :
+                items) {
+            if(item.getView()) items1.add(item);
+        }
+        return items1;
+    }
 }
