@@ -1,8 +1,5 @@
 package com.yulkost.service.dto;
 
-
-
-import com.yulkost.service.model.Categories;
 import com.yulkost.service.model.Units;
 
 import java.util.ArrayList;
