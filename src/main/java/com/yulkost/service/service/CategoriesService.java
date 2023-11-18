@@ -21,6 +21,6 @@ public class CategoriesService {
     }
 
     public void saveAll(List<Categories> categories) {
-        categoriesRepository.saveAll(categoriesRepository.saveAllAndFlush(categories));
+        categoriesRepository.saveAll(categories);
     }
 }

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/users")
 public class UserController {
     private final UserService userService;
 
@@ -23,7 +23,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping("")
     public String Users(Model model) {
         List<User> users = new ArrayList<>();
         userService.findAll().iterator().forEachRemaining(users::add);
@@ -31,17 +31,17 @@ public class UserController {
         model.addAttribute("roles", Role.values());
         return "adminUsers"; }
 
-    @PostMapping("/users")
+    @PostMapping("")
     public String UsersEdit(Model model ,@ModelAttribute UserEditDto form) {
         userService.saveAll(form.getUsers());
         return "redirect:/admin/users"; }
 
-    @GetMapping("/users/add")
+    @GetMapping("/add")
     public String UserAdd(Model model) {
         model.addAttribute("roles", Role.values());
         return "adminUserAdd"; }
 
-    @PostMapping("/users/add")
+    @PostMapping("/add")
     public String UsersAdd(Model model ,User user) {
         userService.save(user);
         return "redirect:/admin/users"; }

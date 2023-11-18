@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/categories")
 public class CategoriesController {
 
     public CategoriesService categoriesService;
@@ -23,7 +23,7 @@ public class CategoriesController {
         this.categoriesService = categoriesService;
     }
 
-    @GetMapping("/categories")
+    @GetMapping
         public String Categories(Model model){
         List<Categories> category = new ArrayList<>();
         categoriesService.findAll().iterator().forEachRemaining(category::add);
@@ -31,17 +31,16 @@ public class CategoriesController {
         return "adminCategories";
         }
 
-    @PostMapping("/categories")
+    @PostMapping
     public String CategoriesEdit(Model model ,@ModelAttribute CategoriesEditDto form) {
-        System.out.println(form.getCategory().get(0).getCategoriesName());
         categoriesService.saveAll(form.getCategory());
         return "redirect:/admin/categories"; }
 
-    @GetMapping("/categories/add")
+    @GetMapping("/add")
     public String CategoriesAdd(Model model) {
         return "adminCategoriesAdd"; }
 
-    @PostMapping("/categories/add")
+    @PostMapping("/add")
     public String CategoriesAdd(Model model , Categories categories) {
         categoriesService.save(categories);
         return "redirect:/admin/categories"; }

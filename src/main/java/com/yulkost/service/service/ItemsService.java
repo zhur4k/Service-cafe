@@ -2,6 +2,7 @@ package com.yulkost.service.service;
 
 import com.yulkost.service.model.Categories;
 import com.yulkost.service.model.Items;
+import com.yulkost.service.model.Products;
 import com.yulkost.service.model.User;
 import com.yulkost.service.repository.CategoriesRepository;
 import com.yulkost.service.repository.ItemsRepository;
@@ -27,10 +28,9 @@ public class ItemsService {
         return itemsRepository.findByNameOfItems(nameOfItems);
     }
     public void saveAll(List<Items> items) {
-        itemsRepository.saveAll(itemsRepository.saveAllAndFlush(items));}
+        itemsRepository.saveAll(items);}
 
     public void save(Items item) {
-        item.getCategories().getItems().add(item);
         itemsRepository.save(item);
     }
 

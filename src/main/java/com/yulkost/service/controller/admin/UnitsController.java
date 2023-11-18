@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/units")
 public class UnitsController {
 
     public UnitsService unitsService;
@@ -23,25 +23,25 @@ public class UnitsController {
         this.unitsService = unitsService;
     }
 
-    @GetMapping("/units")
-        public String Categories(Model model){
+    @GetMapping
+        public String Units(Model model){
         List<Units> units = new ArrayList<>();
         unitsService.findAll().iterator().forEachRemaining(units::add);
         model.addAttribute("form", new UnitsEditDto(units));
         return "adminUnits";
         }
 
-    @PostMapping("/units")
-    public String CategoriesEdit(@ModelAttribute UnitsEditDto form) {
+    @PostMapping
+    public String UnitsEdit(@ModelAttribute UnitsEditDto form) {
         unitsService.saveAll(form.getUnits());
         return "redirect:/admin/units"; }
 
-    @GetMapping("/units/add")
-    public String CategoriesAdd() {
+    @GetMapping("/add")
+    public String UnitsAdd() {
         return "adminUnitsAdd"; }
 
-    @PostMapping("/units/add")
-    public String CategoriesAdd(Units unit) {
+    @PostMapping("/add")
+    public String UnitsAdd(Units unit) {
         unitsService.save(unit);
         return "redirect:/admin/units"; }
 }

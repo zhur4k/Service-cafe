@@ -28,7 +28,7 @@ public class Items {
     private Categories categories;
 
     @OneToMany
-    @JoinColumn(name = "product_weight_id", referencedColumnName = "id")
+    @JoinColumn(name = "item_id", referencedColumnName = "id")
     private List<ProductWeight> productsWeight = new ArrayList<>();
 
     public String getPriceToPage() {

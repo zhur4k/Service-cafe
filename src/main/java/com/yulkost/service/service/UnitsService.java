@@ -24,6 +24,6 @@ public class UnitsService {
     }
 
     public void saveAll(List<Units> units) {
-        unitsRepository.saveAll(unitsRepository.saveAllAndFlush(units));
+        unitsRepository.saveAll(units);
     }
 }
