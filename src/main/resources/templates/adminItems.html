@@ -28,6 +28,7 @@
                 <th>Видимость</th>
                 <th>Категория</th>
                 <th>Единицы измерения</th>
+                <th>Состав</th>
             </tr>
             <tr th:each="item, itemStat : ${form.items}">
                 <td><input th:name="|items[${itemStat.index}].id|" th:value="${item.getId()}" readonly /></td>
@@ -56,6 +57,7 @@
                         ></option>
                     </select>
                 </td>
+                <td><a th:href="'/admin/items/'+${item.getId()}" class="btnchange">Изменить</a></td>
             </tr>
         </table>
     </div>

@@ -8,6 +8,7 @@ import com.yulkost.service.repository.ItemsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ItemsService {
@@ -31,5 +32,14 @@ public class ItemsService {
     public void save(Items item) {
         item.getCategories().getItems().add(item);
         itemsRepository.save(item);
+    }
+
+    public Items findById(Long id) {
+        Optional<Items> optionalItems = itemsRepository.findById(id);
+        if (optionalItems.isPresent()) {
+            return optionalItems.get();
+        } else {
+            throw new RuntimeException("Объект с id=" + id + " не найден");
+        }
     }
 }

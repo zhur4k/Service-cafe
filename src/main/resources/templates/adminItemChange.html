@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/adminUsersEdit.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
+</head>
+<body class="container-mo">
+    <header>
+        <div class="end">
+            <div class="ends">
+                <button class="btn-oko">Изменить</button>
+                <a href="/admin/items" class="btnchange">Выйти</a>
+            </div>
+        </div>
+    </header>
+    <div class="container-fo">
+        <table>
+            <tr>
+                <th>id</th>
+                <th>Вес</th>
+                <th>Название продукта</th>
+            </tr>
+            <form th:action="@{/admin/items/change}"  method="post">
+            <tr th:each="item, itemStat : ${items.productsWeight}">
+                <td><input th:name="|items.productsWeight[${itemStat.index}].id|" th:value="${item.getId()}" readonly /></td>
+                <td><input th:name="|items.productsWeight[${itemStat.index}].weight|" th:value="${item.getWeight()}" required/></td>
+                <td>
+                    <select th:name="|items.productsWeight[${itemStat.index}].product|" required>
+                        <option th:each="product: ${products}" th:value="${product.getId()}"
+                                th:text="${product.getName()}"
+                                th:selected="${product.getId()} == ${item.getProduct().getId()}"
+                        ></option>
+                    </select>
+                </td>
+            </tr>
+            </form>
+            <form th:action="@{/admin/items/${items.getId()}/addProduct}"  method="post">
+            <tr>
+                <td></td>
+                <td><input th:name="weightAdd" required/></td>
+                <td>
+                    <select th:name="productAdd" required>
+                        <option th:each="product: ${products}" th:value="${product.getId()}"
+                                th:text="${product.getName()}"
+                        ></option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
