@@ -1,7 +1,9 @@
 package com.yulkost.service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,15 +16,16 @@ public class Items {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(length = 13)
+
     private String code;
     private String nameOfItems;
     private Boolean view;
     private int price;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "unit_id", referencedColumnName = "id")
     private Units unit;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "categories_id", referencedColumnName = "id")
     private Categories categories;

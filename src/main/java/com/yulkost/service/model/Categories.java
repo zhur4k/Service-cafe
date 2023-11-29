@@ -18,8 +18,7 @@ public class Categories {
 
     public List<Items> getItemsToPage() {
        List<Items> items1 = new ArrayList<>();
-        for (Items item :
-                items) {
+        for (Items item : items) {
             if(item.getView()) items1.add(item);
         }
         return items1;

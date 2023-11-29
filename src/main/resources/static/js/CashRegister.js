@@ -1,4 +1,72 @@
+const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+// Отправляем заказ на сервер
+let categoryData = [];
+const xhr = new XMLHttpRequest();
+xhr.open('GET','/getCategory', true);
+xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+xhr.onreadystatechange = function () {
+    // Проверяем, что запрос завершен (readyState = 4)
+    // и статус ответа сервера 200 (OK)
+    if (xhr.readyState === 4 && xhr.status === 200) {
+        // Обработка успешного ответа от сервера
+        categoryData =JSON.parse(xhr.responseText);
+        console.log(categoryData);
+        addCategory();
+    }
+};
+// Отправляем запрос
+xhr.send();
 orderItems =[];
+function addCategory() {
+console.log("work");
+const leftContainer = document.getElementById('leftContainer');
+
+// Итерация по данным и создание элементов
+categoryData.forEach(function (categories) {
+    const categoryDiv = document.createElement('div');
+    categoryDiv.classList.add('category');
+
+    const categoryNameDiv = document.createElement('div');
+    categoryNameDiv.textContent = categories.categoriesName;
+    categoryNameDiv.onclick = function () {
+        toggleCategory(categories.categoriesName);
+    };
+
+    // const productsDiv = document.createElement('div');
+    // productsDiv.classList.add('products');
+    // productsDiv.id = category.categoriesName;
+    //
+    // category.itemsToPage.forEach(function (item) {
+    //     const productDiv = document.createElement('div');
+    //     productDiv.classList.add('product');
+    //     productDiv.onclick = function () {
+    //         addProduct(item.nameOfItems, item.price);
+    //     };
+    //
+    //     const productInfoDiv =
+    //         document.createElement('div');
+    //     productInfoDiv.classList.add('product-info');
+    //
+    //     const itemNameHeading = document.createElement('h3');
+    //     itemNameHeading.textContent = item.nameOfItems;
+    //
+    //     const itemPriceParagraph = document.createElement('p');
+    //     itemPriceParagraph.textContent = 'Цена: $' + item.priceToPage;
+    //
+    //     productInfoDiv.appendChild(itemNameHeading);
+    //     productInfoDiv.appendChild(itemPriceParagraph);
+    //     productDiv.appendChild(productInfoDiv);
+    //
+    //     productsDiv.appendChild(productDiv);
+    // });
+
+    categoryDiv.appendChild(categoryNameDiv);
+    // categoryDiv.appendChild(productsDiv);
+
+    leftContainer.appendChild(categoryDiv);
+});
+}
 
 function toggleCategory(category) {
     const products = document.getElementById(category);
@@ -81,23 +149,23 @@ function submitOrder() {
         orderItems: orderItems, // Массив с информацией о товарах в заказе
     };
 
-        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
-        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+
 
         // Отправляем заказ на сервер
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '/submitOrder', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                console.log('Статус ответа:', xhr.status);
-                if (xhr.status === 200) {
+        let xhr2 = new XMLHttpRequest();
+        xhr2.open('POST', '/submitOrder', true);
+        xhr2.setRequestHeader('Content-Type', 'application/json');
+        xhr2.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+        xhr2.onreadystatechange = function () {
+            if (xhr2.readyState === 4) {
+                console.log('Статус ответа:', xhr2.status);
+                if (xhr2.status === 200) {
                     console.log('Заказ успешно отправлен!');
                     // Очищаем корзину после успешной отправки
                     clearOrder();
                 }
             }
         };
-        xhr.send(JSON.stringify(order));
+        xhr2.send(JSON.stringify(order));
 }

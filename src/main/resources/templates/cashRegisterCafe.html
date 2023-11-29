@@ -7,26 +7,23 @@
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
     <title>Кассовое приложение для кафе</title>
-    <link rel="stylesheet" href="/css/CashRegister.css">
-</head>
+    <link rel="stylesheet" href="/css/CashRegister.css"> </head>
+
 <body>
-<header>
-    <span th:text="${#authentication.principal.name}"></span>
-    <button id="settings-button">&#9881;</button>
-</header>
+<header> <span th:text="${#authentication.principal.name}"></span> <button id="settings-button">&#9881;</button> </header>
 <div class="main-conteiner">
-    <div class="left">
-        <div class="category" th:each="categories : ${category}">
-            <div th:text="${categories.categoriesName}" th:attr="onclick=|toggleCategory('${categories.categoriesName}')|"></div>
-            <div class="products" th:id="${categories.categoriesName}">
-                <div th:each="item : ${categories.itemsToPage}" class="product" th:attr="onclick=|addProduct('${item.nameOfItems}', '${item.price}')|">
-                    <div class="product-info">
-                        <h3 th:text="${item.nameOfItems}"></h3>
-                        <p th:text="'Цена: $' + ${item.priceToPage}"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="left" id="leftContainer">
+<!--        <div class="category" th:each="categories : ${category}">-->
+<!--            <div th:text="${categories.categoriesName}" th:attr="onclick=|toggleCategory('${categories.categoriesName}')|"></div>-->
+<!--            <div class="products" th:id="${categories.categoriesName}">-->
+<!--                <div th:each="item : ${categories.itemsToPage}" class="product" th:attr="onclick=|addProduct('${item.nameOfItems}', '${item.price}')|">-->
+<!--                    <div class="product-info">-->
+<!--                        <h3 th:text="${item.nameOfItems}"></h3>-->
+<!--                        <p th:text="'Цена: $' + ${item.priceToPage}"></p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
     <div class="right">
         <h1>Заказ</h1>

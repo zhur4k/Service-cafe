@@ -1,5 +1,6 @@
 package com.yulkost.service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,9 +11,11 @@ public class ProductWeight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int weight;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     Products product;
+    @JsonIgnore
     @ManyToOne
     Items item;
 }
