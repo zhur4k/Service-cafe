@@ -33,7 +33,7 @@ public class OrdersService {
 
         for (int i = 0; i < order.getOrderItems().size(); i++) {
             OrderItems orderItem = new OrderItems();
-            orderItem.setItems(itemsService.findByNameOfItem(order.getOrderItems().get(i).getItems().getNameOfItems()));
+            orderItem.setItems(itemsService.findByNameOfItemAndPrice(order.getOrderItems().get(i).getItems().getNameOfItems(),order.getOrderItems().get(i).getItems().getPrice()));
             orderItem.setQuantity(order.getOrderItems().get(i).getQuantity());
             orderItems.add(orderItem);
         }

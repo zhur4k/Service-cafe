@@ -1,58 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="_csrf" th:content="${_csrf.token}"/>
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
     <title>Кассовое приложение для кафе</title>
     <link rel="stylesheet" href="/css/CashRegister.css">
 </head>
 <body>
-<div class="left">
-    <h1>Выбор товаров</h1>
-    <div class="category" th:each="categories : ${category}" >
-        <div style=" width : 100%" th:text="${categories.categoriesName}" th:attr="onclick=|toggleCategory('${categories.categoriesName}')|"></div>
-
-    <div class="products" th:id="${categories.categoriesName}">
-        <div th:each="item : ${categories.itemsToPage}" class="product" th:attr="onclick=|addProduct('${item.nameOfItems}', '${item.price}')|">
-            <div class="product-info">
-                <h3 th:text="${item.nameOfItems}"></h3>
-                <p th:text="'Цена: $' + ${item.priceToPage}"></p>
+<header>
+    <span th:text="${#authentication.principal.name}"></span>
+    <button id="settings-button">&#9881;</button>
+</header>
+<div class="main-conteiner">
+    <div class="left">
+        <div class="category" th:each="categories : ${category}">
+            <div th:text="${categories.categoriesName}" th:attr="onclick=|toggleCategory('${categories.categoriesName}')|"></div>
+            <div class="products" th:id="${categories.categoriesName}">
+                <div th:each="item : ${categories.itemsToPage}" class="product" th:attr="onclick=|addProduct('${item.nameOfItems}', '${item.price}')|">
+                    <div class="product-info">
+                        <h3 th:text="${item.nameOfItems}"></h3>
+                        <p th:text="'Цена: $' + ${item.priceToPage}"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    </div>
-
-</div>
     <div class="right">
         <h1>Заказ</h1>
-         <div class="order-list">
-        <table>
-            <thead>
-                <tr>
-                    <th>Товар</th>
-                    <th>Цена</th>
-                    <th>Количество</th>
-                    <th>Сумма</th>
-                    <th>Действие</th>
-                </tr>
-            </thead>
-            <tbody id="order-items">
-            </tbody>
-        </table>
-               </div>
+        <div class="order-list">
+            <table>
+                <tbody id="order-items"> </tbody>
+            </table>
+        </div>
         <h3 class="total">Итого: <span id="total">0</span></h3>
-        <button type="button" onclick="clearOrder()" class="button">Очистить корзину</button> <!-- Добавленная кнопка -->
-        <h2>Выберите способ оплаты:</h2>
-        <label>
-            <input type="radio" name="payment" value="cash" checked> Наличные
-        </label>
-        <label>
-            <input type="radio" name="payment" value="card"> Карта
-        </label>
-        <button type="button" onclick="submitOrder()" class="button">Оплатить</button> <!-- Улучшенная кнопка оплаты -->
+        <!-- Добавленная кнопка -->
+        <h2>Выберите способ оплаты:</h2> <label>
+        <input type="radio" name="payment" value="cash" checked> Наличные
+    </label> <label>
+        <input type="radio" name="payment" value="card"> Карта
+    </label> <button type="button" onclick="submitOrder()" class="button">Оплатить</button>
+        <!-- Улучшенная кнопка оплаты -->
     </div>
-    <script src="/js/CashRegister.js"></script>
+</div>
+<script src="/js/CashRegister.js"></script>
 </body>
+
 </html>

@@ -5,10 +5,9 @@ function toggleCategory(category) {
     products.style.display = products.style.display === 'block' ? 'none' : 'block';
 }
 
-function addProduct(productName, pric) {
-    const price = Number(pric) / 100;
+function addProduct(productName, price) {
     // Поиск продукта в массиве по имени
-    const existingProduct = orderItems.find(orderItem => orderItem.items.nameOfItems === productName);
+    const existingProduct = orderItems.find(orderItem => (orderItem.items.nameOfItems === productName&&orderItem.items.price === price));
 
     if (existingProduct) {
         // Если продукт с таким именем уже существует, увеличиваем количество
@@ -29,33 +28,39 @@ function addProduct(productName, pric) {
     orderItems.forEach((item, index) => {
         const row = document.createElement("tr");
         const itemCell = document.createElement("td");
-        const priceCell = document.createElement("td");
         const quantityCell = document.createElement("td");
         const totalCell = document.createElement("td");
         const removeCell = document.createElement("td");
         const removeButton = document.createElement("button");
 
         itemCell.textContent = item.items.nameOfItems;
-        priceCell.textContent = item.items.price.toFixed(2);
         quantityCell.textContent = item.quantity;
-        const itemTotal = (item.items.price * item.quantity).toFixed(2);
+        const itemTotal = ((item.items.price * item.quantity)/100).toFixed(2);
         totalCell.textContent = itemTotal;
         removeButton.textContent = "Удалить";
         removeButton.addEventListener("click", () => removeItem(index));
 
-        row.appendChild(itemCell);
-        row.appendChild(priceCell);
+        quantityCell.style.width = "10%";
+        quantityCell.style.textAlign = "center"
+
+        itemCell.style.width = "50%";
+
+        totalCell.style.width = "20%";
+        totalCell.style.textAlign = "center"
+        removeCell.style.width = "20%";
+
         row.appendChild(quantityCell);
+        row.appendChild(itemCell);
         row.appendChild(totalCell);
         removeCell.appendChild(removeButton);
         row.appendChild(removeCell);
 
         orderItemsd.appendChild(row);
 
-        total += parseFloat(itemTotal);
+        total += parseFloat(itemTotal)*100;
     });
 
-    document.getElementById("total").textContent = total.toFixed(2);
+    document.getElementById("total").textContent = (total/100).toFixed(2);
 }
 
 function removeItem(index) {
@@ -95,6 +100,4 @@ function submitOrder() {
             }
         };
         xhr.send(JSON.stringify(order));
-
-
 }

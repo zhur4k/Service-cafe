@@ -1,9 +1,6 @@
 package com.yulkost.service.service;
 
-import com.yulkost.service.model.Categories;
 import com.yulkost.service.model.Items;
-import com.yulkost.service.model.Products;
-import com.yulkost.service.model.User;
 import com.yulkost.service.repository.CategoriesRepository;
 import com.yulkost.service.repository.ItemsRepository;
 import org.springframework.stereotype.Service;
@@ -24,8 +21,8 @@ public class ItemsService {
         return itemsRepository.findAll();
     }
 
-    public Items findByNameOfItem(String nameOfItems) {
-        return itemsRepository.findByNameOfItems(nameOfItems);
+    public Items findByNameOfItemAndPrice(String nameOfItems, int price) {
+        return itemsRepository.findByNameOfItemsAndPrice(nameOfItems,price);
     }
     public void saveAll(List<Items> items) {
         itemsRepository.saveAll(items);}

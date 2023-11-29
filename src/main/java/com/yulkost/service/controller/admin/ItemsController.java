@@ -63,7 +63,7 @@ public class ItemsController {
         productWeight.setProduct(productsService.findById(productAdd));
         productWeight.setItem(itemsService.findById(id));
         productWeightService.save(productWeight);
-        return "redirect:/admin/items";
+        return "redirect:/admin/items/"+id;
     }
     @GetMapping("/add")
     public String ItemsAdd(Model model) {
