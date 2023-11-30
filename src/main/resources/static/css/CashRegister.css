@@ -13,10 +13,11 @@ header{
     background-color: #ffffff;
 }
 .button-settings{
-    float: right;
+    display: flex;
+    justify-content: center;
     height: 50px;
-    width: 65px;
-    font-size: 35px;
+    width: 50px;
+    font-size: 30px;
 }
 .main-container{
     margin-top: 0.5%;
@@ -97,4 +98,10 @@ table {
     height: 390px; /* Вы можете настроить максимальную высоту по своему усмотрению */
     max-height: 390px; /* Вы можете настроить максимальную высоту по своему усмотрению */
     overflow-y: auto; /* Добавление вертикального скролла при необходимости */
+}
+.left-Settings{
+    width: 30%;
+    height: 500px;
+    background-color: white;
+    border-radius: 8px;
 }

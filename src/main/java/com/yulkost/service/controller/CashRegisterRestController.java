@@ -53,11 +53,34 @@ public class CashRegisterRestController {
         order.setCashier(user.getName());
         Orders orderToSave= ordersService.OrderFromPageToOrders(order);
 
-        if(cashRegisterService.SendFCheck(orderToSave)){
+        if(cashRegisterService.sendFCheck(orderToSave)){
             ordersService.save(orderToSave);
             yulkostTelegramBotService.SendOrderToUser(user,ordersService.save(orderToSave));
             return "true";
         }
         return "false";
+    }
+    @GetMapping("/getXReport")
+    public ResponseEntity<Void> getXReport() {
+        try {
+            if(cashRegisterService.sendXReport())
+                throw new Exception();
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            // Ошибка, отправьте соответствующий HTTP-статус
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @GetMapping("/getZReport")
+    public ResponseEntity<Void> getZReport() {
+        try {
+            if(cashRegisterService.sendZReport())
+                throw new Exception();
+
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            // Ошибка, отправьте соответствующий HTTP-статус
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

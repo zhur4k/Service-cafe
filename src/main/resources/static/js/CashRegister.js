@@ -7,6 +7,7 @@ let itemsToPage = [];
 getItemsToPage()
 function drawMainContainer() {
     let headButtons = document.getElementById('buttons-head');
+    headButtons.innerHTML ='';
     let settingsButton = document.createElement('button');
     settingsButton.classList.add('button-settings');
     settingsButton.textContent = '☸';
@@ -70,10 +71,44 @@ function drawMainContainer() {
     showCategory();
 }
 function showSettings(){
+    let headButtons = document.getElementById('buttons-head');
+    headButtons.innerHTML ='';
+    let backButton = document.createElement('buttonBack');
+    backButton.classList.add('button-settings');
+    backButton.textContent = '🔙';
+    backButton.onclick = function () {
+        drawMainContainer();
+    }
+    headButtons.appendChild(backButton);
+    
+    
     let mainContainer = document.getElementById('main-container');
 
     // Очищаем контейнер перед отрисовкой
     mainContainer.innerHTML = '';
+
+    // Создаем левую часть (leftContainer)
+    let leftContainer = document.createElement('div');
+    leftContainer.classList.add('left-Settings');
+
+    let zButton = document.createElement('button');
+    zButton.type = 'button';
+    zButton.className = 'button';
+    zButton.textContent = 'Оплатить';
+    zButton.onclick = function () {
+        zReport();
+    };
+
+    let xButton = document.createElement('button');
+    xButton.type = 'button';
+    xButton.className = 'button';
+    xButton.textContent = 'Оплатить';
+    xButton.onclick = function () {
+        xReport();
+    };
+
+    mainContainer.appendChild(leftContainer);
+
 }
 
 function getCategoriesToPage() {
@@ -248,7 +283,6 @@ function submitOrder() {
         paymentMethod: document.querySelector('input[name="payment"]:checked').value,
         orderItems, // Массив с информацией о товарах в заказе
     });
-    console.log(orders);
         // Отправляем заказ на сервер
         let xhr = new XMLHttpRequest();
         xhr.open('POST', '/submitOrder', true);
@@ -262,4 +296,34 @@ function submitOrder() {
             }
         };
         xhr.send(JSON.stringify(orders));
+}
+function zReport(){
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/getZReport', true);
+    xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+    xhr.onreadystatechange = function () {
+        // Проверяем, что запрос завершен (readyState = 4)
+        // и статус ответа сервера 200 (OK)
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Обработка успешного ответа от сервера
+            console.log(xhr.responseText);
+        }
+    };
+// Отправляем запрос
+    xhr.send();
+}
+function xReport(){
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/getXReport', true);
+    xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+    xhr.onreadystatechange = function () {
+        // Проверяем, что запрос завершен (readyState = 4)
+        // и статус ответа сервера 200 (OK)
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Обработка успешного ответа от сервера
+            console.log(xhr.responseText);
+        }
+    };
+// Отправляем запрос
+    xhr.send();
 }
