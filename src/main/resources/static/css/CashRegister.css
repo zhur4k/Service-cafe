@@ -16,8 +16,9 @@ header{
     float: right;
     height: 50px;
     width: 65px;
+    font-size: 35px;
 }
-.main-conteiner{
+.main-container{
     margin-top: 0.5%;
     display: flex;
     justify-content: space-between;

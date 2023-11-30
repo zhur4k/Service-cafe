@@ -5,6 +5,77 @@ let categoryData = [];
 getCategoriesToPage();
 let itemsToPage = [];
 getItemsToPage()
+function drawMainContainer() {
+    let headButtons = document.getElementById('buttons-head');
+    let settingsButton = document.createElement('button');
+    settingsButton.classList.add('button-settings');
+    settingsButton.textContent = '☸';
+    settingsButton.onclick = function () {
+        showSettings();
+    }
+    headButtons.appendChild(settingsButton);
+    // Получаем основной контейнер
+    let mainContainer = document.getElementById('main-container');
+
+    // Очищаем контейнер перед отрисовкой
+    mainContainer.innerHTML = '';
+
+    // Создаем левую часть (leftContainer)
+    let leftContainer = document.createElement('div');
+    leftContainer.classList.add('left');
+    leftContainer.id = 'leftContainer';
+
+    // Создаем правую часть (rightContainer)
+    let rightContainer = document.createElement('div');
+    rightContainer.classList.add('right');
+
+    let orderList = document.createElement('div');
+    orderList.classList.add('order-list');
+
+    let table = document.createElement('table');
+    let tbody = document.createElement('tbody');
+    tbody.id = 'order-items';
+    table.appendChild(tbody);
+
+    orderList.appendChild(table);
+
+    let total = document.createElement('h3');
+    total.classList.add('total');
+    total.id = 'total';
+    total.textContent = '0';
+
+    let paymentLabel1 = document.createElement('label');
+    paymentLabel1.innerHTML = '<input type="radio" name="payment" value="cash" checked> Наличные';
+
+    let paymentLabel2 = document.createElement('label');
+    paymentLabel2.innerHTML = '<input type="radio" name="payment" value="card"> Карта';
+
+    let payButton = document.createElement('button');
+    payButton.type = 'button';
+    payButton.className = 'button';
+    payButton.textContent = 'Оплатить';
+    payButton.onclick = function () {
+        submitOrder();
+    };
+
+    rightContainer.appendChild(orderList);
+    rightContainer.appendChild(total);
+    rightContainer.appendChild(paymentLabel1);
+    rightContainer.appendChild(paymentLabel2);
+    rightContainer.appendChild(payButton);
+
+    // Добавляем левую и правую части в основной контейнер
+    mainContainer.appendChild(leftContainer);
+    mainContainer.appendChild(rightContainer);
+    showCategory();
+}
+function showSettings(){
+    let mainContainer = document.getElementById('main-container');
+
+    // Очищаем контейнер перед отрисовкой
+    mainContainer.innerHTML = '';
+}
+
 function getCategoriesToPage() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getCategory', true);
@@ -15,6 +86,7 @@ function getCategoriesToPage() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             // Обработка успешного ответа от сервера
             categoryData = JSON.parse(xhr.responseText);
+            drawMainContainer()
             showCategory();
         }
     };

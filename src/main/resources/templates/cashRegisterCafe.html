@@ -10,27 +10,14 @@
     <link rel="stylesheet" href="/css/CashRegister.css"> </head>
 
 <body>
-<header> <span th:text="${#authentication.principal.name}"></span> <button class="button-settings" id="settings-button">&#9881;</button> </header>
-<div class="main-conteiner">
-    <div class="left" id="leftContainer">
-    </div>
-    <div class="right">
-        <div class="order-list">
-            <table>
-                <tbody id="order-items"> </tbody>
-            </table>
-        </div>
-        <h3 class="total" id="total">0</h3>
-        <!-- Добавленная кнопка -->
-        <label>
-        <input type="radio" name="payment" value="cash" checked> Наличные
-    </label> <label>
-        <input type="radio" name="payment" value="card"> Карта
-    </label>
+<header> <span th:text="${#authentication.principal.name}">
 
-        <button type="button" onclick="submitOrder()" class="button">Оплатить</button>
-        <!-- Улучшенная кнопка оплаты -->
+</span>
+    <div id="buttons-head">
     </div>
+</header>
+<div id="main-container" class="main-container">
+
 </div>
 <script src="/js/CashRegister.js"></script>
 </body>
