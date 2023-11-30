@@ -2,6 +2,7 @@ package com.yulkost.service.service;
 
 import com.yulkost.service.model.OrderItems;
 import com.yulkost.service.model.Orders;
+import com.yulkost.service.model.User;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -56,5 +57,16 @@ public class CashRegisterService {
     public boolean sendZReport() {
         return true;
 //        return sendGet("/cgi/proc/printreport?0");
+    }
+    public boolean sendChangeMoneyInCashRegister(User user,Integer sum){
+        String jsonString =
+                "{" +
+                "\"IO\":[" +
+                "{\"C\":{\"cm\":\""+user.getName()+"\"}}," +
+                "{\"IO\":{\"sum\":\""+sum+"\"}}" +
+                "]" +
+                "}";
+//        return sendPost(jsonString,"/cgi/chk");
+        return true;
     }
 }

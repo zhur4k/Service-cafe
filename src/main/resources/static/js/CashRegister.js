@@ -5,13 +5,14 @@ let categoryData = [];
 getCategoriesToPage();
 let itemsToPage = [];
 getItemsToPage()
+
 function drawMainContainer() {
     let headButtons = document.getElementById('buttons-head');
-    headButtons.innerHTML ='';
+    headButtons.innerHTML = '';
     let settingsButton = document.createElement('button');
     settingsButton.classList.add('button-settings');
     settingsButton.textContent = '☸';
-    settingsButton.onclick = function () {
+    settingsButton.onclick = function() {
         showSettings();
     }
     headButtons.appendChild(settingsButton);
@@ -55,7 +56,7 @@ function drawMainContainer() {
     payButton.type = 'button';
     payButton.className = 'button';
     payButton.textContent = 'Оплатить';
-    payButton.onclick = function () {
+    payButton.onclick = function() {
         submitOrder();
     };
 
@@ -70,18 +71,19 @@ function drawMainContainer() {
     mainContainer.appendChild(rightContainer);
     showCategory();
 }
-function showSettings(){
+
+function showSettings() {
     let headButtons = document.getElementById('buttons-head');
-    headButtons.innerHTML ='';
+    headButtons.innerHTML = '';
     let backButton = document.createElement('buttonBack');
     backButton.classList.add('button-settings');
     backButton.textContent = '🔙';
-    backButton.onclick = function () {
+    backButton.onclick = function() {
         drawMainContainer();
     }
     headButtons.appendChild(backButton);
-    
-    
+
+
     let mainContainer = document.getElementById('main-container');
 
     // Очищаем контейнер перед отрисовкой
@@ -94,19 +96,20 @@ function showSettings(){
     let zButton = document.createElement('button');
     zButton.type = 'button';
     zButton.className = 'button';
-    zButton.textContent = 'Оплатить';
-    zButton.onclick = function () {
+    zButton.textContent = 'Z-Отчёт';
+    zButton.onclick = function() {
         zReport();
     };
 
     let xButton = document.createElement('button');
     xButton.type = 'button';
     xButton.className = 'button';
-    xButton.textContent = 'Оплатить';
-    xButton.onclick = function () {
+    xButton.textContent = 'X-Отчёт';
+    xButton.onclick = function() {
         xReport();
     };
-
+    leftContainer.appendChild(zButton);
+    leftContainer.appendChild(xButton);
     mainContainer.appendChild(leftContainer);
 
 }
@@ -115,7 +118,7 @@ function getCategoriesToPage() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getCategory', true);
     xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = function() {
         // Проверяем, что запрос завершен (readyState = 4)
         // и статус ответа сервера 200 (OK)
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -125,7 +128,7 @@ function getCategoriesToPage() {
             showCategory();
         }
     };
-// Отправляем запрос
+    // Отправляем запрос
     xhr.send();
 }
 
@@ -133,7 +136,7 @@ function getItemsToPage() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getItemsToPage', true);
     xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = function() {
         // Проверяем, что запрос завершен (readyState = 4)
         // и статус ответа сервера 200 (OK)
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -141,20 +144,21 @@ function getItemsToPage() {
             itemsToPage = JSON.parse(xhr.responseText);
         }
     };
-// Отправляем запрос
+    // Отправляем запрос
     xhr.send();
 }
-let orderItems =[];
+let orderItems = [];
+
 function showCategory() {
     let leftContainer = document.getElementById('leftContainer');
-    leftContainer.innerHTML="";
+    leftContainer.innerHTML = "";
     // Итерация по данным и создание элементов
-    categoryData.forEach(function (categories) {
+    categoryData.forEach(function(categories) {
         const categoryDiv = document.createElement('div');
         categoryDiv.classList.add('child-block');
 
         categoryDiv.textContent = categories.categoriesName;
-        categoryDiv.onclick = function () {
+        categoryDiv.onclick = function() {
             showProducts(categories);
         };
         leftContainer.appendChild(categoryDiv);
@@ -164,42 +168,42 @@ function showCategory() {
 
 function showProducts(categories) {
     let leftContainer = document.getElementById('leftContainer');
-        leftContainer.innerHTML="";
+    leftContainer.innerHTML = "";
 
-        let backDiv = document.createElement('div');
-        backDiv.classList.add('child-block');
-        backDiv.onclick = function () {
-            showCategory();
-        }
-        let backDivHeading = document.createElement('h2');
-        backDivHeading.textContent = 'Вернуться';
-        backDiv.appendChild(backDivHeading);
-        backDiv.style.backgroundColor = "red";
-        leftContainer.appendChild(backDiv);
+    let backDiv = document.createElement('div');
+    backDiv.classList.add('child-block');
+    backDiv.onclick = function() {
+        showCategory();
+    }
+    let backDivHeading = document.createElement('h2');
+    backDivHeading.textContent = 'Вернуться';
+    backDiv.appendChild(backDivHeading);
+    backDiv.style.backgroundColor = "red";
+    leftContainer.appendChild(backDiv);
 
-        categories.items.forEach(function (item) {
-            let productDiv = document.createElement('div');
-            productDiv.classList.add('child-block');
-            productDiv.onclick = function () {
-                addProduct(item.id);
-            };
+    categories.items.forEach(function(item) {
+        let productDiv = document.createElement('div');
+        productDiv.classList.add('child-block');
+        productDiv.onclick = function() {
+            addProduct(item.id);
+        };
 
-            let productInfoDiv =
-                document.createElement('div');
-            productInfoDiv.classList.add('child-block-Info');
+        let productInfoDiv =
+            document.createElement('div');
+        productInfoDiv.classList.add('child-block-Info');
 
-            let itemNameHeading = document.createElement('div');
-            itemNameHeading.textContent = item.nameOfItems;
+        let itemNameHeading = document.createElement('div');
+        itemNameHeading.textContent = item.nameOfItems;
 
-            let itemPriceParagraph = document.createElement('div');
-            itemPriceParagraph.textContent = (item.price/100).toFixed(2)+" руб";
+        let itemPriceParagraph = document.createElement('div');
+        itemPriceParagraph.textContent = (item.price / 100).toFixed(2) + " руб";
 
-            productInfoDiv.appendChild(itemNameHeading);
-            productInfoDiv.appendChild(itemPriceParagraph);
-            productDiv.appendChild(productInfoDiv);
+        productInfoDiv.appendChild(itemNameHeading);
+        productInfoDiv.appendChild(itemPriceParagraph);
+        productDiv.appendChild(productInfoDiv);
 
-            leftContainer.appendChild(productDiv);
-        });
+        leftContainer.appendChild(productDiv);
+    });
 }
 
 
@@ -211,15 +215,18 @@ function addProduct(id) {
         // Если продукт с таким именем уже существует, увеличиваем количество
         existingProduct.quantity += 1;
     } else {
-        let items = itemsToPage.find(items => (items.id===id));
+        let items = itemsToPage.find(items => (items.id === id));
         // Иначе создаем новый продукт
-        orderItems.push({ quantity: 1, items });
+        orderItems.push({
+            quantity: 1,
+            items
+        });
         console.log(orderItems);
     }
     displayOrder();
 }
 
-    function displayOrder() {
+function displayOrder() {
     const orderItemTable = document.getElementById("order-items");
     orderItemTable.innerHTML = "";
     let total = 0;
@@ -234,7 +241,7 @@ function addProduct(id) {
 
         itemCell.textContent = item.items.nameOfItems;
         quantityCell.textContent = item.quantity;
-        const itemTotal = ((item.items.price * item.quantity)/100).toFixed(2)+" р";
+        const itemTotal = ((item.items.price * item.quantity) / 100).toFixed(2) + " р";
         totalCell.textContent = itemTotal;
         removeButton.textContent = "Удалить";
         removeButton.addEventListener("click", () => removeItem(index));
@@ -261,10 +268,10 @@ function addProduct(id) {
 
         orderItemTable.appendChild(row);
 
-        total += parseFloat(itemTotal)*100;
+        total += parseFloat(itemTotal) * 100;
     });
 
-    document.getElementById("total").textContent = (total/100).toFixed(2)+" р";
+    document.getElementById("total").textContent = (total / 100).toFixed(2) + " р";
 }
 
 function removeItem(index) {
@@ -283,47 +290,38 @@ function submitOrder() {
         paymentMethod: document.querySelector('input[name="payment"]:checked').value,
         orderItems, // Массив с информацией о товарах в заказе
     });
-        // Отправляем заказ на сервер
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', '/submitOrder', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                console.log('Заказ успешно отправлен!');
-                    // Очищаем корзину после успешной отправки
-                    clearOrder();
-            }
-        };
-        xhr.send(JSON.stringify(orders));
-}
-function zReport(){
+    // Отправляем заказ на сервер
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/getZReport', true);
+    xhr.open('POST', '/submitOrder', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
-    xhr.onreadystatechange = function () {
-        // Проверяем, что запрос завершен (readyState = 4)
-        // и статус ответа сервера 200 (OK)
+    xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            // Обработка успешного ответа от сервера
-            console.log(xhr.responseText);
+            console.log('Заказ успешно отправлен!');
+            // Очищаем корзину после успешной отправки
+            clearOrder();
         }
     };
-// Отправляем запрос
-    xhr.send();
+    xhr.send(JSON.stringify(orders));
 }
-function xReport(){
+
+function zReport() {
+    sendGetRequest('/getZReport');
+}
+
+function xReport() {
+    sendGetRequest('/getXReport');
+}
+function sendGetRequest(url){
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/getXReport', true);
+    xhr.open('GET', url, true);
     xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
-    xhr.onreadystatechange = function () {
-        // Проверяем, что запрос завершен (readyState = 4)
+    xhr.onreadystatechange =  function() {
         // и статус ответа сервера 200 (OK)
-        if (xhr.readyState === 4 && xhr.status === 200) {
+        if (xhr.readyState === 4 && xhr.status === 200)
             // Обработка успешного ответа от сервера
             console.log(xhr.responseText);
-        }
     };
-// Отправляем запрос
+    // Отправляем запрос
     xhr.send();
 }
