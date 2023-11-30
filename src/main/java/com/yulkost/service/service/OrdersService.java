@@ -33,11 +33,10 @@ public class OrdersService {
 
         for (int i = 0; i < order.getOrderItems().size(); i++) {
             OrderItems orderItem = new OrderItems();
-            orderItem.setItems(itemsService.findByNameOfItemAndPrice(order.getOrderItems().get(i).getItems().getNameOfItems(),order.getOrderItems().get(i).getItems().getPrice()));
+            orderItem.setItems(itemsService.findById(order.getOrderItems().get(i).getItems().getId()));
             orderItem.setQuantity(order.getOrderItems().get(i).getQuantity());
             orderItems.add(orderItem);
         }
-
         newOrder.setOrderItems(orderItems);
         return newOrder;
     }

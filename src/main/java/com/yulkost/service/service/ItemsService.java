@@ -20,6 +20,9 @@ public class ItemsService {
     public Iterable<Items> findAll(){
         return itemsRepository.findAll();
     }
+    public List<Items> findAllList(){
+        return (List<Items>) itemsRepository.findAll();
+    }
 
     public Items findByNameOfItemAndPrice(String nameOfItems, int price) {
         return itemsRepository.findByNameOfItemsAndPrice(nameOfItems,price);

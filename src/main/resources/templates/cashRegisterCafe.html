@@ -10,35 +10,25 @@
     <link rel="stylesheet" href="/css/CashRegister.css"> </head>
 
 <body>
-<header> <span th:text="${#authentication.principal.name}"></span> <button id="settings-button">&#9881;</button> </header>
+<header> <span th:text="${#authentication.principal.name}"></span> <button class="button-settings" id="settings-button">&#9881;</button> </header>
 <div class="main-conteiner">
     <div class="left" id="leftContainer">
-<!--        <div class="category" th:each="categories : ${category}">-->
-<!--            <div th:text="${categories.categoriesName}" th:attr="onclick=|toggleCategory('${categories.categoriesName}')|"></div>-->
-<!--            <div class="products" th:id="${categories.categoriesName}">-->
-<!--                <div th:each="item : ${categories.itemsToPage}" class="product" th:attr="onclick=|addProduct('${item.nameOfItems}', '${item.price}')|">-->
-<!--                    <div class="product-info">-->
-<!--                        <h3 th:text="${item.nameOfItems}"></h3>-->
-<!--                        <p th:text="'Цена: $' + ${item.priceToPage}"></p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
     </div>
     <div class="right">
-        <h1>Заказ</h1>
         <div class="order-list">
             <table>
                 <tbody id="order-items"> </tbody>
             </table>
         </div>
-        <h3 class="total">Итого: <span id="total">0</span></h3>
+        <h3 class="total" id="total">0</h3>
         <!-- Добавленная кнопка -->
-        <h2>Выберите способ оплаты:</h2> <label>
+        <label>
         <input type="radio" name="payment" value="cash" checked> Наличные
     </label> <label>
         <input type="radio" name="payment" value="card"> Карта
-    </label> <button type="button" onclick="submitOrder()" class="button">Оплатить</button>
+    </label>
+
+        <button type="button" onclick="submitOrder()" class="button">Оплатить</button>
         <!-- Улучшенная кнопка оплаты -->
     </div>
 </div>
