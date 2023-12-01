@@ -51,10 +51,12 @@ public class CashRegisterService {
         return true;
     }
     public  boolean sendXReport() {
+        System.out.println("Send X-report");
         return true;
 //        return sendGet("/cgi/proc/printreport?10");
     }
     public boolean sendZReport() {
+        System.out.println("Send Z-report");
         return true;
 //        return sendGet("/cgi/proc/printreport?0");
     }

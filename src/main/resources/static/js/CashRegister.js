@@ -1,10 +1,16 @@
 const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
-// Отправляем заказ на сервер
+//All category to page
 let categoryData = [];
-getCategoriesToPage();
+//All items from server
 let itemsToPage = [];
-getItemsToPage()
+//Items in order on page
+let orderItems = [];
+//Shift state
+let shift=[]
+
+getCategoriesToPage();
+getItemsToPage();
 
 function drawMainContainer() {
     let headButtons = document.getElementById('buttons-head');
@@ -44,32 +50,25 @@ function drawMainContainer() {
     let total = document.createElement('h3');
     total.classList.add('total');
     total.id = 'total';
-    total.textContent = '0';
-
-    let paymentLabel1 = document.createElement('label');
-    paymentLabel1.innerHTML = '<input type="radio" name="payment" value="cash" checked> Наличные';
-
-    let paymentLabel2 = document.createElement('label');
-    paymentLabel2.innerHTML = '<input type="radio" name="payment" value="card"> Карта';
+    total.textContent = '0.00 р';
 
     let payButton = document.createElement('button');
     payButton.type = 'button';
     payButton.className = 'button';
     payButton.textContent = 'Оплатить';
     payButton.onclick = function() {
-        submitOrder();
+        showPayBlock();
     };
 
     rightContainer.appendChild(orderList);
     rightContainer.appendChild(total);
-    rightContainer.appendChild(paymentLabel1);
-    rightContainer.appendChild(paymentLabel2);
     rightContainer.appendChild(payButton);
 
     // Добавляем левую и правую части в основной контейнер
     mainContainer.appendChild(leftContainer);
     mainContainer.appendChild(rightContainer);
     showCategory();
+    displayOrder();
 }
 
 function showSettings() {
@@ -93,13 +92,11 @@ function showSettings() {
     let leftContainer = document.createElement('div');
     leftContainer.classList.add('left-Settings');
 
-    let zButton = document.createElement('button');
-    zButton.type = 'button';
-    zButton.className = 'button';
-    zButton.textContent = 'Z-Отчёт';
-    zButton.onclick = function() {
-        zReport();
-    };
+    let shiftButton = document.createElement('button');
+    shiftButton.type = 'button';
+    shiftButton.className = 'button';
+
+    getShiftToSettings(shiftButton);
 
     let xButton = document.createElement('button');
     xButton.type = 'button';
@@ -108,46 +105,12 @@ function showSettings() {
     xButton.onclick = function() {
         xReport();
     };
-    leftContainer.appendChild(zButton);
+    leftContainer.appendChild(shiftButton);
     leftContainer.appendChild(xButton);
     mainContainer.appendChild(leftContainer);
 
 }
 
-function getCategoriesToPage() {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/getCategory', true);
-    xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
-    xhr.onreadystatechange = function() {
-        // Проверяем, что запрос завершен (readyState = 4)
-        // и статус ответа сервера 200 (OK)
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Обработка успешного ответа от сервера
-            categoryData = JSON.parse(xhr.responseText);
-            drawMainContainer()
-            showCategory();
-        }
-    };
-    // Отправляем запрос
-    xhr.send();
-}
-
-function getItemsToPage() {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/getItemsToPage', true);
-    xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
-    xhr.onreadystatechange = function() {
-        // Проверяем, что запрос завершен (readyState = 4)
-        // и статус ответа сервера 200 (OK)
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Обработка успешного ответа от сервера
-            itemsToPage = JSON.parse(xhr.responseText);
-        }
-    };
-    // Отправляем запрос
-    xhr.send();
-}
-let orderItems = [];
 
 function showCategory() {
     let leftContainer = document.getElementById('leftContainer');
@@ -164,7 +127,6 @@ function showCategory() {
         leftContainer.appendChild(categoryDiv);
     });
 }
-
 
 function showProducts(categories) {
     let leftContainer = document.getElementById('leftContainer');
@@ -206,7 +168,6 @@ function showProducts(categories) {
     });
 }
 
-
 function addProduct(id) {
     // Поиск продукта в массиве по имени
     const existingProduct = orderItems.find(orderItems => (orderItems.items.id === id));
@@ -221,7 +182,6 @@ function addProduct(id) {
             quantity: 1,
             items
         });
-        console.log(orderItems);
     }
     displayOrder();
 }
@@ -244,6 +204,7 @@ function displayOrder() {
         const itemTotal = ((item.items.price * item.quantity) / 100).toFixed(2) + " р";
         totalCell.textContent = itemTotal;
         removeButton.textContent = "Удалить";
+        removeButton.classList.add("remove-button");
         removeButton.addEventListener("click", () => removeItem(index));
 
         quantityCell.style.width = "10%";
@@ -287,7 +248,7 @@ function clearOrder() {
 function submitOrder() {
     // Создаем объект заказа
     let orders = ({
-        paymentMethod: document.querySelector('input[name="payment"]:checked').value,
+        paymentMethod: true,
         orderItems, // Массив с информацией о товарах в заказе
     });
     // Отправляем заказ на сервер
@@ -305,22 +266,144 @@ function submitOrder() {
     xhr.send(JSON.stringify(orders));
 }
 
-function zReport() {
-    sendGetRequest('/getZReport');
+function showPayBlock() {
+    let headButtons = document.getElementById('buttons-head');
+    headButtons.innerHTML = '';
+    let backButton = document.createElement('buttonBack');
+    backButton.classList.add('button-settings');
+    backButton.textContent = '🔙';
+    backButton.onclick = function() {
+        drawMainContainer();
+    }
+    headButtons.appendChild(backButton);
+
+
+    let mainContainer = document.getElementById('main-container');
+
+    // Очищаем контейнер перед отрисовкой
+    mainContainer.innerHTML = '';
+
+    // Создаем левую часть (leftContainer)
+    let leftContainer = document.createElement('div');
+    leftContainer.classList.add('left-Settings');
+
+
+    mainContainer.appendChild(leftContainer);
 }
 
-function xReport() {
-    sendGetRequest('/getXReport');
-}
-function sendGetRequest(url){
+function getShiftToSettings(shiftButton) {
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
+    xhr.open('GET', '/getOpenShift', true);
+    xhr.setRequestHeader(csrfHeader, csrfToken);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Обработка успешного ответа от сервера
+            if(xhr.responseText)
+                shift = JSON.parse(xhr.responseText);
+            shift=xhr.responseText;
+            // После получения ответа, проверяем условие
+            if (!shift) {
+                shiftButton.textContent = 'Открыть смену';
+                shiftButton.onclick = function() {
+                    openShift(shiftButton);
+                };
+            } else {
+                shiftButton.textContent = 'Закрыть смену';
+                shiftButton.onclick = function() {
+                    closeShift(shiftButton);
+                };
+            }
+        }
+    };
+
+    // Отправляем запрос
+    xhr.send();
+}
+
+function openShift(shiftButton) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/openShift', true);
+    xhr.setRequestHeader(csrfHeader, csrfToken);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Обработка успешного ответа от сервера
+            shift = JSON.parse(xhr.responseText);
+
+            // После получения ответа, проверяем условие
+                shiftButton.textContent = 'Закрыть смену';
+                shiftButton.onclick = function() {
+                    closeShift(shiftButton);
+                };
+            }
+        };
+    // Отправляем запрос
+    xhr.send();
+}
+
+function closeShift(shiftButton) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/closeShift', true);
     xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
     xhr.onreadystatechange =  function() {
         // и статус ответа сервера 200 (OK)
         if (xhr.readyState === 4 && xhr.status === 200)
             // Обработка успешного ответа от сервера
             console.log(xhr.responseText);
+        shiftButton.textContent = 'Открыть смену';
+        shiftButton.onclick = function() {
+            openShift(shiftButton);
+        };
+
+    };
+    // Отправляем запрос
+    xhr.send();
+}
+
+function xReport() {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/getXReport', true);
+    xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+    xhr.onreadystatechange =  function() {
+        // и статус ответа сервера 200 (OK)
+        if (xhr.readyState === 4 && xhr.status === 200)
+            // Обработка успешного ответа от сервера
+            console.log(xhr.responseText);
+    };
+    // Отправляем запрос
+    xhr.send();
+}
+
+function getCategoriesToPage() {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/getCategory', true);
+    xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+    xhr.onreadystatechange = function() {
+        // Проверяем, что запрос завершен (readyState = 4)
+        // и статус ответа сервера 200 (OK)
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Обработка успешного ответа от сервера
+            categoryData = JSON.parse(xhr.responseText);
+            drawMainContainer()
+            showCategory();
+        }
+    };
+    // Отправляем запрос
+    xhr.send();
+}
+
+function getItemsToPage() {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/getItemsToPage', true);
+    xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+    xhr.onreadystatechange = function() {
+        // Проверяем, что запрос завершен (readyState = 4)
+        // и статус ответа сервера 200 (OK)
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Обработка успешного ответа от сервера
+            itemsToPage = JSON.parse(xhr.responseText);
+        }
     };
     // Отправляем запрос
     xhr.send();

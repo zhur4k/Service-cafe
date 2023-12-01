@@ -17,13 +17,20 @@ public class Shift {
     private boolean stateOfShift;
     private LocalDateTime endDate;
 
-    public Shift() {
-        this.startDate = LocalDateTime.now();
-        this.stateOfShift = true;
-    }
+    @ManyToOne
+    private User user;
 
     @OneToMany
     @JoinColumn(name = "orders_id", referencedColumnName = "id")
     private List<Orders> orders = new ArrayList<>();
 
+    public Shift(User user) {
+        this.setUser(user);
+        this.startDate = LocalDateTime.now();
+        this.stateOfShift = true;
+    }
+
+    public Shift() {
+
+    }
 }

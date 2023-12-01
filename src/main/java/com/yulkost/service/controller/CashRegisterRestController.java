@@ -49,19 +49,33 @@ public class CashRegisterRestController {
         }
     }
 
-    @GetMapping("/getShift")
-    public ResponseEntity<Shift> getShift() {
+    @GetMapping("/getOpenShift")
+    public ResponseEntity<Shift> getOpenShift(@AuthenticationPrincipal User user) {
         try {
-            return ResponseEntity.ok(shiftService.getOpenShift());
+            return ResponseEntity.ok(shiftService.getOpenShift(user));
         } catch (Exception e) {
             // Ошибка, отправьте соответствующий HTTP-статус
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
     @GetMapping("/openShift")
-    public ResponseEntity<Shift> openShift() {
+    public ResponseEntity<Shift> openShift(@AuthenticationPrincipal User user) {
         try {
-            return ResponseEntity.ok(shiftService.openShift());
+            return ResponseEntity.ok(shiftService.openShift(user));
+        } catch (Exception e) {
+            // Ошибка, отправьте соответствующий HTTP-статус
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/closeShift")
+    public ResponseEntity<String> closeShift(@AuthenticationPrincipal User user) {
+        try {
+            if(cashRegisterService.sendZReport()){
+                shiftService.closeShift(user);
+                return ResponseEntity.ok("Success Shift was closed");
+            }
+            return null;
         } catch (Exception e) {
             // Ошибка, отправьте соответствующий HTTP-статус
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -80,23 +94,13 @@ public class CashRegisterRestController {
         return "false";
     }
     @GetMapping("/getXReport")
-    public ResponseEntity<Void> getXReport() {
+    public ResponseEntity<String> getXReport() {
         try {
             if(cashRegisterService.sendXReport())
-                throw new Exception();
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            // Ошибка, отправьте соответствующий HTTP-статус
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-    @GetMapping("/getZReport")
-    public ResponseEntity<Void> getZReport() {
-        try {
-            if(cashRegisterService.sendZReport())
-                throw new Exception();
+                return ResponseEntity.ok("Success send X-Report");
 
-            return ResponseEntity.noContent().build();
+            throw new Exception();
+
         } catch (Exception e) {
             // Ошибка, отправьте соответствующий HTTP-статус
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

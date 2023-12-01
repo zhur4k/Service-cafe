@@ -76,6 +76,7 @@ table {
 
 .order-table-td {
     font-size: 22px;
+    height: 35px;
     overflow: hidden;
     white-space: nowrap;
 }
@@ -92,7 +93,18 @@ table {
     font-size: 33px;
     border-radius: 5px; /* Скругление углов */
 }
-
+.remove-button{
+    color: white;
+    border: none;
+    padding: 3%;
+    width: 98.5%;
+    margin-right: 0.5%;
+    margin-left: 0.5%;
+    margin-bottom: 0.5%;
+    background-color: #3694d1;
+    font-size: 20px;
+    border-radius: 5px; /* Скругление углов */
+}
 .order-list {
     width: 100%;
     height: 390px; /* Вы можете настроить максимальную высоту по своему усмотрению */
@@ -101,7 +113,7 @@ table {
 }
 .left-Settings{
     width: 30%;
-    height: 600px;
+    height: 530px;
     background-color: white;
     border-radius: 8px;
 }
