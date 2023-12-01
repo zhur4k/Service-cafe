@@ -16,7 +16,7 @@ public class CashRegisterService {
     private final String CASH_REGISTER_ID ="http://169.254.35.154" ;
     public Boolean sendFCheck(Orders order){
         StringBuilder json = new StringBuilder("{\"F\":[" +
-                "{\"C\":{\"cm\":\"Кассир:"+order.getCashier()+"\"}}");
+                "{\"C\":{\"cm\":\"Кассир:"+order.getShift().getUser().getName()+"\"}}");
         for (OrderItems orderItem :order.getOrderItems()) {
             json.append(",{\"S\":{\"code\":\"").append(orderItem.getItems().getCode()).append("\",\"name\":\"").append(orderItem.getItems().getNameOfItems()).append("\",").append("\"qty\":\"").append(orderItem.getQuantity()).append("\"\"price\":\"").append(orderItem.getItems().getPriceToPage()).append("\"}}");
         }

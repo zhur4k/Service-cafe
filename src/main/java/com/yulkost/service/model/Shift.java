@@ -1,5 +1,7 @@
 package com.yulkost.service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,20 +19,12 @@ public class Shift {
     private boolean stateOfShift;
     private LocalDateTime endDate;
 
+    @JsonIgnore
     @ManyToOne
     private User user;
 
+    @JsonIgnore
     @OneToMany
     @JoinColumn(name = "orders_id", referencedColumnName = "id")
     private List<Orders> orders = new ArrayList<>();
-
-    public Shift(User user) {
-        this.setUser(user);
-        this.startDate = LocalDateTime.now();
-        this.stateOfShift = true;
-    }
-
-    public Shift() {
-
-    }
 }

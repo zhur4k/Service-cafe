@@ -17,7 +17,11 @@ public class ShiftService {
 
     public Shift openShift(User user) {
         Shift shift = getOpenShift(user);
-        if(shift==null)  return shiftRepository.save(new Shift(user));
+        if(shift==null)  {
+            shift = new Shift();
+            shift.setUser(user);
+            return shift;
+        }
         return shift;
     }
 

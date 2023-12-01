@@ -57,6 +57,8 @@ function drawMainContainer() {
     payButton.className = 'button';
     payButton.textContent = 'Оплатить';
     payButton.onclick = function() {
+        if (orderItems.length>0)
+            submitOrder();
         showPayBlock();
     };
 
@@ -110,7 +112,6 @@ function showSettings() {
     mainContainer.appendChild(leftContainer);
 
 }
-
 
 function showCategory() {
     let leftContainer = document.getElementById('leftContainer');
@@ -303,15 +304,15 @@ function getShiftToSettings(shiftButton) {
                 shift = JSON.parse(xhr.responseText);
             shift=xhr.responseText;
             // После получения ответа, проверяем условие
-            if (!shift) {
-                shiftButton.textContent = 'Открыть смену';
-                shiftButton.onclick = function() {
-                    openShift(shiftButton);
-                };
-            } else {
+            if (shift) {
                 shiftButton.textContent = 'Закрыть смену';
                 shiftButton.onclick = function() {
                     closeShift(shiftButton);
+                };
+            } else {
+                shiftButton.textContent = 'Открыть смену';
+                shiftButton.onclick = function() {
+                    openShift(shiftButton);
                 };
             }
         }

@@ -83,12 +83,11 @@ public class CashRegisterRestController {
     }
     @PostMapping("/submitOrder")
     public String SubmitOrder(@RequestBody Orders order,@AuthenticationPrincipal User user) {
-        order.setCashier(user.getName());
+        order.setShift(shiftService.openShift(user));
         Orders orderToSave= ordersService.OrderFromPageToOrders(order);
-
         if(cashRegisterService.sendFCheck(orderToSave)){
             ordersService.save(orderToSave);
-            yulkostTelegramBotService.SendOrderToUser(user,ordersService.save(orderToSave));
+            yulkostTelegramBotService.SendOrderToUser(ordersService.save(orderToSave));
             return "true";
         }
         return "false";

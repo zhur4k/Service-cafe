@@ -28,7 +28,7 @@ public class OrdersService {
         Orders newOrder = new Orders();
         newOrder.setDate(LocalDateTime.now());
         newOrder.setPaymentMethod(order.getPaymentMethod());
-        newOrder.setCashier(order.getCashier());
+        newOrder.setShift(order.getShift());
         List<OrderItems> orderItems = new ArrayList<>();
 
         for (int i = 0; i < order.getOrderItems().size(); i++) {

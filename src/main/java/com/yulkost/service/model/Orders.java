@@ -14,13 +14,11 @@ public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String cashier;
     private String paymentMethod;
     private LocalDateTime date;
     @OneToMany
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private List<OrderItems> orderItems = new ArrayList<>();
-
     @ManyToOne
     private Shift shift;
     }
