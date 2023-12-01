@@ -27,4 +27,9 @@ public class Shift {
     @OneToMany
     @JoinColumn(name = "orders_id", referencedColumnName = "id")
     private List<Orders> orders = new ArrayList<>();
+
+    public Shift() {
+        this.startDate = LocalDateTime.now();
+        this.stateOfShift = true;
+    }
 }

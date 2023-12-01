@@ -247,24 +247,52 @@ function clearOrder() {
 }
 
 function submitOrder() {
-    // Создаем объект заказа
-    let orders = ({
-        paymentMethod: true,
-        orderItems, // Массив с информацией о товарах в заказе
-    });
-    // Отправляем заказ на сервер
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', '/submitOrder', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+    xhr.open('GET', '/getOpenShift', true);
+    xhr.setRequestHeader(csrfHeader, csrfToken);
+
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log('Заказ успешно отправлен!');
-            // Очищаем корзину после успешной отправки
-            clearOrder();
+            // Обработка успешного ответа от сервера
+            if(xhr.responseText)
+                shift = JSON.parse(xhr.responseText);
+            shift=xhr.responseText;
+            // После получения ответа, проверяем условие
+            if (shift) {
+                // Создаем объект заказа
+                let orders = ({
+                    paymentMethod: true,
+                    orderItems, // Массив с информацией о товарах в заказе
+                });
+                // Отправляем заказ на сервер
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', '/submitOrder', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        console.log('Заказ успешно отправлен!');
+                        // Очищаем корзину после успешной отправки
+                        clearOrder();
+                    }
+                };
+                xhr.send(JSON.stringify(orders));
+            } else {
+                let messageElement = document.getElementById('messages');
+                messageElement.style.fontSize = "26px";
+                messageElement.style.color = "red";
+                messageElement.textContent = 'Откройте смену!!!';
+                let displayTime = 5000; // например, 5000 миллисекунд (5 секунд)
+                setTimeout(function() {
+                    messageElement.textContent = ''; // Очищаем содержимое элемента
+                }, displayTime);
+            }
         }
     };
-    xhr.send(JSON.stringify(orders));
+
+    // Отправляем запрос
+    xhr.send();
+
 }
 
 function showPayBlock() {

@@ -20,7 +20,7 @@ public class ShiftService {
         if(shift==null)  {
             shift = new Shift();
             shift.setUser(user);
-            return shift;
+            return shiftRepository.save(shift);
         }
         return shift;
     }
