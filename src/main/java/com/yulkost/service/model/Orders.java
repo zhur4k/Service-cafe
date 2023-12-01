@@ -20,4 +20,7 @@ public class Orders {
     @OneToMany
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private List<OrderItems> orderItems = new ArrayList<>();
+
+    @ManyToOne
+    private Shift shift;
     }

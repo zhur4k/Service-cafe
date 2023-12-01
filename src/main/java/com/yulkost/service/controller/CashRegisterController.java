@@ -14,17 +14,9 @@ import java.util.List;
 
 @Controller
 public class CashRegisterController {
-    public CategoriesService categoriesService;
-
-    public CashRegisterController(CategoriesService categoriesService) {
-        this.categoriesService = categoriesService;
-    }
 
     @GetMapping("/")
     public String CashRegister(Model model){
-            model.addAttribute("category" ,categoriesService.findAll());
         return "cashRegisterCafe";
     }
-
-
 }

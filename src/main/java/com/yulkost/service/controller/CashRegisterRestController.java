@@ -1,9 +1,6 @@
 package com.yulkost.service.controller;
 
-import com.yulkost.service.model.Categories;
-import com.yulkost.service.model.Items;
-import com.yulkost.service.model.Orders;
-import com.yulkost.service.model.User;
+import com.yulkost.service.model.*;
 import com.yulkost.service.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +18,15 @@ public class CashRegisterRestController {
     public CategoriesService categoriesService;
     public ItemsService itemsService;
 
-    public CashRegisterRestController(CashRegisterService cashRegisterService, OrdersService ordersService, YulkostTelegramBotService yulkostTelegramBotService, CategoriesService categoriesService, ItemsService itemsService) {
+    private ShiftService shiftService;
+
+    public CashRegisterRestController(CashRegisterService cashRegisterService, OrdersService ordersService, YulkostTelegramBotService yulkostTelegramBotService, CategoriesService categoriesService, ItemsService itemsService, ShiftService shiftService) {
         this.cashRegisterService = cashRegisterService;
         this.ordersService = ordersService;
         this.yulkostTelegramBotService = yulkostTelegramBotService;
         this.categoriesService = categoriesService;
         this.itemsService = itemsService;
+        this.shiftService = shiftService;
     }
 
     @GetMapping("/getCategory")
@@ -43,6 +43,25 @@ public class CashRegisterRestController {
     public ResponseEntity<List<Items>> getItemsToPage() {
         try {
             return ResponseEntity.ok(itemsService.findAllList());
+        } catch (Exception e) {
+            // Ошибка, отправьте соответствующий HTTP-статус
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/getShift")
+    public ResponseEntity<Shift> getShift() {
+        try {
+            return ResponseEntity.ok(shiftService.getOpenShift());
+        } catch (Exception e) {
+            // Ошибка, отправьте соответствующий HTTP-статус
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @GetMapping("/openShift")
+    public ResponseEntity<Shift> openShift() {
+        try {
+            return ResponseEntity.ok(shiftService.openShift());
         } catch (Exception e) {
             // Ошибка, отправьте соответствующий HTTP-статус
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
