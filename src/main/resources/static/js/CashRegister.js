@@ -92,24 +92,24 @@ function displaySettings() {
 
     // Создаем левую часть (leftContainer)
     let leftContainer = document.createElement('div');
-    leftContainer.classList.add('left-Settings');
+    leftContainer.classList.add('left-settings');
 
     let shiftButton = document.createElement('button');
     shiftButton.id = "shiftButton";
     shiftButton.type = 'button';
-    shiftButton.className = 'button';
+    shiftButton.className = 'button-in-settings';
     checkShiftButtonState();
 
     let xButton = document.createElement('button');
     xButton.type = 'button';
-    xButton.className = 'button';
+    xButton.className = 'button-in-settings';
     xButton.textContent = 'X-Отчёт';
     xButton.onclick = function() {
         xReportButtonClick();
     };
     let collectionButton = document.createElement('button');
     collectionButton.type = 'button';
-    collectionButton.className = 'button';
+    collectionButton.className = 'button-in-settings';
     collectionButton.textContent = 'Инкассация';
     collectionButton.onclick = function() {
         showCollection();
@@ -126,7 +126,12 @@ function showCollection() {
     let mainContainer = document.getElementById('main-container');
 
     let rightContainer = document.createElement('div');
-    rightContainer.classList.add('right-Settings');
+    rightContainer.classList.add('right-settings');
+    mainContainer.appendChild(rightContainer);
+
+    // let rightContainer = document.createElement('div');
+    //
+    // rightContainer.appendChild()
 
 }
 

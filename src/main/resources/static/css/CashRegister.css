@@ -80,7 +80,17 @@ table {
     overflow: hidden;
     white-space: nowrap;
 }
-
+.button-in-settings {
+    color: white;
+    border: none;
+    height:21%;
+    max-height: 20%;
+    width: 96%;
+    margin: 2%;
+    background-color: #f9943c;
+    font-size: 33px;
+    border-radius: 5px; /* Скругление углов */
+}
 .button {
     color: white;
     border: none;
@@ -107,13 +117,19 @@ table {
 }
 .order-list {
     width: 100%;
-    height: 390px; /* Вы можете настроить максимальную высоту по своему усмотрению */
-    max-height: 390px; /* Вы можете настроить максимальную высоту по своему усмотрению */
+    height: 450px; /* Вы можете настроить максимальную высоту по своему усмотрению */
+    max-height: 450px; /* Вы можете настроить максимальную высоту по своему усмотрению */
     overflow-y: auto; /* Добавление вертикального скролла при необходимости */
 }
-.left-Settings{
+.left-settings{
     width: 30%;
-    height: 530px;
+    height: 590px;
     background-color: white;
+    border-radius: 8px;
+}
+.right-settings{
+    width: 69%;
+    height: 590px;
+    background-color: #043c61;
     border-radius: 8px;
 }
