@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class CashRegisterService {
+public class CashRegisterRestService {
 
     private final String CASH_REGISTER_ID ="http://169.254.35.154" ;
     public Boolean sendFCheck(Orders order){

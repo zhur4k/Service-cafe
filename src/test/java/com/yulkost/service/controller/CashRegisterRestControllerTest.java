@@ -1,6 +1,6 @@
 package com.yulkost.service.controller;
 
-import com.yulkost.service.service.CashRegisterService;
+import com.yulkost.service.service.CashRegisterRestService;
 import com.yulkost.service.service.OrdersService;
 import com.yulkost.service.service.YulkostTelegramBotService;
 import org.junit.jupiter.api.Test;
@@ -9,12 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @ExtendWith(MockitoExtension.class)
 class CashRegisterRestControllerTest {
     @Mock
-    CashRegisterService cashRegisterService;
+    CashRegisterRestService cashRegisterService;
     @Mock
     OrdersService ordersService;
     @Mock

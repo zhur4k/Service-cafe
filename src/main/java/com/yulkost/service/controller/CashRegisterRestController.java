@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 public class CashRegisterRestController {
 
-    public CashRegisterService cashRegisterService;
+    public CashRegisterRestService cashRegisterService;
     public OrdersService ordersService;
     public YulkostTelegramBotService yulkostTelegramBotService;
     public CategoriesService categoriesService;
@@ -20,7 +20,7 @@ public class CashRegisterRestController {
 
     private ShiftService shiftService;
 
-    public CashRegisterRestController(CashRegisterService cashRegisterService, OrdersService ordersService, YulkostTelegramBotService yulkostTelegramBotService, CategoriesService categoriesService, ItemsService itemsService, ShiftService shiftService) {
+    public CashRegisterRestController(CashRegisterRestService cashRegisterService, OrdersService ordersService, YulkostTelegramBotService yulkostTelegramBotService, CategoriesService categoriesService, ItemsService itemsService, ShiftService shiftService) {
         this.cashRegisterService = cashRegisterService;
         this.ordersService = ordersService;
         this.yulkostTelegramBotService = yulkostTelegramBotService;
@@ -83,11 +83,11 @@ public class CashRegisterRestController {
     }
     @PostMapping("/submitOrder")
     public String SubmitOrder(@RequestBody Orders order,@AuthenticationPrincipal User user) {
-        order.setShift(shiftService.openShift(user));
+        order.setShift(shiftService.getOpenShift(user));
         Orders orderToSave= ordersService.OrderFromPageToOrders(order);
         if(cashRegisterService.sendFCheck(orderToSave)){
             ordersService.save(orderToSave);
-            yulkostTelegramBotService.SendOrderToUser(ordersService.save(orderToSave));
+            yulkostTelegramBotService.SendOrderToUser(orderToSave);
             return "true";
         }
         return "false";
