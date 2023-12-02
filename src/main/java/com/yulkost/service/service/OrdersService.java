@@ -1,7 +1,9 @@
 package com.yulkost.service.service;
 
+import com.yulkost.service.model.CashRegister;
 import com.yulkost.service.model.OrderItems;
 import com.yulkost.service.model.Orders;
+import com.yulkost.service.repository.CashRegisterRepository;
 import com.yulkost.service.repository.OrderItemsRepository;
 import com.yulkost.service.repository.OrdersRepository;
 import org.springframework.stereotype.Service;
@@ -15,11 +17,13 @@ public class OrdersService {
     public OrdersRepository ordersRepository;
     public ItemsService itemsService;
     public OrderItemsRepository orderItemsRepository;
+    private CashRegisterRepository cashRegisterRepository;
 
-    public OrdersService(OrdersRepository ordersRepository, ItemsService itemsService, OrderItemsRepository orderItemsRepository) {
+    public OrdersService(OrdersRepository ordersRepository, ItemsService itemsService, OrderItemsRepository orderItemsRepository, CashRegisterRepository cashRegisterRepository) {
         this.ordersRepository = ordersRepository;
         this.itemsService = itemsService;
         this.orderItemsRepository = orderItemsRepository;
+        this.cashRegisterRepository = cashRegisterRepository;
     }
 
     public Orders OrderFromPageToOrders(Orders order){
@@ -27,7 +31,6 @@ public class OrdersService {
             return null;
         Orders newOrder = new Orders();
         newOrder.setDate(LocalDateTime.now());
-        newOrder.setPaymentMethod(order.getPaymentMethod());
         newOrder.setShift(order.getShift());
         List<OrderItems> orderItems = new ArrayList<>();
 
@@ -40,8 +43,11 @@ public class OrdersService {
         newOrder.setOrderItems(orderItems);
         return newOrder;
     }
-        public Orders save(Orders order){
+        public void save(Orders order){
+            CashRegister cashRegister = new CashRegister();
+            cashRegister.setCashAmount(cashRegister.getCashAmount()+order.getCashPaid());
             orderItemsRepository.saveAll(order.getOrderItems());
-            return ordersRepository.save(order);
-        }
+            cashRegister.setOrder(ordersRepository.save(order));
+            cashRegisterRepository.save(cashRegister);
+    }
 }

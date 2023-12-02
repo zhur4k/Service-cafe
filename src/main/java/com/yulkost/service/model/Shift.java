@@ -28,6 +28,11 @@ public class Shift {
     @JoinColumn(name = "orders_id", referencedColumnName = "id")
     private List<Orders> orders = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany
+    @JoinColumn(name = "colections_id", referencedColumnName = "id")
+    private List<Collection> collections = new ArrayList<>();
+
     public Shift() {
         this.startDate = LocalDateTime.now();
         this.stateOfShift = true;
