@@ -12,14 +12,15 @@ let shift=[]
 getCategoriesToPage();
 getItemsToPage();
 
-function drawMainContainer() {
+//Display main container
+function displayMainContainer() {
     let headButtons = document.getElementById('buttons-head');
     headButtons.innerHTML = '';
     let settingsButton = document.createElement('button');
     settingsButton.classList.add('button-settings');
     settingsButton.textContent = '☸';
     settingsButton.onclick = function() {
-        showSettings();
+        displaySettings();
     }
     headButtons.appendChild(settingsButton);
     // Получаем основной контейнер
@@ -57,8 +58,6 @@ function drawMainContainer() {
     payButton.className = 'button';
     payButton.textContent = 'Оплатить';
     payButton.onclick = function() {
-        if (orderItems.length>0)
-            submitOrder();
         showPayBlock();
     };
 
@@ -69,18 +68,19 @@ function drawMainContainer() {
     // Добавляем левую и правую части в основной контейнер
     mainContainer.appendChild(leftContainer);
     mainContainer.appendChild(rightContainer);
-    showCategory();
+    displayCategories();
     displayOrder();
 }
 
-function showSettings() {
+//Display settings page
+function displaySettings() {
     let headButtons = document.getElementById('buttons-head');
     headButtons.innerHTML = '';
     let backButton = document.createElement('buttonBack');
     backButton.classList.add('button-settings');
     backButton.textContent = '🔙';
     backButton.onclick = function() {
-        drawMainContainer();
+        displayMainContainer();
     }
     headButtons.appendChild(backButton);
 
@@ -95,25 +95,43 @@ function showSettings() {
     leftContainer.classList.add('left-Settings');
 
     let shiftButton = document.createElement('button');
+    shiftButton.id = "shiftButton";
     shiftButton.type = 'button';
     shiftButton.className = 'button';
-
-    getShiftToSettings(shiftButton);
+    checkShiftButtonState();
 
     let xButton = document.createElement('button');
     xButton.type = 'button';
     xButton.className = 'button';
     xButton.textContent = 'X-Отчёт';
     xButton.onclick = function() {
-        xReport();
+        xReportButtonClick();
+    };
+    let collectionButton = document.createElement('button');
+    collectionButton.type = 'button';
+    collectionButton.className = 'button';
+    collectionButton.textContent = 'Инкассация';
+    collectionButton.onclick = function() {
+        showCollection();
     };
     leftContainer.appendChild(shiftButton);
     leftContainer.appendChild(xButton);
+    leftContainer.appendChild(collectionButton);
     mainContainer.appendChild(leftContainer);
 
 }
 
-function showCategory() {
+
+function showCollection() {
+    let mainContainer = document.getElementById('main-container');
+
+    let rightContainer = document.createElement('div');
+    rightContainer.classList.add('right-Settings');
+
+}
+
+//Display categories to page
+function displayCategories() {
     let leftContainer = document.getElementById('leftContainer');
     leftContainer.innerHTML = "";
     // Итерация по данным и создание элементов
@@ -123,20 +141,21 @@ function showCategory() {
 
         categoryDiv.textContent = categories.categoriesName;
         categoryDiv.onclick = function() {
-            showProducts(categories);
+            displayProducts(categories);
         };
         leftContainer.appendChild(categoryDiv);
     });
 }
 
-function showProducts(categories) {
+//Display order to page
+function displayProducts(categories) {
     let leftContainer = document.getElementById('leftContainer');
     leftContainer.innerHTML = "";
 
     let backDiv = document.createElement('div');
     backDiv.classList.add('child-block');
     backDiv.onclick = function() {
-        showCategory();
+        displayCategories();
     }
     let backDivHeading = document.createElement('h2');
     backDivHeading.textContent = 'Вернуться';
@@ -169,6 +188,7 @@ function showProducts(categories) {
     });
 }
 
+//Add product to order
 function addProduct(id) {
     // Поиск продукта в массиве по имени
     const existingProduct = orderItems.find(orderItems => (orderItems.items.id === id));
@@ -187,6 +207,7 @@ function addProduct(id) {
     displayOrder();
 }
 
+//Display order to page
 function displayOrder() {
     const orderItemTable = document.getElementById("order-items");
     orderItemTable.innerHTML = "";
@@ -236,16 +257,18 @@ function displayOrder() {
     document.getElementById("total").textContent = (total / 100).toFixed(2) + " р";
 }
 
+//Remove item from page
 function removeItem(index) {
     orderItems.splice(index, 1);
     displayOrder();
 }
 
+//Clear order on page
 function clearOrder() {
     orderItems = [];
-    displayOrder();
 }
 
+//Send order to server
 function submitOrder() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getOpenShift', true);
@@ -278,14 +301,7 @@ function submitOrder() {
                 };
                 xhr.send(JSON.stringify(orders));
             } else {
-                let messageElement = document.getElementById('messages');
-                messageElement.style.fontSize = "26px";
-                messageElement.style.color = "red";
-                messageElement.textContent = 'Откройте смену!!!';
-                let displayTime = 5000; // например, 5000 миллисекунд (5 секунд)
-                setTimeout(function() {
-                    messageElement.textContent = ''; // Очищаем содержимое элемента
-                }, displayTime);
+                showMessage();
             }
         }
     };
@@ -295,32 +311,8 @@ function submitOrder() {
 
 }
 
+//Show pay block
 function showPayBlock() {
-    let headButtons = document.getElementById('buttons-head');
-    headButtons.innerHTML = '';
-    let backButton = document.createElement('buttonBack');
-    backButton.classList.add('button-settings');
-    backButton.textContent = '🔙';
-    backButton.onclick = function() {
-        drawMainContainer();
-    }
-    headButtons.appendChild(backButton);
-
-
-    let mainContainer = document.getElementById('main-container');
-
-    // Очищаем контейнер перед отрисовкой
-    mainContainer.innerHTML = '';
-
-    // Создаем левую часть (leftContainer)
-    let leftContainer = document.createElement('div');
-    leftContainer.classList.add('left-Settings');
-
-
-    mainContainer.appendChild(leftContainer);
-}
-
-function getShiftToSettings(shiftButton) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getOpenShift', true);
     xhr.setRequestHeader(csrfHeader, csrfToken);
@@ -332,6 +324,57 @@ function getShiftToSettings(shiftButton) {
                 shift = JSON.parse(xhr.responseText);
             shift=xhr.responseText;
             // После получения ответа, проверяем условие
+            if (shift) {
+                if (orderItems.length<1)
+                    return showMessage('Добавьте товары в заказ!!!');
+                let headButtons = document.getElementById('buttons-head');
+                headButtons.innerHTML = '';
+                let backButton = document.createElement('buttonBack');
+                backButton.classList.add('button-settings');
+                backButton.textContent = '🔙';
+                backButton.onclick = function() {
+                    displayMainContainer();
+                }
+                headButtons.appendChild(backButton);
+
+
+                let mainContainer = document.getElementById('main-container');
+
+                // Очищаем контейнер перед отрисовкой
+                mainContainer.innerHTML = '';
+
+                // Создаем левую часть (leftContainer)
+                let leftContainer = document.createElement('div');
+                leftContainer.classList.add('left-Settings');
+
+
+                mainContainer.appendChild(leftContainer);
+                submitOrder();
+
+
+            } else {
+                showMessage();
+            }
+        }
+    };
+    // Отправляем запрос
+    xhr.send();
+}
+
+//Check state of shift and set corresponding button
+function checkShiftButtonState() {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/getOpenShift', true);
+    xhr.setRequestHeader(csrfHeader, csrfToken);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Обработка успешного ответа от сервера
+            if(xhr.responseText)
+                shift = JSON.parse(xhr.responseText);
+            shift=xhr.responseText;
+            // После получения ответа, проверяем условие
+            let shiftButton = document.getElementById("shiftButton");
             if (shift) {
                 shiftButton.textContent = 'Закрыть смену';
                 shiftButton.onclick = function() {
@@ -350,6 +393,19 @@ function getShiftToSettings(shiftButton) {
     xhr.send();
 }
 
+//Show message in messages div
+function showMessage(message='Откройте смену!!!'){
+    let messageElement = document.getElementById('messages');
+    messageElement.style.fontSize = "26px";
+    messageElement.style.color = "red";
+    messageElement.textContent = message;
+    let displayTime = 5000; // например, 5000 миллисекунд (5 секунд)
+    setTimeout(function() {
+        messageElement.textContent = ''; // Очищаем содержимое элемента
+    }, displayTime);
+}
+
+//Send GET request to open shift and changing shift button state
 function openShift(shiftButton) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/openShift', true);
@@ -371,6 +427,7 @@ function openShift(shiftButton) {
     xhr.send();
 }
 
+//Send GET request to close shift and changing shift button state
 function closeShift(shiftButton) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/closeShift', true);
@@ -390,11 +447,36 @@ function closeShift(shiftButton) {
     xhr.send();
 }
 
-function xReport() {
+//Checking state of shift and calls xReportSend
+function xReportButtonClick() {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/getOpenShift', true);
+    xhr.setRequestHeader(csrfHeader, csrfToken);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Обработка успешного ответа от сервера
+            if (xhr.responseText)
+                shift = JSON.parse(xhr.responseText);
+            shift = xhr.responseText;
+            // После получения ответа, проверяем условие
+            if (shift) {
+                xReportSend();
+            } else {
+                showMessage();
+            }
+        }
+    };
+    // Отправляем запрос
+    xhr.send();
+}
+
+//Sending GET request to X-Report
+function xReportSend(){
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getXReport', true);
     xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
-    xhr.onreadystatechange =  function() {
+    xhr.onreadystatechange = function () {
         // и статус ответа сервера 200 (OK)
         if (xhr.readyState === 4 && xhr.status === 200)
             // Обработка успешного ответа от сервера
@@ -402,8 +484,9 @@ function xReport() {
     };
     // Отправляем запрос
     xhr.send();
-}
+    }
 
+//Sending GET request that returns all Categories
 function getCategoriesToPage() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getCategory', true);
@@ -414,14 +497,15 @@ function getCategoriesToPage() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             // Обработка успешного ответа от сервера
             categoryData = JSON.parse(xhr.responseText);
-            drawMainContainer()
-            showCategory();
+            displayMainContainer()
+            displayCategories();
         }
     };
     // Отправляем запрос
     xhr.send();
 }
 
+//Sending GET request that returns all Items
 function getItemsToPage() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getItemsToPage', true);
