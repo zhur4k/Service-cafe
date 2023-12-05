@@ -121,20 +121,88 @@ function displaySettings() {
 
 }
 
-
 function showCollection() {
     let mainContainer = document.getElementById('main-container');
+    let rightContainer = document.getElementById('right-container');
 
-    let rightContainer = document.createElement('div');
+// Проверяем, существует ли элемент rightContainer
+    if (rightContainer) {
+        // Если существует, удаляем его
+        rightContainer.remove();
+        return
+    }
+    rightContainer = document.createElement('div');
+    rightContainer.id='right-container';
     rightContainer.classList.add('right-settings');
+    let rightContainerChild = document.createElement('div');
+    rightContainerChild.classList.add('right-settings-button-container');
+
+    
+    let addCashButton = document.createElement('button');
+    addCashButton.type = 'button';
+    addCashButton.className = 'button-in-settings';
+    addCashButton.textContent = 'Внести';
+    addCashButton.onclick = function() {
+        let collection = ({
+            typeOfOperation: true,
+            sumOfOperation: (parseFloat(document.getElementById('sum-input').innerText).toFixed(2)*100) // Массив с информацией о товарах в заказе
+        });
+        sendCollectionMove(collection)
+    };
+    let takeCashButton = document.createElement('button');
+    takeCashButton.type = 'button';
+    takeCashButton.className = 'button-in-settings';
+    takeCashButton.textContent = 'Изъять';
+    takeCashButton.onclick = function() {
+        let collection = ({
+            typeOfOperation: false,
+            sumOfOperation: (parseFloat(document.getElementById('sum-input').innerText).toFixed(2)*100) // Массив с информацией о товарах в заказе
+        });
+        sendCollectionMove(collection)
+    };
+    rightContainer.appendChild(getInputForm());
+    rightContainerChild.appendChild(addCashButton);
+    rightContainerChild.appendChild(takeCashButton);
+    rightContainer.appendChild(rightContainerChild);
     mainContainer.appendChild(rightContainer);
-
-    // let rightContainer = document.createElement('div');
-    //
-    // rightContainer.appendChild()
-
 }
+// Создаем объект заказа
 
+function sendCollectionMove(collection) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/getOpenShift', true);
+    xhr.setRequestHeader(csrfHeader, csrfToken);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Обработка успешного ответа от сервера
+            if(xhr.responseText)
+                shift = JSON.parse(xhr.responseText);
+            shift=xhr.responseText;
+            // После получения ответа, проверяем условие
+            if (shift) {
+                // Отправляем заказ на сервер
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', '/collectionMove', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        console.log('Инкассация проведена успешно!!!');
+                        // Очищаем корзину после успешной отправки
+                    }else
+                        showMessage("В кассе нет столько денег!!!");
+                };
+                xhr.send(JSON.stringify(collection));
+            } else {
+                showMessage();
+            }
+        }
+    };
+
+    // Отправляем запрос
+    xhr.send();
+}
 //Display categories to page
 function displayCategories() {
     let leftContainer = document.getElementById('leftContainer');
@@ -191,6 +259,109 @@ function displayProducts(categories) {
 
         leftContainer.appendChild(productDiv);
     });
+}
+
+function getInputForm() {
+    let inputForm = document.createElement('div')
+    inputForm.classList.add('sum-input-container')
+    let sumInputContainer = document.createElement('div');
+    sumInputContainer.classList.add('sum-input-container-child')
+
+    let sumInput = document.createElement('div');
+    sumInput.classList.add('sum-input');
+    sumInput.id = 'sum-input';
+    sumInput.textContent = '';
+    let label = document.createElement('div');
+    label.textContent = 'руб';
+    let buttonClear = document.createElement('button');
+    buttonClear.classList.add('button-clear-form-input');
+    buttonClear.textContent = '×';
+    buttonClear.onclick = ClearInputFormSum;
+    let buttonContainer = document.createElement('div');
+    // buttonContainer.classList.add('sum-input-container');
+    for (let i = 1; i <= 9; i++) {
+        let button = createButtonToSumElement(i);
+        buttonContainer.appendChild(button);
+    }
+    let dotButton = createButtonToSumElement('.');
+    buttonContainer.appendChild(dotButton);
+    let zeroButton = createButtonToSumElement('0');
+    buttonContainer.appendChild(zeroButton);
+    let deleteButton = createButtonToSumElement('⌫');
+    deleteButton.onclick = deleteLastChar;
+    buttonContainer.appendChild(deleteButton);
+
+    sumInputContainer.appendChild(sumInput);
+    sumInputContainer.appendChild(label);
+    sumInputContainer.appendChild(buttonClear);
+
+    inputForm.appendChild(sumInputContainer);
+    inputForm.appendChild(buttonContainer);
+    return inputForm;
+}
+
+function ClearInputFormSum() {
+    let sumInput = document.getElementById('sum-input');
+    sumInput.textContent ='';
+}
+
+function deleteLastChar() {
+    let sumInput = document.getElementById('sum-input');
+    let currentText = sumInput.textContent;
+    sumInput.textContent = currentText.slice(0, -1);
+}
+
+function appendToInput(value) {
+    let inputElement = document.getElementById('sum-input');
+    let currentValue = inputElement.textContent;
+
+    // Проверка наличия точки в текущем вводе
+    let hasDot = currentValue.includes('.');
+
+    // Если текущий ввод не содержит точку или содержит точку, но после неё нет числа
+    if (!hasDot || (hasDot && !/\d$/.test(currentValue))) {
+        // Если введена точка, добавляем 0 перед ней
+        if (value === '.' && !/\d$/.test(currentValue)) {
+            inputElement.textContent += '0';
+        }
+        // Если текущий ввод - ноль и введено число, то введенное значение будет новым вводом
+        else if (currentValue === '0' && /\d/.test(value)) {
+            inputElement.textContent = value;
+        }
+        // Добавляем ввод к текущему значению
+        else {
+            inputElement.textContent += value;
+        }
+    }
+
+    // Если текущий ввод содержит точку
+    else if (hasDot) {
+        // Разбиваем число на целую и десятичную части
+        let parts = currentValue.split('.');
+        let integerPart = parts[0];
+        let decimalPart = parts[1] || '';
+
+        // Если в десятичной части уже есть два знака после точки, не добавляем больше
+        if (decimalPart.length < 2) {
+            // Добавляем ввод к текущей десятичной части
+            inputElement.textContent += value;
+        }
+    }
+
+    // Ограничиваем ввод, чтобы результат не превышал 10000
+    if (parseFloat(inputElement.textContent) > 10000) {
+        inputElement.textContent = '10000';
+    }
+}
+
+function createButtonToSumElement(value) {
+    let button = document.createElement('button');
+    button.className = 'button-sum-input';
+    button.textContent = value;
+    button.onclick = function() {
+        appendToInput(value);
+    };
+    return button;
 }
 
 //Add product to order
@@ -313,7 +484,6 @@ function submitOrder() {
 
     // Отправляем запрос
     xhr.send();
-
 }
 
 //Show pay block

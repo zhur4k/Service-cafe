@@ -45,7 +45,7 @@ public class OrdersService {
     }
         public void save(Orders order){
             CashRegister cashRegister = new CashRegister();
-            cashRegister.setCashAmount(cashRegister.getCashAmount()+order.getCashPaid());
+            cashRegister.setCashAmount(cashRegisterRepository.findCashRegisterWithMaxId().getCashAmount()+order.getCashPaid());
             orderItemsRepository.saveAll(order.getOrderItems());
             cashRegister.setOrder(ordersRepository.save(order));
             cashRegisterRepository.save(cashRegister);

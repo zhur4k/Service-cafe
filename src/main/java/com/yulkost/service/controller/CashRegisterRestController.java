@@ -17,15 +17,16 @@ public class CashRegisterRestController {
     public YulkostTelegramBotService yulkostTelegramBotService;
     public CategoriesService categoriesService;
     public ItemsService itemsService;
-
+    private CollectionService collectionService;
     private ShiftService shiftService;
 
-    public CashRegisterRestController(CashRegisterRestService cashRegisterService, OrdersService ordersService, YulkostTelegramBotService yulkostTelegramBotService, CategoriesService categoriesService, ItemsService itemsService, ShiftService shiftService) {
+    public CashRegisterRestController(CashRegisterRestService cashRegisterService, OrdersService ordersService, YulkostTelegramBotService yulkostTelegramBotService, CategoriesService categoriesService, ItemsService itemsService, CollectionService collectionService, ShiftService shiftService) {
         this.cashRegisterService = cashRegisterService;
         this.ordersService = ordersService;
         this.yulkostTelegramBotService = yulkostTelegramBotService;
         this.categoriesService = categoriesService;
         this.itemsService = itemsService;
+        this.collectionService = collectionService;
         this.shiftService = shiftService;
     }
 
@@ -91,6 +92,12 @@ public class CashRegisterRestController {
             return "true";
         }
         return "false";
+    }
+    @PostMapping("/collectionMove")
+    public String CollectionMove(@RequestBody Collection collection,@AuthenticationPrincipal User user) {
+        collection.setShift(shiftService.getOpenShift(user));
+        collectionService.save(collection);
+        return "Success";
     }
     @GetMapping("/getXReport")
     public ResponseEntity<String> getXReport() {
