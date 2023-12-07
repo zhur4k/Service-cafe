@@ -21,6 +21,7 @@ public class Items {
     private String nameOfItems;
     private Boolean view;
     private int price;
+    private int unitPrice;
     @ManyToOne
     @JoinColumn(name = "unit_id", referencedColumnName = "id")
     private Units unit;

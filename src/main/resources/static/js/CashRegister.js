@@ -605,7 +605,7 @@ function displayOrder() {
         const removeButton = document.createElement("button");
 
         itemCell.textContent = item.items.nameOfItems;
-        quantityCell.textContent = item.quantity;
+        quantityCell.textContent = (item.quantity*item.items.unitPrice)+item.items.unit.name;
         const itemTotal = ((item.items.price * item.quantity) / 100).toFixed(2) + " р";
         totalCell.textContent = itemTotal;
         removeButton.textContent = "Удалить";

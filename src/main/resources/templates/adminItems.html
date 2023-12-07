@@ -25,6 +25,7 @@
                 <th>Код</th>
                 <th>Имя</th>
                 <th>Цена</th>
+                <th>Кол-во в ед.</th>
                 <th>Видимость</th>
                 <th>Категория</th>
                 <th>Ед. изм.</th>
@@ -35,6 +36,7 @@
                 <td><input th:name="|items[${itemStat.index}].code|" th:value="${item.getCode()}" required/></td>
                 <td><input th:name="|items[${itemStat.index}].nameOfItems|" th:value="${item.getNameOfItems()}" required/></td>
                 <td><input type="number" step="0.01" th:name="|items[${itemStat.index}].priceToPage|" th:value="${item.getPriceToPage()}" required/></td>
+                <td><input type="number" step="1" th:name="|items[${itemStat.index}].unitPrice|" th:value="${item.getUnitPrice()}" required/></td>
                 <td>
                     <select th:name="|items[${itemStat.index}].view|" required>
                         <option th:selected="${item.getView()}" th:value="true">Виден</option>
