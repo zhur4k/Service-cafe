@@ -26,7 +26,14 @@
     text-align: center;
     border-bottom:3px solid white;
 }
+.sum-info{
+    color: white;
+    width: 100%;
+    font-size: 19px;
+}
 .button-clear-form-input{
+    display: flex;
+    justify-content: center;
     border: none;
     margin-left: 20px;
     background-color: #59b1eb;
@@ -44,5 +51,4 @@
     height: 100px;
     margin: 5px;
     border-radius: 50%;
-    justify-content: center;
 }

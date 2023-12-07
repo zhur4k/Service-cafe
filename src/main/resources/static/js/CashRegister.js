@@ -9,6 +9,10 @@ let orderItems = [];
 //Shift state
 let shift=[]
 
+let cashPaid=0;
+let cashLessPaid=0;
+let establishmentPaid=0;
+let total=0;
 getCategoriesToPage();
 getItemsToPage();
 
@@ -142,13 +146,70 @@ function displayPayBlock(){
     rightContainer.classList.add('right-pay');
 
     mainContainer.appendChild(getInputForm());
+
+
+    setSumAfterPaidOperation();
+    let cashContainer = document.createElement('div');
+    cashContainer.classList.add('child-block-pay');
+    cashContainer.textContent = 'Наличные $';
+    cashContainer.onclick = function () {
+        cashPaid+= document.getElementById('sum-input').textContent*100;
+        setSumAfterPaidOperation();
+    }
+    rightContainer.appendChild(cashContainer);
+
+    let lessCashContainer = document.createElement('div');
+    lessCashContainer.classList.add('child-block-pay');
+    lessCashContainer.textContent = 'Безналичный $'
+    lessCashContainer.onclick = function () {
+        cashLessPaid+= document.getElementById('sum-input').textContent*100;
+        setSumAfterPaidOperation();
+    }
+    rightContainer.appendChild(lessCashContainer);
+
+    let establishmentContainer = document.createElement('div');
+    establishmentContainer.classList.add('child-block-pay');
+    establishmentContainer.textContent = 'За счёт заведения';
+    establishmentContainer.onclick = function () {
+        establishmentPaid+= document.getElementById('sum-input').textContent*100;
+        setSumAfterPaidOperation();
+    }
+
+    rightContainer.appendChild(establishmentContainer);
+
     mainContainer.appendChild(rightContainer);
+}
+function displayCheck() {
+    let headButtons = document.getElementById('buttons-head');
+    headButtons.innerHTML = '';
+    let backButton = document.createElement('buttonBack');
+    backButton.classList.add('button-in-header');
+    backButton.textContent = '🔙';
+    backButton.onclick = function() {
+        displayMainContainer();
+    }
+    headButtons.appendChild(backButton);
 
-    submitOrder();
 
+    let mainContainer = document.getElementById('main-container');
 
+    // Очищаем контейнер перед отрисовкой
+    mainContainer.innerHTML = '';
+
+    // Создаем левую часть (leftContainer)
+    let leftContainer = document.createElement('div');
+    leftContainer.classList.add('main-check-block');
 }
 
+function setSumAfterPaidOperation(){
+    let sumToPai = (total-cashPaid-cashLessPaid-establishmentPaid);
+    document.getElementById('sum-input').textContent =(sumToPai/100).toFixed(2);
+    document.getElementById( 'sum-info').textContent = 'К оплате: '+(sumToPai/100).toFixed(2)
+        +'руб из '+(sumToPai/100).toFixed(2)+'руб';
+    if(sumToPai===0){
+        return submitOrder();
+    }
+}
 //Show pay block
 function checkOrderAndDisplayPayBlock() {
     let xhr = new XMLHttpRequest();
@@ -341,7 +402,11 @@ function getInputForm() {
     let sumInput = document.createElement('div');
     sumInput.classList.add('sum-input');
     sumInput.id = 'sum-input';
-    sumInput.textContent = '';
+
+    let sumInfo = document.createElement('div');
+    sumInfo.classList.add('sum-info');
+    sumInfo.id = 'sum-info';
+
     let label = document.createElement('div');
     label.textContent = 'руб';
     let buttonClear = document.createElement('button');
@@ -367,6 +432,7 @@ function getInputForm() {
     sumInputContainer.appendChild(buttonClear);
 
     inputForm.appendChild(sumInputContainer);
+    inputForm.appendChild(sumInfo);
     inputForm.appendChild(buttonContainer);
     return inputForm;
 }
@@ -397,7 +463,7 @@ function appendToInput(value) {
     }else if (!hasDot || (hasDot && !/\d$/.test(currentValue))) {
         // Если введена точка, добавляем 0 перед ней
         if (value === '.' && !/\d$/.test(currentValue)) {
-            inputElement.textContent += '0';
+            inputElement.textContent += '0.';
         }
         // Если текущий ввод - ноль и введено число, то введенное значение будет новым вводом
         else if (currentValue === '0' && /\d/.test(value)) {
@@ -463,7 +529,7 @@ function addProduct(id) {
 function displayOrder() {
     const orderItemTable = document.getElementById("order-items");
     orderItemTable.innerHTML = "";
-    let total = 0;
+    total = 0;
 
     orderItems.forEach((item, index) => {
         const row = document.createElement("tr");
@@ -521,7 +587,7 @@ function clearOrder() {
 }
 
 //Send order to server
-function submitOrder() {
+function submitOrder(orders) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getOpenShift', true);
     xhr.setRequestHeader(csrfHeader, csrfToken);
@@ -536,7 +602,9 @@ function submitOrder() {
             if (shift) {
                 // Создаем объект заказа
                 let orders = ({
-                    paymentMethod: true,
+                    establishmentPaid:establishmentPaid,
+                    cashPaid:cashPaid,
+                    cashLessPaid:cashLessPaid,
                     orderItems, // Массив с информацией о товарах в заказе
                 });
                 // Отправляем заказ на сервер
@@ -549,6 +617,9 @@ function submitOrder() {
                         console.log('Заказ успешно отправлен!');
                         // Очищаем корзину после успешной отправки
                         clearOrder();
+                        cashPaid = 0;
+                        cashLessPaid = 0;
+                        establishmentPaid=0;
                     }
                 };
                 xhr.send(JSON.stringify(orders));

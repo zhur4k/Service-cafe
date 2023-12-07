@@ -16,6 +16,8 @@ public class Orders {
     private Long id;
     private int cashPaid;
     private int cashLessPaid;
+    private int establishmentPaid;
+
     private LocalDateTime date;
     @OneToMany
     @JoinColumn(name = "order_id", referencedColumnName = "id")

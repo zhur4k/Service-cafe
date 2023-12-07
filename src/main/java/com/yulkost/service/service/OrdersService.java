@@ -32,6 +32,9 @@ public class OrdersService {
         Orders newOrder = new Orders();
         newOrder.setDate(LocalDateTime.now());
         newOrder.setShift(order.getShift());
+        newOrder.setCashPaid(order.getCashPaid());
+        newOrder.setCashLessPaid(order.getCashLessPaid());
+        newOrder.setEstablishmentPaid(order.getEstablishmentPaid());
         List<OrderItems> orderItems = new ArrayList<>();
 
         for (int i = 0; i < order.getOrderItems().size(); i++) {
