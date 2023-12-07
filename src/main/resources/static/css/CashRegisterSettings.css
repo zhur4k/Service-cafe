@@ -1,0 +1,39 @@
+.button-in-settings {
+    color: white;
+    border: none;
+    height:21%;
+    max-height: 20%;
+    width: 96%;
+    margin: 2%;
+    background-color: #f9943c;
+    font-size: 33px;
+    border-radius: 5px; /* Скругление углов */
+}
+
+.left-settings{
+    width: 30%;
+    height: 590px;
+    background-color: white;
+    border-radius: 8px;
+}
+.right-settings{
+    width: 69%;
+    height: 590px;
+    background-color: #043c61;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+.right-settings-button-container{
+    width: 45%;
+}
+.sum-in-cash-register{
+    border-radius: 8px;
+    margin: 1%;
+    width: auto;
+    height: auto;
+    background-color: #59b1eb;
+    color: white;
+    font-size: 45px;
+    text-align: center;
+}

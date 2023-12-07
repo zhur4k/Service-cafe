@@ -17,7 +17,7 @@ function displayMainContainer() {
     let headButtons = document.getElementById('buttons-head');
     headButtons.innerHTML = '';
     let settingsButton = document.createElement('button');
-    settingsButton.classList.add('button-settings');
+    settingsButton.classList.add('button-in-header');
     settingsButton.textContent = '☸';
     settingsButton.onclick = function() {
         displaySettings();
@@ -58,7 +58,7 @@ function displayMainContainer() {
     payButton.className = 'button';
     payButton.textContent = 'Оплатить';
     payButton.onclick = function() {
-        showPayBlock();
+        checkOrderAndDisplayPayBlock();
     };
 
     rightContainer.appendChild(orderList);
@@ -77,7 +77,7 @@ function displaySettings() {
     let headButtons = document.getElementById('buttons-head');
     headButtons.innerHTML = '';
     let backButton = document.createElement('buttonBack');
-    backButton.classList.add('button-settings');
+    backButton.classList.add('button-in-header');
     backButton.textContent = '🔙';
     backButton.onclick = function() {
         displayMainContainer();
@@ -121,6 +121,61 @@ function displaySettings() {
 
 }
 
+function displayPayBlock(){
+    let headButtons = document.getElementById('buttons-head');
+    headButtons.innerHTML = '';
+    let backButton = document.createElement('buttonBack');
+    backButton.classList.add('button-in-header');
+    backButton.textContent = '🔙';
+    backButton.onclick = function() {
+        displayMainContainer();
+    }
+    headButtons.appendChild(backButton);
+
+
+    let mainContainer = document.getElementById('main-container');
+
+    // Очищаем контейнер перед отрисовкой
+    mainContainer.innerHTML = '';
+
+    let rightContainer = document.createElement('div');
+    rightContainer.classList.add('right-pay');
+
+    mainContainer.appendChild(getInputForm());
+    mainContainer.appendChild(rightContainer);
+
+    submitOrder();
+
+
+}
+
+//Show pay block
+function checkOrderAndDisplayPayBlock() {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/getOpenShift', true);
+    xhr.setRequestHeader(csrfHeader, csrfToken);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Обработка успешного ответа от сервера
+            if(xhr.responseText)
+                shift = JSON.parse(xhr.responseText);
+            shift=xhr.responseText;
+            // После получения ответа, проверяем условие
+            if (shift) {
+                if (orderItems.length<1){
+                    return showMessage('Добавьте товары в заказ!!!');
+                }
+                displayPayBlock();
+            } else {
+                showMessage();
+            }
+        }
+    };
+    // Отправляем запрос
+    xhr.send();
+}
+
 function showCollection() {
     let mainContainer = document.getElementById('main-container');
     let rightContainer = document.getElementById('right-container');
@@ -143,32 +198,47 @@ function showCollection() {
     addCashButton.className = 'button-in-settings';
     addCashButton.textContent = 'Внести';
     addCashButton.onclick = function() {
-        let collection = ({
-            typeOfOperation: true,
-            sumOfOperation: (parseFloat(document.getElementById('sum-input').innerText).toFixed(2)*100) // Массив с информацией о товарах в заказе
-        });
-        sendCollectionMove(collection)
+        sendCollectionMove(true);
     };
     let takeCashButton = document.createElement('button');
     takeCashButton.type = 'button';
     takeCashButton.className = 'button-in-settings';
     takeCashButton.textContent = 'Изъять';
     takeCashButton.onclick = function() {
-        let collection = ({
-            typeOfOperation: false,
-            sumOfOperation: (parseFloat(document.getElementById('sum-input').innerText).toFixed(2)*100) // Массив с информацией о товарах в заказе
-        });
-        sendCollectionMove(collection)
+        sendCollectionMove(false);
     };
+
+    let sumInCashRegister = document.createElement('div');
+    sumInCashRegister.id = 'sum-in-cashRegister';
+    sumInCashRegister.classList.add('sum-in-cash-register');
+    getSumInCashRegister();
     rightContainer.appendChild(getInputForm());
     rightContainerChild.appendChild(addCashButton);
     rightContainerChild.appendChild(takeCashButton);
+    rightContainerChild.appendChild(sumInCashRegister);
     rightContainer.appendChild(rightContainerChild);
     mainContainer.appendChild(rightContainer);
 }
-// Создаем объект заказа
-
-function sendCollectionMove(collection) {
+//Get sum in Cash Register
+function getSumInCashRegister() {
+// Отправляем заказ на сервер
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/sumInCashRegister', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            document.getElementById('sum-in-cashRegister').textContent = 'В кассе: '+xhr.responseText+' руб';
+        }
+    };
+    xhr.send();
+}
+//Send move of cash in cashRegister
+function sendCollectionMove(collectionType) {
+    let collection = ({
+        typeOfOperation: collectionType,
+        sumOfOperation: (parseFloat(document.getElementById('sum-input').innerText).toFixed(2)*100) // Массив с информацией о товарах в заказе
+    });
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getOpenShift', true);
     xhr.setRequestHeader(csrfHeader, csrfToken);
@@ -188,10 +258,10 @@ function sendCollectionMove(collection) {
                 xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4 && xhr.status === 200) {
-                        console.log('Инкассация проведена успешно!!!');
-                        // Очищаем корзину после успешной отправки
-                    }else
-                        showMessage("В кассе нет столько денег!!!");
+                        showMessage('Инкассация проведена успешно!!!','green');
+                        getSumInCashRegister();
+                    }else{
+                        showMessage("В кассе нет столько денег!!!");}
                 };
                 xhr.send(JSON.stringify(collection));
             } else {
@@ -261,6 +331,7 @@ function displayProducts(categories) {
     });
 }
 
+//Return sum input form
 function getInputForm() {
     let inputForm = document.createElement('div')
     inputForm.classList.add('sum-input-container')
@@ -300,26 +371,30 @@ function getInputForm() {
     return inputForm;
 }
 
+//Clear all char from input form sum element
 function ClearInputFormSum() {
     let sumInput = document.getElementById('sum-input');
     sumInput.textContent ='';
 }
 
+//Delete last char from input form sum element
 function deleteLastChar() {
     let sumInput = document.getElementById('sum-input');
     let currentText = sumInput.textContent;
     sumInput.textContent = currentText.slice(0, -1);
 }
 
+//Append Char to sum Input element
 function appendToInput(value) {
     let inputElement = document.getElementById('sum-input');
     let currentValue = inputElement.textContent;
 
     // Проверка наличия точки в текущем вводе
     let hasDot = currentValue.includes('.');
-
-    // Если текущий ввод не содержит точку или содержит точку, но после неё нет числа
-    if (!hasDot || (hasDot && !/\d$/.test(currentValue))) {
+    if(hasDot&&value==='.') {
+        return;
+        // Если текущий ввод не содержит точку или содержит точку, но после неё нет числа
+    }else if (!hasDot || (hasDot && !/\d$/.test(currentValue))) {
         // Если введена точка, добавляем 0 перед ней
         if (value === '.' && !/\d$/.test(currentValue)) {
             inputElement.textContent += '0';
@@ -354,6 +429,7 @@ function appendToInput(value) {
     }
 }
 
+//Create button to sum input form
 function createButtonToSumElement(value) {
     let button = document.createElement('button');
     button.className = 'button-sum-input';
@@ -486,55 +562,6 @@ function submitOrder() {
     xhr.send();
 }
 
-//Show pay block
-function showPayBlock() {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/getOpenShift', true);
-    xhr.setRequestHeader(csrfHeader, csrfToken);
-
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Обработка успешного ответа от сервера
-            if(xhr.responseText)
-                shift = JSON.parse(xhr.responseText);
-            shift=xhr.responseText;
-            // После получения ответа, проверяем условие
-            if (shift) {
-                if (orderItems.length<1)
-                    return showMessage('Добавьте товары в заказ!!!');
-                let headButtons = document.getElementById('buttons-head');
-                headButtons.innerHTML = '';
-                let backButton = document.createElement('buttonBack');
-                backButton.classList.add('button-settings');
-                backButton.textContent = '🔙';
-                backButton.onclick = function() {
-                    displayMainContainer();
-                }
-                headButtons.appendChild(backButton);
-
-
-                let mainContainer = document.getElementById('main-container');
-
-                // Очищаем контейнер перед отрисовкой
-                mainContainer.innerHTML = '';
-
-                // Создаем левую часть (leftContainer)
-                let leftContainer = document.createElement('div');
-                leftContainer.classList.add('left-Settings');
-
-
-                mainContainer.appendChild(leftContainer);
-                submitOrder();
-
-
-            } else {
-                showMessage();
-            }
-        }
-    };
-    // Отправляем запрос
-    xhr.send();
-}
 
 //Check state of shift and set corresponding button
 function checkShiftButtonState() {
@@ -569,10 +596,10 @@ function checkShiftButtonState() {
 }
 
 //Show message in messages div
-function showMessage(message='Откройте смену!!!'){
+function showMessage(message='Откройте смену!!!',color='red'){
     let messageElement = document.getElementById('messages');
     messageElement.style.fontSize = "26px";
-    messageElement.style.color = "red";
+    messageElement.style.color = color;
     messageElement.textContent = message;
     let displayTime = 5000; // например, 5000 миллисекунд (5 секунд)
     setTimeout(function() {

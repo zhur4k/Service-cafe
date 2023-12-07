@@ -1,0 +1,39 @@
+.left-pay{
+    width: auto;
+    height: 590px;
+    border-radius: 8px;
+}
+.right-pay{
+    width: auto;
+    height: 590px;
+    background-color: #043c61;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+.child-block-pay {
+    float: left;
+    width: 32%;
+    height: 20%;
+    margin-left: 1%;
+    margin-top: 1%;
+    overflow: hidden; /* Обрезка текста */
+    text-overflow: ellipsis; /* Добавление многоточия при обрезке */
+    white-space: normal; /* Разрешение переноса строки */
+    font-size: 23px;
+
+    background-color:#01d9a8;
+    color: white;
+    border-radius: 5px; /* Скругление углов */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.child-block-info-pay{
+    padding: 5%;
+    text-align: left;
+    font-size: 25px;
+    overflow: hidden; /* Обрезка текста */
+    text-overflow: ellipsis; /* Добавление многоточия при обрезке */
+    white-space: nowrap; /* Разрешение переноса строки */
+}

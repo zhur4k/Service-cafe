@@ -12,22 +12,24 @@ import java.util.List;
 @RestController
 public class CashRegisterRestController {
 
-    public CashRegisterRestService cashRegisterService;
-    public OrdersService ordersService;
-    public YulkostTelegramBotService yulkostTelegramBotService;
-    public CategoriesService categoriesService;
-    public ItemsService itemsService;
+    private CashRegisterRestService cashRegisterRestService;
+    private OrdersService ordersService;
+    private YulkostTelegramBotService yulkostTelegramBotService;
+    private CategoriesService categoriesService;
+    private ItemsService itemsService;
     private CollectionService collectionService;
     private ShiftService shiftService;
+    private CashRegisterService cashRegisterService;
 
-    public CashRegisterRestController(CashRegisterRestService cashRegisterService, OrdersService ordersService, YulkostTelegramBotService yulkostTelegramBotService, CategoriesService categoriesService, ItemsService itemsService, CollectionService collectionService, ShiftService shiftService) {
-        this.cashRegisterService = cashRegisterService;
+    public CashRegisterRestController(CashRegisterRestService cashRegisterRestService, OrdersService ordersService, YulkostTelegramBotService yulkostTelegramBotService, CategoriesService categoriesService, ItemsService itemsService, CollectionService collectionService, ShiftService shiftService, CashRegisterService cashRegisterService) {
+        this.cashRegisterRestService = cashRegisterRestService;
         this.ordersService = ordersService;
         this.yulkostTelegramBotService = yulkostTelegramBotService;
         this.categoriesService = categoriesService;
         this.itemsService = itemsService;
         this.collectionService = collectionService;
         this.shiftService = shiftService;
+        this.cashRegisterService = cashRegisterService;
     }
 
     @GetMapping("/getCategory")
@@ -72,7 +74,7 @@ public class CashRegisterRestController {
     @GetMapping("/closeShift")
     public ResponseEntity<String> closeShift(@AuthenticationPrincipal User user) {
         try {
-            if(cashRegisterService.sendZReport()){
+            if(cashRegisterRestService.sendZReport()){
                 shiftService.closeShift(user);
                 return ResponseEntity.ok("Success Shift was closed");
             }
@@ -82,27 +84,33 @@ public class CashRegisterRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    @GetMapping("/sumInCashRegister")
+    public ResponseEntity<String> sumInCashRegister() {
+        try {
+                return ResponseEntity.ok(cashRegisterService.getSumInCashRegister());
+        } catch (Exception e) {
+            // Ошибка, отправьте соответствующий HTTP-статус
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
     @PostMapping("/submitOrder")
-    public String SubmitOrder(@RequestBody Orders order,@AuthenticationPrincipal User user) {
+    public void SubmitOrder(@RequestBody Orders order,@AuthenticationPrincipal User user) {
         order.setShift(shiftService.getOpenShift(user));
         Orders orderToSave= ordersService.OrderFromPageToOrders(order);
-        if(cashRegisterService.sendFCheck(orderToSave)){
+        if(cashRegisterRestService.sendFCheck(orderToSave)){
             ordersService.save(orderToSave);
             yulkostTelegramBotService.SendOrderToUser(orderToSave);
-            return "true";
         }
-        return "false";
     }
     @PostMapping("/collectionMove")
-    public String CollectionMove(@RequestBody Collection collection,@AuthenticationPrincipal User user) {
+    public void CollectionMove(@RequestBody Collection collection,@AuthenticationPrincipal User user) {
         collection.setShift(shiftService.getOpenShift(user));
         collectionService.save(collection);
-        return "Success";
     }
     @GetMapping("/getXReport")
     public ResponseEntity<String> getXReport() {
         try {
-            if(cashRegisterService.sendXReport())
+            if(cashRegisterRestService.sendXReport())
                 return ResponseEntity.ok("Success send X-Report");
 
             throw new Exception();
