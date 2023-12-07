@@ -1,0 +1,36 @@
+.main-check-block{
+    width: 100%;
+    height: 590px;
+    padding-top: 10%;
+    padding-left: 25%;
+    padding-right: 25%;
+}
+.main-check-block-child{
+    background-color: white;
+    border-radius: 8px;
+}
+.total{
+    text-align: right;
+    font-size: 30px;
+
+}
+.table-check {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Фиксированная ширина столбцов */
+    border-radius: 16px;
+    border-bottom:1px solid black;
+
+}
+.order-list-check {
+    width: 100%;
+    height: 250px; /* Вы можете настроить максимальную высоту по своему усмотрению */
+    max-height: 250px; /* Вы можете настроить максимальную высоту по своему усмотрению */
+    overflow-y: auto; /* Добавление вертикального скролла при необходимости */
+}
+.order-table-td-check{
+    font-size: 30px;
+    height: 35px;
+    overflow: hidden;
+    white-space: nowrap;
+}

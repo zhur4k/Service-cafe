@@ -52,8 +52,7 @@ function displayMainContainer() {
 
     orderList.appendChild(table);
 
-    let total = document.createElement('h3');
-    total.classList.add('total');
+    let total = document.createElement('h2');
     total.id = 'total';
     total.textContent = '0.00 р';
 
@@ -190,15 +189,81 @@ function displayCheck() {
     }
     headButtons.appendChild(backButton);
 
-
     let mainContainer = document.getElementById('main-container');
-
     // Очищаем контейнер перед отрисовкой
     mainContainer.innerHTML = '';
 
-    // Создаем левую часть (leftContainer)
-    let leftContainer = document.createElement('div');
-    leftContainer.classList.add('main-check-block');
+    // Создаем левую часть (mainCheckBlock)
+    let mainCheckBlock = document.createElement('div');
+    mainCheckBlock.classList.add('main-check-block');
+    let mainCheckBlockChild = document.createElement('div');
+    mainCheckBlockChild.classList.add('main-check-block-child');
+
+    let orderList = document.createElement('div');
+    orderList.classList.add('order-list-check');
+
+    let table = document.createElement('table');
+    table.classList.add('table-check');
+    let tbody = document.createElement('tbody');
+    tbody.id = 'order-items';
+
+    table.appendChild(tbody);
+    orderList.appendChild(table);
+
+    let totalH = document.createElement('div');
+    totalH.classList.add('total');
+    totalH.id = 'total';
+    totalH.textContent  = 'Итог: '+(total/100).toFixed(2)+ 'р';
+
+    let sumOfPaid = document.createElement('div');
+    sumOfPaid.classList.add('total');
+    sumOfPaid.textContent = 'Наличными: '+(cashPaid/100).toFixed(2)+' р  Картой: '+(cashLessPaid/100).toFixed(2)
+    +' р  За счёт заведения: '+(establishmentPaid/100).toFixed(2)+' р';
+    mainCheckBlockChild.appendChild(orderList);
+    mainCheckBlockChild.appendChild(totalH);
+    mainCheckBlock.appendChild(mainCheckBlockChild);
+    mainCheckBlock.appendChild(sumOfPaid);
+    mainContainer.appendChild(mainCheckBlock);
+
+    const orderItemTable = document.getElementById("order-items");
+    orderItemTable.innerHTML = "";
+
+    orderItems.forEach((item, index) => {
+        const row = document.createElement("tr");
+        const itemCell = document.createElement("td");
+        const quantityCell = document.createElement("td");
+        const totalCell = document.createElement("td");
+
+        itemCell.textContent = item.items.nameOfItems;
+        quantityCell.textContent = item.quantity;
+        totalCell.textContent = ((item.items.price * item.quantity) / 100).toFixed(2) + " р";
+
+        quantityCell.style.width = "20%";
+        quantityCell.style.textAlign = "center"
+        quantityCell.classList.add("order-table-td-check");
+
+        itemCell.style.width = "60%";
+        itemCell.classList.add("order-table-td-check");
+
+        totalCell.style.width = "20%";
+        totalCell.style.textAlign = "center"
+        totalCell.classList.add("order-table-td-check");
+
+        row.appendChild(quantityCell);
+        row.appendChild(itemCell);
+        row.appendChild(totalCell);
+
+        orderItemTable.appendChild(row);
+
+    });
+    clearOrder();
+    cashPaid = 0;
+    cashLessPaid = 0;
+    establishmentPaid=0;
+    let displayTime = 4000; // например, 5000 миллисекунд (5 секунд)
+    setTimeout(function() {
+        displayMainContainer();
+    }, displayTime);
 }
 
 function setSumAfterPaidOperation(){
@@ -616,10 +681,7 @@ function submitOrder(orders) {
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         console.log('Заказ успешно отправлен!');
                         // Очищаем корзину после успешной отправки
-                        clearOrder();
-                        cashPaid = 0;
-                        cashLessPaid = 0;
-                        establishmentPaid=0;
+                        displayCheck();
                     }
                 };
                 xhr.send(JSON.stringify(orders));
