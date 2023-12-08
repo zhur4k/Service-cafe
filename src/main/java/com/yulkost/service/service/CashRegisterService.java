@@ -1,5 +1,6 @@
 package com.yulkost.service.service;
 
+import com.yulkost.service.model.CashRegister;
 import com.yulkost.service.repository.CashRegisterRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,10 @@ public class CashRegisterService {
 
     public String getSumInCashRegister()
     {
-        return String.valueOf(((float) cashRegisterRepository.findCashRegisterWithMaxId().getCashAmount())/100);
+        CashRegister cashRegister = cashRegisterRepository.findCashRegisterWithMaxId();
+        if (cashRegister ==null){
+            return "0";
+        }
+        return String.valueOf(((float)cashRegister.getCashAmount() )/100);
     }
 }

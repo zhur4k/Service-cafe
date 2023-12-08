@@ -25,12 +25,12 @@ public class Shift {
 
     @JsonIgnore
     @OneToMany
-    @JoinColumn(name = "orders_id", referencedColumnName = "id")
+    @JoinColumn(name = "shift_id", referencedColumnName = "id")
     private List<Orders> orders = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany
-    @JoinColumn(name = "colections_id", referencedColumnName = "id")
+    @JoinColumn(name = "shift_id", referencedColumnName = "id")
     private List<Collection> collections = new ArrayList<>();
 
     public Shift() {

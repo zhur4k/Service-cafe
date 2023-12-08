@@ -20,14 +20,24 @@ public class CollectionService {
         try {
 
             CashRegister cashRegisterMain = cashRegisterRepository.findCashRegisterWithMaxId();
-        CashRegister cashRegister = new CashRegister();
-        if (collection.getTypeOfOperation())
-            cashRegister.setCashAmount(cashRegisterMain.getCashAmount()+collection.getSumOfOperation());
-        else{
-            if(cashRegisterMain.getCashAmount()<collection.getSumOfOperation())
-                throw new Exception("There's not that much money in the cash register");
 
-            cashRegister.setCashAmount(cashRegisterMain.getCashAmount()-collection.getSumOfOperation());
+        CashRegister cashRegister = new CashRegister();
+        if (collection.getTypeOfOperation()){
+            if(cashRegisterMain==null){
+                cashRegister.setCashAmount(collection.getSumOfOperation());
+            }else{
+                cashRegister.setCashAmount(cashRegisterMain.getCashAmount()+collection.getSumOfOperation());
+            }
+        }
+        else{
+            if(cashRegisterMain==null){
+                throw new Exception("There's not that much money in the cash register");
+            }
+            else {
+                if(cashRegisterMain.getCashAmount()<collection.getSumOfOperation())
+                    throw new Exception("There's not that much money in the cash register");
+                cashRegister.setCashAmount(cashRegisterMain.getCashAmount()-collection.getSumOfOperation());
+            }
         }
         cashRegister.setCollection(collectionRepository.save(collection));
         cashRegisterRepository.save(cashRegister);
