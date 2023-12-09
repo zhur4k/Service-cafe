@@ -75,6 +75,43 @@ function displayMainContainer() {
     displayOrder();
 }
 
+function showUserAdd() {
+    let mainContainer = document.getElementById('main-container');
+    let rightContainer = document.getElementById('right-container');
+
+// Проверяем, существует ли элемент rightContainer
+    if (rightContainer) {
+        // Если существует, удаляем его
+        rightContainer.remove();
+        return
+    }
+
+    let loginInput = document.createElement('input');
+    loginInput.id='login';
+    loginInput.classList.add('button-in-settings');
+
+    rightContainer = document.createElement('div');
+    rightContainer.id='right-container';
+    rightContainer.classList.add('right-settings');
+    let rightContainerChild = document.createElement('div');
+    rightContainerChild.classList.add('right-settings-button-container');
+
+
+    let addCashButton = document.createElement('button');
+    addCashButton.type = 'button';
+    addCashButton.className = 'button-in-settings';
+    addCashButton.textContent = 'Добавить';
+    addCashButton.onclick = function() {
+        addUserToShift();
+    };
+
+    rightContainer.appendChild(loginInput);
+
+    rightContainerChild.appendChild(addCashButton);
+    rightContainer.appendChild(rightContainerChild);
+    mainContainer.appendChild(rightContainer);
+}
+
 //Display settings page
 function displaySettings() {
     let headButtons = document.getElementById('buttons-head');
@@ -117,9 +154,18 @@ function displaySettings() {
     collectionButton.onclick = function() {
         showCollection();
     };
+    let addUserButton = document.createElement('button');
+    addUserButton.type = 'button';
+    addUserButton.className = 'button-in-settings';
+    addUserButton.textContent = 'Добавить работника';
+    addUserButton.onclick = function() {
+        showUserAdd();
+    };
     leftContainer.appendChild(shiftButton);
     leftContainer.appendChild(xButton);
     leftContainer.appendChild(collectionButton);
+    leftContainer.appendChild(addUserButton);
+
     mainContainer.appendChild(leftContainer);
 
 }
@@ -651,6 +697,44 @@ function clearOrder() {
     orderItems = [];
 }
 
+
+function addUserToShift(){
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/getOpenShift', true);
+    xhr.setRequestHeader(csrfHeader, csrfToken);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Обработка успешного ответа от сервера
+            if(xhr.responseText)
+                shift = JSON.parse(xhr.responseText);
+            shift=xhr.responseText;
+            // После получения ответа, проверяем условие
+            if (shift) {
+                // Отправляем заказ на сервер
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', '/addUserToShift', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        showMessage('Пользователь добавлен!!!','green');
+                    }else{
+                        showMessage('Пользователь уже добавлен!!!');
+                    }
+                };
+                let login =document.getElementById('login');
+                xhr.send(login.value);
+                login.value = '';
+            } else {
+                showMessage();
+            }
+        }
+    };
+
+    // Отправляем запрос
+    xhr.send();
+}
 //Send order to server
 function submitOrder(orders) {
     let xhr = new XMLHttpRequest();

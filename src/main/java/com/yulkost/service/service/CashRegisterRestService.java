@@ -16,11 +16,12 @@ public class CashRegisterRestService {
     private final String CASH_REGISTER_ID ="http://169.254.35.154" ;
     public Boolean sendFCheck(Orders order){
         StringBuilder json = new StringBuilder("{\"F\":[" +
-                "{\"C\":{\"cm\":\"Кассир:"+order.getShift().getUser().getName()+"\"}}");
+                "{\"C\":{\"cm\":\"Кассир:"+(order.getShift().getUsers().get(0)).getName()+"\"}}");
         for (OrderItems orderItem :order.getOrderItems()) {
             json.append(",{\"S\":{\"code\":\"").append(orderItem.getItems().getCode()).append("\",\"name\":\"").append(orderItem.getItems().getNameOfItems()).append("\",").append("\"qty\":\"").append(orderItem.getQuantity()).append("\"\"price\":\"").append(orderItem.getItems().getPriceToPage()).append("\"}}");
         }
-                json.append(",{\"P\":{}}");
+                json.append(",{\"P\":{\"sum\"").append(((float) order.getCashPaid()) / 100).append("\"no\":1}}");
+
         json.append("]}");
 
 //        return sendPost(json.toString(), "/cgi/chk");\

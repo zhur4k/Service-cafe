@@ -53,9 +53,9 @@ public class CashRegisterRestController {
     }
 
     @GetMapping("/getOpenShift")
-    public ResponseEntity<Shift> getOpenShift(@AuthenticationPrincipal User user) {
+    public ResponseEntity<Shift> getOpenShift() {
         try {
-            return ResponseEntity.ok(shiftService.getOpenShift(user));
+            return ResponseEntity.ok(shiftService.getOpenShift());
         } catch (Exception e) {
             // Ошибка, отправьте соответствующий HTTP-статус
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -94,8 +94,8 @@ public class CashRegisterRestController {
         }
     }
     @PostMapping("/submitOrder")
-    public void SubmitOrder(@RequestBody Orders order,@AuthenticationPrincipal User user) {
-        order.setShift(shiftService.getOpenShift(user));
+    public void SubmitOrder(@RequestBody Orders order) {
+        order.setShift(shiftService.getOpenShift());
         Orders orderToSave= ordersService.OrderFromPageToOrders(order);
         if(cashRegisterRestService.sendFCheck(orderToSave)){
             ordersService.save(orderToSave);
@@ -103,9 +103,14 @@ public class CashRegisterRestController {
         }
     }
     @PostMapping("/collectionMove")
-    public void CollectionMove(@RequestBody Collection collection,@AuthenticationPrincipal User user) {
-        collection.setShift(shiftService.getOpenShift(user));
+    public void CollectionMove(@RequestBody Collection collection) {
+        collection.setShift(shiftService.getOpenShift());
         collectionService.save(collection);
+    }
+
+    @PostMapping("/addUserToShift")
+    public void AddUserToShift(@RequestBody String login) {
+        shiftService.addUser(shiftService.getOpenShift(), login);
     }
     @GetMapping("/getXReport")
     public ResponseEntity<String> getXReport() {

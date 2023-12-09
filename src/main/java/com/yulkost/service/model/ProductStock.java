@@ -10,6 +10,7 @@ public class ProductStock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int weight;
+    private int price;
 
     @OneToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")

@@ -20,8 +20,8 @@ public class Shift {
     private LocalDateTime endDate;
 
     @JsonIgnore
-    @ManyToOne
-    private User user;
+    @OneToMany
+    private List<User> users = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany
