@@ -19,7 +19,12 @@ public class YulkostTelegramBotService {
         StringBuilder orderInfo = new StringBuilder();
         orderInfo.append("Заказ № ").append(order.getId()).append("\n");
         for (OrderItems item :order.getOrderItems()) {
-            orderInfo.append(item.getItems().getNameOfItems()).append(" - ").append(item.getQuantity()).append(" ").append(item.getItems().getUnit().getName()).append("\n");
+            orderInfo.append(item.getItems().getNameOfItems())
+                    .append(" - ").append(item.getQuantity()*Float.parseFloat(item.getItems().getUnitPriceToPage()))
+                    .append(" ")
+                    .append(item.getItems()
+                            .getUnit().getName())
+                    .append("\n");
         }
         for (User user : order.getShift().getUsers())
             telegramBot.sendMessage(user.getChatId(),orderInfo.toString());

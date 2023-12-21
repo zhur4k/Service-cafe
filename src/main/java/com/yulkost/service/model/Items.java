@@ -41,4 +41,11 @@ public class Items {
     public void setPriceToPage(String price) {
         this.price = (int)(Double.parseDouble(price)*100);;
     }
+    public String getUnitPriceToPage() {
+        double pr = (double) unitPrice;
+        return Double.toString(pr/1000);
+    }
+    public void setUnitPriceToPage(String price) {
+        this.unitPrice = (int)(Double.parseDouble(price)*1000);;
+    }
 }

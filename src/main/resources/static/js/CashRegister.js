@@ -694,18 +694,18 @@ function displayOrder() {
         const removeButton = document.createElement("button");
 
         itemCell.textContent = item.items.nameOfItems;
-        quantityCell.textContent = (item.quantity*item.items.unitPrice)+item.items.unit.name;
-        const itemTotal = ((item.items.price * item.quantity) / 100).toFixed(2) + " р";
+        quantityCell.textContent = (item.quantity*item.items.unitPriceToPage).toFixed(3)+item.items.unit.name;
+        const itemTotal = (item.items.priceToPage * item.quantity).toFixed(2) + " р";
         totalCell.textContent = itemTotal;
         removeButton.textContent = "Удалить";
         removeButton.classList.add("remove-button");
         removeButton.addEventListener("click", () => removeItem(index));
 
-        quantityCell.style.width = "10%";
+        quantityCell.style.width = "20%";
         quantityCell.style.textAlign = "center"
         quantityCell.classList.add("order-table-td");
 
-        itemCell.style.width = "50%";
+        itemCell.style.width = "40%";
         itemCell.classList.add("order-table-td");
 
         totalCell.style.width = "20%";
