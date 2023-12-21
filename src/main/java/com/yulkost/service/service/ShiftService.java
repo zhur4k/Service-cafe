@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ShiftService {
@@ -53,5 +54,19 @@ public class ShiftService {
 
     public Shift save(Shift openShift) {
         return shiftRepository.save(openShift);
+    }
+
+    public String getListOfUsers() {
+        StringBuilder listOfUsers = new StringBuilder("Работники на смене:<br>");
+        for(User user:getOpenShift().getUsers()) {
+            if(Objects.equals(user.getRoles().toString(), "[ADMIN]")){
+                listOfUsers.append("Админ");
+            }
+            if(Objects.equals(user.getRoles().toString(), "[CASHIER]")){
+                listOfUsers.append("Продавец");
+            }
+            listOfUsers.append("   ").append(user.getName()).append("<br>");
+        }
+        return listOfUsers.toString();
     }
 }

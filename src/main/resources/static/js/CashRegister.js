@@ -75,6 +75,46 @@ function displayMainContainer() {
     displayOrder();
 }
 
+function showListOfUser(rightContainerChild2) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/getOpenShift', true);
+    xhr.setRequestHeader(csrfHeader, csrfToken);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Обработка успешного ответа от сервера
+            if (xhr.responseText)
+            shift = xhr.responseText;
+            // После получения ответа, проверяем условие
+            if (shift) {
+                let xhr = new XMLHttpRequest();
+                xhr.open('GET', '/getListOfUsers', true);
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        // Обработка успешного ответа от сервера
+                        if (xhr.responseText){
+                            let listOfUser = document.createElement('div');
+                            listOfUser.style.fontSize= '40px';
+                            listOfUser.style.color = 'white';
+                            listOfUser.innerHTML =  xhr.responseText;
+                            rightContainerChild2.appendChild(listOfUser);
+                        }
+                    }
+                };
+                // Отправляем запрос
+                xhr.send();
+            } else {
+                showMessage();
+            }
+        }
+    };
+    // Отправляем запрос
+    xhr.send();
+
+}
+
 function showUserAdd() {
     let mainContainer = document.getElementById('main-container');
     let rightContainer = document.getElementById('right-container');
@@ -95,6 +135,7 @@ function showUserAdd() {
     rightContainer.classList.add('right-settings');
     let rightContainerChild = document.createElement('div');
     rightContainerChild.classList.add('right-settings-button-container');
+    let rightContainerChild2 = document.createElement('div');
 
 
     let addCashButton = document.createElement('button');
@@ -105,9 +146,11 @@ function showUserAdd() {
         addUserToShift();
     };
 
-    rightContainer.appendChild(loginInput);
+    rightContainerChild2.appendChild(loginInput);
 
     rightContainerChild.appendChild(addCashButton);
+    showListOfUser(rightContainerChild2);
+    rightContainer.appendChild(rightContainerChild2);
     rightContainer.appendChild(rightContainerChild);
     mainContainer.appendChild(rightContainer);
 }
@@ -736,7 +779,7 @@ function addUserToShift(){
     xhr.send();
 }
 //Send order to server
-function submitOrder(orders) {
+function submitOrder() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getOpenShift', true);
     xhr.setRequestHeader(csrfHeader, csrfToken);
@@ -790,7 +833,6 @@ function checkShiftButtonState() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             // Обработка успешного ответа от сервера
             if(xhr.responseText)
-                shift = JSON.parse(xhr.responseText);
             shift=xhr.responseText;
             // После получения ответа, проверяем условие
             let shiftButton = document.getElementById("shiftButton");

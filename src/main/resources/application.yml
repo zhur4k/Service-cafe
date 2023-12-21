@@ -1,13 +1,17 @@
 spring:
+  flyway:
+    locations: classpath:migrations
+    url: jdbc:mysql://localhost:3306/yulkost
+    user: root
+    password: 19804731205
   jpa:
     hibernate:
       ddl-auto: update
     generate-ddl: true
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/yulkost
+    url: jdbc:mysql://localhost:3306/yulkost
     username: root
     password: 19804731205
-  cassandra:
-    port: 2000
 server:
   address: 0.0.0.0
+  port: 8080

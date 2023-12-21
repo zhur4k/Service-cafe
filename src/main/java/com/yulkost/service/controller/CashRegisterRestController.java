@@ -125,4 +125,8 @@ public class CashRegisterRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    @GetMapping("/getListOfUsers")
+    public ResponseEntity<String> getListOfUsers() {
+        return ResponseEntity.ok(shiftService.getListOfUsers());
+    }
 }
