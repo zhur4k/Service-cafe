@@ -18,12 +18,14 @@ public class OrdersService {
     public ItemsService itemsService;
     public OrderItemsRepository orderItemsRepository;
     private CashRegisterRepository cashRegisterRepository;
+    private ProductStockService productStockService;
 
-    public OrdersService(OrdersRepository ordersRepository, ItemsService itemsService, OrderItemsRepository orderItemsRepository, CashRegisterRepository cashRegisterRepository) {
+    public OrdersService(OrdersRepository ordersRepository, ItemsService itemsService, OrderItemsRepository orderItemsRepository, CashRegisterRepository cashRegisterRepository, ProductStockService productStockService) {
         this.ordersRepository = ordersRepository;
         this.itemsService = itemsService;
         this.orderItemsRepository = orderItemsRepository;
         this.cashRegisterRepository = cashRegisterRepository;
+        this.productStockService = productStockService;
     }
 
     public Orders OrderFromPageToOrders(Orders order){
@@ -54,8 +56,10 @@ public class OrdersService {
             }else{
                 cashRegister.setCashAmount(cashRegister1.getCashAmount()+order.getCashPaid());
             }
+
             orderItemsRepository.saveAll(order.getOrderItems());
             cashRegister.setOrder(ordersRepository.save(order));
             cashRegisterRepository.save(cashRegister);
+            productStockService.writeOffProductFromStock(order);
     }
 }
