@@ -15,4 +15,12 @@ public class ProductStock {
     @OneToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     Products product;
+
+    public String getPriceToPage() {
+        double pr = (double) price;
+        return Double.toString(pr/100);
+    }
+    public void setPriceToPage(String price) {
+        this.price = (int)(Double.parseDouble(price)*100);;
+    }
 }

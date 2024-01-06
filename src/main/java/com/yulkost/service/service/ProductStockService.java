@@ -22,9 +22,10 @@ public class ProductStockService {
                 if(productStock==null) {
                     productStock = new ProductStock();
                     productStock.setProduct(productWeight.getProduct());
-                    productWeight.setWeight(0);
+                    productStock.setWeight(0);
+                    productStock.setPrice(0);
                 }
-                productStock.setWeight(productStock.getWeight()-productWeight.getWeight());
+                productStock.setWeight(productStock.getWeight()-(productWeight.getWeight()*orderItem.getQuantity()));
                 productStockRepository.save(productStock);
             }
         }
