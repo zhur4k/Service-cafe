@@ -20,8 +20,8 @@ public class CashRegisterRestService {
         for (OrderItems orderItem :order.getOrderItems()) {
             json.append(",{\"S\":{\"code\":\"").append(orderItem.getItems().getCode()).append("\",\"name\":\"").append(orderItem.getItems().getNameOfItems()).append("\",").append("\"qty\":\"").append(orderItem.getQuantity()).append("\"\"price\":\"").append(orderItem.getItems().getPriceToPage()).append("\"}}");
         }
-                json.append(",{\"P\":{\"sum\"").append(((float) order.getCashPaid()) / 100).append("\"no\":1}}");
-
+        json.append(",{\"P\":{\"sum\"").append(((float) order.getCashPaid()) / 100).append("\"no\":1}}");
+        json.append(",{\"P\":{\"sum\"").append(((float) order.getCashLessPaid()) / 100).append("\"no\":2}}");
         json.append("]}");
 
 //        return sendPost(json.toString(), "/cgi/chk");\

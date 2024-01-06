@@ -1,7 +1,6 @@
 package com.yulkost.service.controller.admin;
 
 import com.yulkost.service.dto.ProductStockEditDto;
-import com.yulkost.service.dto.ProductsEditDto;
 import com.yulkost.service.model.ProductStock;
 import com.yulkost.service.repository.ProductStockRepository;
 import org.springframework.beans.factory.annotation.Autowired;

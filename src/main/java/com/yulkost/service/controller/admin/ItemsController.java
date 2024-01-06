@@ -3,7 +3,6 @@ package com.yulkost.service.controller.admin;
 import com.yulkost.service.dto.ItemsEditDto;
 import com.yulkost.service.model.Items;
 import com.yulkost.service.model.ProductWeight;
-import com.yulkost.service.model.Products;
 import com.yulkost.service.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,7 +40,7 @@ public class ItemsController {
         }
 
     @PostMapping
-    public String ItemsEdit(Model model ,@ModelAttribute ItemsEditDto form) {
+    public String ItemsEdit(@ModelAttribute ItemsEditDto form) {
         itemsService.saveAll(form.getItems());
         return "redirect:/admin/items"; }
 
@@ -52,7 +51,7 @@ public class ItemsController {
         return "adminItemChange"; }
 
     @PostMapping("/change")
-    public String ItemChange(Model model , Items item) {
+    public String ItemChange(Items item) {
         itemsService.save(item);
         return "redirect:/admin/items"; }
 
@@ -72,7 +71,7 @@ public class ItemsController {
         return "adminItemAdd"; }
 
     @PostMapping("/add")
-    public String ItemsAdd(Model model , Items item) {
+    public String ItemsAdd(Items item) {
         itemsService.save(item);
         return "redirect:/admin/items"; }
 }

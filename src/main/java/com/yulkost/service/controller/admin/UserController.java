@@ -23,7 +23,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("")
+    @GetMapping
     public String Users(Model model) {
         List<User> users = new ArrayList<>();
         userService.findAll().iterator().forEachRemaining(users::add);
@@ -31,8 +31,8 @@ public class UserController {
         model.addAttribute("roles", Role.values());
         return "adminUsers"; }
 
-    @PostMapping("")
-    public String UsersEdit(Model model ,@ModelAttribute UserEditDto form) {
+    @PostMapping
+    public String UsersEdit(@ModelAttribute UserEditDto form) {
         userService.saveAll(form.getUsers());
         return "redirect:/admin/users"; }
 

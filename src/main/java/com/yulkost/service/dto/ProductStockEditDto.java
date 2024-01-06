@@ -1,9 +1,6 @@
 package com.yulkost.service.dto;
 
-
-
 import com.yulkost.service.model.ProductStock;
-
 import java.util.ArrayList;
 import java.util.List;
 

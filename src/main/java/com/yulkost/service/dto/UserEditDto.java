@@ -1,8 +1,6 @@
 package com.yulkost.service.dto;
 
-
 import com.yulkost.service.model.User;
-
 import java.util.ArrayList;
 import java.util.List;
 

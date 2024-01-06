@@ -1,8 +1,6 @@
 package com.yulkost.service.controller.admin;
 
-import com.yulkost.service.dto.CategoriesEditDto;
 import com.yulkost.service.dto.ProductsEditDto;
-import com.yulkost.service.model.Categories;
 import com.yulkost.service.model.Products;
 import com.yulkost.service.service.ProductsService;
 import org.springframework.stereotype.Controller;
@@ -33,16 +31,16 @@ public class ProductsController {
     }
 
     @PostMapping
-    public String ProductsEdit(Model model ,@ModelAttribute ProductsEditDto form) {
+    public String ProductsEdit(@ModelAttribute ProductsEditDto form) {
         productsService.saveAll(form.getProducts());
         return "redirect:/admin/products"; }
 
     @GetMapping("/add")
-    public String ProductsAdd(Model model) {
+    public String ProductsAdd() {
         return "adminProductsAdd"; }
 
     @PostMapping("/add")
-    public String ProductsAdd(Model model , Products products) {
+    public String ProductsAdd(Products products) {
         productsService.save(products);
         return "redirect:/admin/products"; }
 }

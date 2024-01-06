@@ -1,9 +1,6 @@
 package com.yulkost.service.dto;
 
-
-
 import com.yulkost.service.model.Items;
-
 import java.util.ArrayList;
 import java.util.List;
 

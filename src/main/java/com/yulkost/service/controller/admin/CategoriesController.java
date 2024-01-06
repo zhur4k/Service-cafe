@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,16 +31,16 @@ public class CategoriesController {
         }
 
     @PostMapping
-    public String CategoriesEdit(Model model ,@ModelAttribute CategoriesEditDto form) {
+    public String CategoriesEdit(@ModelAttribute CategoriesEditDto form) {
         categoriesService.saveAll(form.getCategory());
         return "redirect:/admin/categories"; }
 
     @GetMapping("/add")
-    public String CategoriesAdd(Model model) {
+    public String CategoriesAdd() {
         return "adminCategoriesAdd"; }
 
     @PostMapping("/add")
-    public String CategoriesAdd(Model model , Categories categories) {
+    public String CategoriesAdd(Categories categories) {
         categoriesService.save(categories);
         return "redirect:/admin/categories"; }
 }

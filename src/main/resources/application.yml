@@ -1,7 +1,7 @@
 spring:
   flyway:
     locations: classpath:migrations
-    url: jdbc:mysql://localhost:3306/yulkost
+    url: jdbc:mysql://localhost:3306/yulkos
     user: root
     password: 19804731205
   jpa:
@@ -9,7 +9,7 @@ spring:
       ddl-auto: update
     generate-ddl: true
   datasource:
-    url: jdbc:mysql://localhost:3306/yulkost
+    url: jdbc:mysql://localhost:3306/yulkos
     username: root
     password: 19804731205
 server:
