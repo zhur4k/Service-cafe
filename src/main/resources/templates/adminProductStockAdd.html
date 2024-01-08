@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/adminEdit.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
+</head>
+<body class="container-mo">
+
+<header>
+    <div class="end">
+        <div class="ends">
+            <a href="/admin/stock" class="btnchange">Выйти</a>
+
+        </div>
+    </div>
+</header>
+<div class="container-fo">
+    <table>
+        <form th:action="@{/admin/stock/add}" method="post">
+            <button class="btn-oko">Добавить</button>
+            <tr>
+                <th>Вес(Граммы)</th>
+                <th>Цена</th>
+                <th>Продукт</th>
+                <th>Описание Операции</th>
+            </tr>
+
+            <tr>
+                <td><input th:name="weight" required/></td>
+                <td><input type="number" step="0.01" th:name="priceToPage" required/></td>
+                <td>
+                    <select th:name="product" required>
+                        <option th:each="product: ${products}" th:value="${product.getId()}"
+                                th:text="${product.getName()}"
+                        ></option>
+                    </select>
+                </td>
+                <td><input th:name="description" required/></td>
+
+            </tr>
+        </form>
+    </table>
+</div>
+</body>
+</html>

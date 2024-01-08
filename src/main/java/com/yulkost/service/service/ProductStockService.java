@@ -1,18 +1,25 @@
 package com.yulkost.service.service;
 
-import com.yulkost.service.model.OrderItems;
-import com.yulkost.service.model.Orders;
-import com.yulkost.service.model.ProductStock;
-import com.yulkost.service.model.ProductWeight;
+import com.yulkost.service.model.*;
+import com.yulkost.service.repository.ProductStockMovementRepository;
 import com.yulkost.service.repository.ProductStockRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 public class ProductStockService {
-    ProductStockRepository productStockRepository;
-
-    public ProductStockService(ProductStockRepository productStockRepository) {
+    private ProductStockRepository productStockRepository;
+    private ProductStockMovementRepository productStockMovementRepository;
+    @Autowired
+    public void setProductStockRepository(ProductStockRepository productStockRepository) {
         this.productStockRepository = productStockRepository;
+    }
+    @Autowired
+    public void setProductStockMovementRepository(ProductStockMovementRepository productStockMovementRepository) {
+        this.productStockMovementRepository = productStockMovementRepository;
     }
 
     public void writeOffProductFromStock(Orders order){
@@ -29,5 +36,18 @@ public class ProductStockService {
                 productStockRepository.save(productStock);
             }
         }
+    }
+
+    public void saveMovement(ProductStockMovement movement) {
+        movement.setDateOfOperation(LocalDateTime.now());
+        productStockMovementRepository.save(movement);
+        ProductStock productStock = productStockRepository.findByProductId(movement.getProduct().getId());
+        if (movement.isTypeOfOperation()){
+            productStock.setWeight(productStock.getWeight()+ movement.getWeight());
+            productStock.setPrice(movement.getPrice());
+        }else {
+            productStock.setWeight(productStock.getWeight()- movement.getWeight());
+        }
+        productStockRepository.save(productStock);
     }
 }

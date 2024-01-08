@@ -12,28 +12,34 @@
 <header>
     <div class="end">
         <div class="ends">
-            <a href="/admin" class="btnchange">Выйти</a>
-            <a href="/admin/stock/add" class="btnchange">Прибытие товара</a>
-            <a href="/admin/stock/care" class="btnchange">Списание товара</a>
-            <a href="/admin/stock/movement" class="btnchange">Движение товара</a>
+            <a href="/admin/stock" class="btnchange">Выйти</a>
+
         </div>
     </div>
 </header>
 <div class="container-fo">
     <table>
+        <form th:action="@{/admin/stock/care}" method="post">
+            <button class="btn-oko">Списать</button>
             <tr>
-                <th>id</th>
                 <th>Вес(Граммы)</th>
-                <th>Цена</th>
-                <th>Название продукта</th>
+                <th>Продукт</th>
+                <th>Описание Операции</th>
             </tr>
 
-            <tr th:each="item, itemStat : ${form}">
-                <td th:text="${item.getId()}"></td>
-                <td th:text="${item.getWeight()}"></td>
-                <td th:text="${item.getPriceToPage()}"></td>
-                <td th:text="${item.getProduct().getName()}"></td>
+            <tr>
+                <td><input th:name="weight" required/></td>
+                <td>
+                    <select th:name="product" required>
+                        <option th:each="product: ${products}" th:value="${product.getId()}"
+                                th:text="${product.getName()}"
+                        ></option>
+                    </select>
+                </td>
+                <td><input th:name="description" required/></td>
+
             </tr>
+        </form>
     </table>
 </div>
 </body>

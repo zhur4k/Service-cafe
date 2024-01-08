@@ -12,10 +12,7 @@
 <header>
     <div class="end">
         <div class="ends">
-            <a href="/admin" class="btnchange">Выйти</a>
-            <a href="/admin/stock/add" class="btnchange">Прибытие товара</a>
-            <a href="/admin/stock/care" class="btnchange">Списание товара</a>
-            <a href="/admin/stock/movement" class="btnchange">Движение товара</a>
+            <a href="/admin/stock" class="btnchange">Выйти</a>
         </div>
     </div>
 </header>
@@ -23,16 +20,22 @@
     <table>
             <tr>
                 <th>id</th>
+                <th>Название продукта</th>
                 <th>Вес(Граммы)</th>
                 <th>Цена</th>
-                <th>Название продукта</th>
+                <th>Тип операции</th>
+                <th>Время</th>
+                <th>Описание</th>
             </tr>
 
             <tr th:each="item, itemStat : ${form}">
                 <td th:text="${item.getId()}"></td>
+                <td th:text="${item.getProduct().getName()}"></td>
                 <td th:text="${item.getWeight()}"></td>
                 <td th:text="${item.getPriceToPage()}"></td>
-                <td th:text="${item.getProduct().getName()}"></td>
+                <td th:text="${item.isTypeOfOperation() ? 'Приход' : 'Уход'}"></td>
+                <td th:text="${item.getDateOfOperation()}"></td>
+                <td th:text="${item.getDescription()}"></td>
             </tr>
     </table>
 </div>
