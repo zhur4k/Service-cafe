@@ -18,6 +18,9 @@
 <body>
 <header>
     <span th:text="${#authentication.principal.name}"></span>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Выйти"/>
+    </form>
     <p id="messages"></p>
     <div id="buttons-head"> </div>
 </header>
