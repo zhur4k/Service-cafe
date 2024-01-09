@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
 </head>
 <body class="container-mo">
-<form th:action="@{/admin/items/add}"  method="post">
+<form th:action="@{/admin/items/add}"  method="post" enctype="multipart/form-data">
     <header>
         <div class="end">
             <div class="ends">
@@ -27,6 +27,7 @@
                 <th>Видимость</th>
                 <th>Категория</th>
                 <th>Ед. изм.</th>
+                <th>Изображение</th>
             </tr>
             <tr >
                 <td><input th:name="code" required/></td>
@@ -54,6 +55,8 @@
                         ></option>
                     </select>
                 </td>
+                <td><input type="file" th:name="image" required/></td>
+
             </tr>
         </table>
     </div>

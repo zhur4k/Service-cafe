@@ -3,11 +3,9 @@ package com.yulkost.service.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Entity
@@ -22,6 +20,8 @@ public class Items {
     private Boolean view;
     private int price;
     private int unitPrice;
+    private String img;
+
     @ManyToOne
     @JoinColumn(name = "unit_id", referencedColumnName = "id")
     private Units unit;

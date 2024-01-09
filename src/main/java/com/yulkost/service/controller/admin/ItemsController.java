@@ -4,10 +4,13 @@ import com.yulkost.service.dto.ItemsEditDto;
 import com.yulkost.service.model.Items;
 import com.yulkost.service.model.ProductWeight;
 import com.yulkost.service.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,12 @@ public class ItemsController {
     private final UnitsService unitsService;
     private final ProductsService productsService;
     private final ProductWeightService productWeightService;
+    private ImageService imageService;
+
+    @Autowired
+    public void setImageService(ImageService imageService) {
+        this.imageService = imageService;
+    }
 
     public ItemsController(ItemsService itemsService, CategoriesService categoriesService, UnitsService unitsService, ProductsService productsService, ProductWeightService productWeightService) {
         this.itemsService = itemsService;
@@ -71,7 +80,13 @@ public class ItemsController {
         return "adminItemAdd"; }
 
     @PostMapping("/add")
-    public String ItemsAdd(Items item) {
-        itemsService.save(item);
-        return "redirect:/admin/items"; }
+    public String ItemsAdd(Items item, @RequestPart MultipartFile image) {
+        try {
+            item.setImg(imageService.saveImg(image));
+            itemsService.save(item);
+            return "redirect:/admin/items";
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+         }
 }
