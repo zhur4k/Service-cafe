@@ -3,6 +3,8 @@ package com.yulkost.service.service;
 import com.yulkost.service.model.Items;
 import com.yulkost.service.repository.CategoriesRepository;
 import com.yulkost.service.repository.ItemsRepository;
+import com.yulkost.service.repository.ProductWeightRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +14,11 @@ import java.util.Optional;
 public class ItemsService {
     public ItemsRepository itemsRepository;
     public CategoriesRepository categoryRepository;
+    public ProductWeightRepository productWeightRepository;
+    @Autowired
+    public void setProductWeightRepository(ProductWeightRepository productWeightRepository) {
+        this.productWeightRepository = productWeightRepository;
+    }
 
     public ItemsService(ItemsRepository itemsRepository, CategoriesRepository categoryRepository) {
         this.itemsRepository = itemsRepository;
@@ -28,6 +35,10 @@ public class ItemsService {
         return itemsRepository.findByNameOfItemsAndPrice(nameOfItems,price);
     }
     public void saveAll(List<Items> items) {
+        for (Items item :
+                items) {
+            item.setProductsWeight(productWeightRepository.findByItemId(item.getId()));
+        }
         itemsRepository.saveAll(items);}
 
     public void save(Items item) {

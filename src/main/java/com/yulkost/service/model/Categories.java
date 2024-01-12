@@ -1,7 +1,9 @@
 package com.yulkost.service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,8 @@ public class Categories {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String categoriesName;
+    @JsonIgnore
+    @ToString.Exclude
     @OneToMany(mappedBy = "categories")
     private List<Items> items = new ArrayList<>();
 

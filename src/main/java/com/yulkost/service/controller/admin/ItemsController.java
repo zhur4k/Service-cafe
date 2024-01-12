@@ -1,6 +1,7 @@
 package com.yulkost.service.controller.admin;
 
 import com.yulkost.service.dto.ItemsEditDto;
+import com.yulkost.service.dto.ProductWeightEditDto;
 import com.yulkost.service.model.Items;
 import com.yulkost.service.model.ProductWeight;
 import com.yulkost.service.service.*;
@@ -56,12 +57,16 @@ public class ItemsController {
     @GetMapping("/{id}")
     public String ItemsAdd(@PathVariable Long id, Model model) {
         model.addAttribute("products", productsService.findAll());
-        model.addAttribute("items", itemsService.findById(id));
+        Items items = itemsService.findById(id);
+        model.addAttribute("items", items);
+        List<ProductWeight> productWeights = new ArrayList<>();
+        items.getProductsWeight().iterator().forEachRemaining(productWeights::add);
+        model.addAttribute("form", new ProductWeightEditDto(productWeights));
         return "adminItemChange"; }
 
     @PostMapping("/change")
-    public String ItemChange(Items item) {
-        itemsService.save(item);
+    public String ItemChange(@ModelAttribute ProductWeightEditDto form) {
+        productWeightService.saveAll(form.getProductWeights());
         return "redirect:/admin/items"; }
 
     @PostMapping("{id}/addProduct")

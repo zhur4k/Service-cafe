@@ -36,12 +36,18 @@ public class ProductsService {
     public void save(Products product) {
         productsRepository.save(product);
         if(!productStockRepository.existsByProductId(product.getId())){
+            // Если не существует, создаем новую запись в ProductStock
             ProductStock productStock = new ProductStock();
             productStock.setProduct(product);
             productStock.setWeight(0);
             productStock.setPrice(0);
             productStockRepository.save(productStock);
+
+            // Обновляем продукт с ссылкой на ProductStock
+            product.setProductStock(productStock);
+            productsRepository.save(product);
         };
+
     }
 
     public Products findById(Long id) {

@@ -29,11 +29,23 @@ public class Items {
     @ManyToOne
     @JoinColumn(name = "categories_id", referencedColumnName = "id")
     private Categories categories;
-
     @OneToMany
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     private List<ProductWeight> productsWeight = new ArrayList<>();
-
+    public int getMarkup() {
+        int priceOfAllProducts= 0;
+        for (ProductWeight productWeight :
+                this.getProductsWeight()) {
+            priceOfAllProducts += productWeight.getProduct().getProductStock().getPrice()*productWeight.getWeight()/1000;
+        }
+        try {
+            return (this.price-priceOfAllProducts)/priceOfAllProducts*100;
+        }catch (ArithmeticException e)
+        {
+            System.out.println(e.getMessage());
+            return 0;
+        }
+    }
     public String getPriceToPage() {
         double pr = (double) price;
         return Double.toString(pr/100);
