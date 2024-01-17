@@ -16,6 +16,11 @@
             <a href="/admin/stock/add" class="btnchange">Прибытие товара</a>
             <a href="/admin/stock/care" class="btnchange">Списание товара</a>
             <a href="/admin/stock/movement" class="btnchange">Движение товара</a>
+                <label for="startDate">От :</label>
+                <input type="date" id="startDate" name="startDate" required>
+                <label for="endDate">До :</label>
+                <input type="date" id="endDate" name="endDate" required>
+            <button type="button" onclick="downloadExcel()">Скачать отчёт</button>
         </div>
     </div>
 </header>
@@ -34,5 +39,7 @@
             </tr>
     </table>
 </div>
+<script src="/js/ExcelJs.js"></script>
+
 </body>
 </html>
