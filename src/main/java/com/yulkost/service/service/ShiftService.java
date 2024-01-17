@@ -3,10 +3,10 @@ package com.yulkost.service.service;
 import com.yulkost.service.model.Shift;
 import com.yulkost.service.model.User;
 import com.yulkost.service.repository.ShiftRepository;
-import com.yulkost.service.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,13 +21,13 @@ public class ShiftService {
     }
 
     public Shift openShift(User user) {
-        Shift shift = getOpenShift();
-        if(shift==null)  {
-            shift = new Shift();
-            shift.getUsers().add(user);
+        Shift openShift = getOpenShift();
+        if(openShift==null)  {
+        Shift shift = new Shift();
+            shift.getUsers().add(userService.save(user));
             return shiftRepository.save(shift);
         }
-        return shift;
+        return openShift;
     }
     public Shift addUser(Shift shift,String login){
         try {
@@ -43,9 +43,17 @@ public class ShiftService {
         }
     }
     public Shift getOpenShift() {
-        return shiftRepository.findByStateOfShift(true);
+        Shift openShift = shiftRepository.findByStateOfShift(true);
+        if(openShift!=null&&openShift.getStartDate().until(LocalDateTime.now(), ChronoUnit.HOURS)>=24){
+            openShift.setStateOfShift(false);
+            openShift.setEndDate(LocalDateTime.now());
+            shiftRepository.save(openShift);
+            return null;
+        }
+        return openShift;
     }
-    public void closeShift(User user){
+
+    public void closeShift(){
         Shift shift = getOpenShift();
         shift.setStateOfShift(false);
         shift.setEndDate(LocalDateTime.now());

@@ -87,7 +87,9 @@ public class ItemsController {
     @PostMapping("/add")
     public String ItemsAdd(Items item, @RequestPart MultipartFile image) {
         try {
-            item.setImg(imageService.saveImg(image));
+            if(!image.isEmpty()){
+                item.setImg(imageService.saveImg(image));
+            }
             itemsService.save(item);
             return "redirect:/admin/items";
         } catch (IOException e) {

@@ -23,16 +23,14 @@
                 <button class="btn-oko">Изменить</button>
 
                 <tr>
-                    <th>id</th>
-                    <th>Вес(Граммы)</th>
                     <th>Название продукта</th>
+                    <th>Вес(Граммы)</th>
                     <th>Цена</th>
 
                 </tr>
 
                 <tr th:each="item, itemStat : ${form.productWeights}">
-                    <td><input th:name="|productWeights[${itemStat.index}].id|" th:value="${item.getId()}" readonly /></td>
-                    <td><input th:name="|productWeights[${itemStat.index}].weight|" th:value="${item.getWeight()}" required/></td>
+                    <input th:name="|productWeights[${itemStat.index}].id|" th:value="${item.getId()}" type="hidden" readonly />
                     <td>
                         <select th:name="|productWeights[${itemStat.index}].product|" required>
                             <option th:each="product: ${products}" th:value="${product.getId()}"
@@ -41,16 +39,22 @@
                             ></option>
                         </select>
                     </td>
+                    <td><input th:name="|productWeights[${itemStat.index}].weightToPage|" th:value="${item.getWeightToPage()}" required/></td>
+
                     <td th:text="${item.getPriceToPage()}">
                     </td>
                     <input th:name="|productWeights[${itemStat.index}].item|" th:value="${items.getId()}" type="hidden" required/>
                 </tr>
             </form>
+            <tr>
+                <th>Название продукта</th>
+                <th>Вес(Граммы)</th>
+                <th>Цена</th>
 
+            </tr>
             <form th:action="'/admin/items/'+${items.getId()}+'/addProduct'"  method="post">
             <tr>
-                <td><button class="btn-oko">Добавить</button></td>
-                <td><input th:name="weightAdd" required/></td>
+                <button class="btn-oko">Добавить</button>
                 <td>
                     <select th:name="productAdd" required>
                         <option th:each="product: ${products}" th:value="${product.getId()}"
@@ -58,6 +62,7 @@
                         ></option>
                     </select>
                 </td>
+                <td><input th:name="weightAdd" required/></td>
             </tr>
             </form>
         </table>

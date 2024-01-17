@@ -22,17 +22,15 @@
 <div class="container-fo">
     <table>
             <tr>
-                <th>id</th>
-                <th>Вес(Граммы)</th>
-                <th>Цена(1000 гр)</th>
                 <th>Название продукта</th>
+                <th>Вес</th>
+                <th>Цена</th>
             </tr>
 
             <tr th:each="item, itemStat : ${form}">
-                <td th:text="${item.getId()}"></td>
-                <td th:text="${item.getWeight()}"></td>
-                <td th:text="${item.getPriceToPage()}"></td>
                 <td th:text="${item.getProduct().getName()}"></td>
+                <td th:text="${item.getWeightToPage()}"></td>
+                <td th:text="${item.getPriceToPage()}"></td>
             </tr>
     </table>
 </div>

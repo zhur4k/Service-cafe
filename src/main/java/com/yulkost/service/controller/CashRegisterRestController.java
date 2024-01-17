@@ -53,7 +53,7 @@ public class CashRegisterRestController {
     }
 
     @GetMapping("/getOpenShift")
-    public ResponseEntity<Shift> getOpenShift() {
+    public ResponseEntity<?> getOpenShift() {
         try {
             return ResponseEntity.ok(shiftService.getOpenShift());
         } catch (Exception e) {
@@ -75,7 +75,7 @@ public class CashRegisterRestController {
     public ResponseEntity<String> closeShift(@AuthenticationPrincipal User user) {
         try {
             if(cashRegisterRestService.sendZReport()){
-                shiftService.closeShift(user);
+                shiftService.closeShift();
                 return ResponseEntity.ok("Success Shift was closed");
             }
             return null;

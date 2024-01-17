@@ -19,7 +19,7 @@ public class Orders {
     private int establishmentPaid;
 
     private LocalDateTime date;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private List<OrderItems> orderItems = new ArrayList<>();
     @ManyToOne

@@ -58,8 +58,9 @@ public class OrdersService {
             }
 
             orderItemsRepository.saveAll(order.getOrderItems());
-            cashRegister.setOrder(ordersRepository.save(order));
+            Orders orders = ordersRepository.save(order);
+            cashRegister.setOrder(orders);
             cashRegisterRepository.save(cashRegister);
-            productStockService.writeOffProductFromStock(order);
+            productStockService.writeOffProductFromStockAndSaveToStockMovement(order);
     }
 }

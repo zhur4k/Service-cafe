@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,14 +50,18 @@ public class Items {
     }
     public String getPriceToPage() {
         double pr = (double) price;
-        return Double.toString(pr/100);
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        return new DecimalFormat("0.00",symbols).format(pr/100);
     }
     public void setPriceToPage(String price) {
         this.price = (int)(Double.parseDouble(price)*100);;
     }
     public String getUnitPriceToPage() {
         double pr = (double) unitPrice;
-        return Double.toString(pr/1000);
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        return new DecimalFormat("0.000",symbols).format(pr/1000);
     }
     public void setUnitPriceToPage(String price) {
         this.unitPrice = (int)(Double.parseDouble(price)*1000);;

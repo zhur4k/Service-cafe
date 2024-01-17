@@ -21,7 +21,6 @@
     <div class="container-fo">
         <table>
             <tr>
-                <th>id</th>
                 <th>Имя</th>
                 <th>Логин</th>
                 <th>Пароль</th>
@@ -30,7 +29,7 @@
                 <th>Роль пользователя</th>
             </tr>
             <tr th:each="user, itemStat : ${form.users}">
-                <td><input th:name="|users[${itemStat.index}].id|" th:value="${user.getId()}" readonly /></td>
+                <input th:name="|users[${itemStat.index}].id|" th:value="${user.getId()}" type="hidden" readonly />
                 <td><input th:name="|users[${itemStat.index}].name|" th:value="${user.getName()}"  required/></td>
                 <td><input th:name="|users[${itemStat.index}].login|" th:value="${user.getUsername()}"  required/></td>
                 <td><input th:name="|users[${itemStat.index}].password|" th:value="${user.getPassword()}"  required/></td>

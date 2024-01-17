@@ -19,23 +19,25 @@
 <div class="container-fo">
     <table>
             <tr>
-                <th>id</th>
                 <th>Название продукта</th>
-                <th>Вес(Граммы)</th>
+                <th>Вес</th>
                 <th>Цена</th>
+                <th>Сумма</th>
                 <th>Тип операции</th>
                 <th>Время</th>
                 <th>Описание</th>
+                <th>Id заказа</th>
             </tr>
 
             <tr th:each="item, itemStat : ${form}">
-                <td th:text="${item.getId()}"></td>
                 <td th:text="${item.getProduct().getName()}"></td>
-                <td th:text="${item.getWeight()}"></td>
+                <td th:text="${item.getWeightToPage()}"></td>
                 <td th:text="${item.getPriceToPage()}"></td>
-                <td th:text="${item.isTypeOfOperation() ? 'Приход' : 'Уход'}"></td>
+                <td th:text="${item.getSumToPage()}"></td>
+                <td th:text="${item.getTypeOfOperation()}"></td>
                 <td th:text="${item.getDateOfOperation()}"></td>
                 <td th:text="${item.getDescription()}"></td>
+                <td th:if="${item.getOrderItems() != null}" th:text="${item.getOrderItems().getId()}"></td>
             </tr>
     </table>
 </div>

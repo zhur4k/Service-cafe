@@ -18,9 +18,13 @@ public class Shift {
     private LocalDateTime startDate;
     private boolean stateOfShift;
     private LocalDateTime endDate;
-
     @JsonIgnore
-    @OneToMany
+    @ManyToMany
+    @JoinTable(
+            name = "shift_users",
+            joinColumns = @JoinColumn(name = "shift_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     private List<User> users = new ArrayList<>();
 
     @JsonIgnore
@@ -33,7 +37,7 @@ public class Shift {
     @JoinColumn(name = "shift_id", referencedColumnName = "id")
     private List<Collection> collections = new ArrayList<>();
 
-    public Shift() {
+   public Shift() {
         this.startDate = LocalDateTime.now();
         this.stateOfShift = true;
     }

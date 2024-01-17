@@ -15,7 +15,6 @@ public class Categories {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String categoriesName;
-    @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "categories")
     private List<Items> items = new ArrayList<>();

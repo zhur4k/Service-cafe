@@ -21,11 +21,10 @@
     <div class="container-fo">
         <table>
             <tr>
-                <th>id</th>
                 <th>Имя</th>
             </tr>
             <tr th:each="product, itemStat : ${form.products}">
-                <td><input th:name="|products[${itemStat.index}].id|" th:value="${product.getId()}" readonly /></td>
+                <input th:name="|products[${itemStat.index}].id|" th:value="${product.getId()}" type="hidden" readonly />
                 <td><input th:name="|products[${itemStat.index}].name|" th:value="${product.getName()}" required/></td>
             </tr>
         </table>

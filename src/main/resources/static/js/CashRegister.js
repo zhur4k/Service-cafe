@@ -357,12 +357,13 @@ function displayCheck() {
 
 function setSumAfterPaidOperation(){
     let sumToPai = (total-cashPaid-cashLessPaid-establishmentPaid);
-    document.getElementById('sum-input').textContent =(sumToPai/100).toFixed(2);
-    document.getElementById( 'sum-info').textContent = 'К оплате: '+(sumToPai/100).toFixed(2)
-        +'руб из '+(sumToPai/100).toFixed(2)+'руб';
     if(sumToPai===0){
         return submitOrder();
     }
+    document.getElementById('sum-input').textContent =(sumToPai/100).toFixed(2);
+    document.getElementById( 'sum-info').textContent = 'К оплате: '+(sumToPai/100).toFixed(2)
+        +'руб из '+(sumToPai/100).toFixed(2)+'руб';
+
 }
 //Show pay block
 function checkOrderAndDisplayPayBlock() {
@@ -813,7 +814,7 @@ function submitOrder() {
                 };
                 xhr.send(JSON.stringify(orders));
             } else {
-                showMessage();
+                showMessage('error');
             }
         }
     };
@@ -830,28 +831,37 @@ function checkShiftButtonState() {
     xhr.setRequestHeader(csrfHeader, csrfToken);
 
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Обработка успешного ответа от сервера
-            if(xhr.responseText)
-            shift=xhr.responseText;
-            // После получения ответа, проверяем условие
-            let shiftButton = document.getElementById("shiftButton");
-            if (shift) {
-                shiftButton.textContent = 'Закрыть смену';
-                shiftButton.onclick = function() {
-                    closeShift(shiftButton);
-                };
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                // Обработка успешного ответа от сервера
+                try {
+                    let shift = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                    let shiftButton = document.getElementById("shiftButton");
+                    console.log(shift);
+                    if (shift) {
+                        shiftButton.textContent = 'Закрыть смену';
+                        shiftButton.onclick = function() {
+                            closeShift(shiftButton);
+                        };
+                    } else {
+                        shiftButton.textContent = 'Открыть смену';
+                        shiftButton.onclick = function() {
+                            openShift(shiftButton);
+                        };
+                    }
+                } catch (error) {
+                    console.error('Ошибка при разборе ответа: ', error);
+                }
             } else {
-                shiftButton.textContent = 'Открыть смену';
-                shiftButton.onclick = function() {
-                    openShift(shiftButton);
-                };
+                // Обработка ошибок
+                console.error('Ошибка запроса: ', xhr.status);
             }
         }
     };
 
-    // Отправляем запрос
+// Отправляем запрос
     xhr.send();
+
 }
 
 //Show message in messages div
