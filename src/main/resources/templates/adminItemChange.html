@@ -24,9 +24,9 @@
 
                 <tr>
                     <th>Название продукта</th>
-                    <th>Вес(Граммы)</th>
+                    <th>Вес</th>
                     <th>Цена</th>
-
+                    <th>Сумма</th>
                 </tr>
 
                 <tr th:each="item, itemStat : ${form.productWeights}">
@@ -43,18 +43,20 @@
 
                     <td th:text="${item.getPriceToPage()}">
                     </td>
+                    <td th:text="${item.getSumToPage()}">
+                    </td>
                     <input th:name="|productWeights[${itemStat.index}].item|" th:value="${items.getId()}" type="hidden" required/>
                 </tr>
             </form>
             <tr>
                 <th>Название продукта</th>
-                <th>Вес(Граммы)</th>
-                <th>Цена</th>
+                <th>Вес</th>
+                <th>Добавить</th>
 
             </tr>
             <form th:action="'/admin/items/'+${items.getId()}+'/addProduct'"  method="post">
             <tr>
-                <button class="btn-oko">Добавить</button>
+
                 <td>
                     <select th:name="productAdd" required>
                         <option th:each="product: ${products}" th:value="${product.getId()}"
@@ -63,6 +65,7 @@
                     </select>
                 </td>
                 <td><input th:name="weightAdd" required/></td>
+                <td><button class="btn-oko">Добавить</button></td>
             </tr>
             </form>
         </table>

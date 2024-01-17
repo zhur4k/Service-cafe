@@ -24,19 +24,24 @@ public class ProductWeight {
     @JsonIgnore
     @ManyToOne
     Items item;
+    public String getSumToPage() {
+        return new DecimalFormat("0.00").format(((float)this.weight)/1000 *((float)product.getProductStock().getPrice())/100);
+    }
     public String getPriceToPage(){
-        double pr = (double) product.getProductStock().getPrice()*getWeight()/1000;
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator('.');
-        return new DecimalFormat("0.00",symbols).format(pr/100);
+        return product.getProductStock().getPriceToPage();
     }
     public String getWeightToPage(){
-        double pr = (double) this.weight/1000;
+        double pr = (double) this.weight;
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator('.');
         return new DecimalFormat("0.000",symbols).format(pr/1000);
     }
+
     public void setWeightToPage(String weight){
         this.weight = (int)(Double.parseDouble(weight)*1000);
     }
+    public void addWeight(String weight){
+        this.weight += (int)(Double.parseDouble(weight)*1000);
+    }
+
 }

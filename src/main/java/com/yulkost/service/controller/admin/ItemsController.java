@@ -4,6 +4,8 @@ import com.yulkost.service.dto.ItemsEditDto;
 import com.yulkost.service.dto.ProductWeightEditDto;
 import com.yulkost.service.model.Items;
 import com.yulkost.service.model.ProductWeight;
+import com.yulkost.service.model.Products;
+import com.yulkost.service.repository.ProductWeightRepository;
 import com.yulkost.service.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +26,12 @@ public class ItemsController {
     private final UnitsService unitsService;
     private final ProductsService productsService;
     private final ProductWeightService productWeightService;
+    private ProductWeightRepository productWeightRepository;
     private ImageService imageService;
+    @Autowired
+    public void setProductWeightRepository(ProductWeightRepository productWeightRepository) {
+        this.productWeightRepository = productWeightRepository;
+    }
 
     @Autowired
     public void setImageService(ImageService imageService) {
@@ -67,15 +74,23 @@ public class ItemsController {
     @PostMapping("/change")
     public String ItemChange(@ModelAttribute ProductWeightEditDto form) {
         productWeightService.saveAll(form.getProductWeights());
-        return "redirect:/admin/items"; }
+        return "redirect:/admin/items/"+form.getProductWeights().get(0).getItem().getId(); }
 
     @PostMapping("{id}/addProduct")
-    public String ItemChange(@PathVariable Long id,Integer weightAdd,Long productAdd) {
-        ProductWeight productWeight = new ProductWeight();
-        productWeight.setWeight(weightAdd);
-        productWeight.setProduct(productsService.findById(productAdd));
-        productWeight.setItem(itemsService.findById(id));
+    public String ItemChange(@PathVariable Long id,String weightAdd,Long productAdd) {
+        Products product = productsService.findById(productAdd);
+        Items item = itemsService.findById(id);
+        ProductWeight productWeight = productWeightRepository.findByProductAndItem(product,item);
+        if(productWeight==null){
+            productWeight = new ProductWeight();
+            productWeight.setWeightToPage(weightAdd);
+            productWeight.setProduct(product);
+            productWeight.setItem(item);
+        } else{
+            productWeight.addWeight(weightAdd);
+        }
         productWeightService.save(productWeight);
+
         return "redirect:/admin/items/"+id;
     }
     @GetMapping("/add")

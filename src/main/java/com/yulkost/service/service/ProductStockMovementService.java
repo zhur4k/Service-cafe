@@ -38,14 +38,14 @@ public class ProductStockMovementService {
         productStock.setWeight(productStock.getWeight()- movement.getWeight());
         productStockRepository.save(productStock);
     }
-    public void saveMovementOrderItem(OrderItems item,ProductStock productStock,ProductWeight productWeight) {
+    public void saveMovementOrderItem(OrderItems item, ProductStock productStock, ProductWeight productWeight) {
         ProductStockMovement movement = new ProductStockMovement();
         movement.setDateOfOperation(LocalDateTime.now());
         movement.setTypeOfOperation("order");
         movement.setOrderItems(item);
         movement.setProduct(productWeight.getProduct());
         movement.setPrice(productStock.getPrice());
-        movement.setWeight(productWeight.getWeight());
+        movement.setWeight(productWeight.getWeight()* item.getQuantity());
         productStockMovementRepository.save(movement);
     }
 }

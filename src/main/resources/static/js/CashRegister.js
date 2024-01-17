@@ -1,5 +1,5 @@
-const csrfToken = document.querySelector('meta[name="_csrf"]').content;
-const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+// const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+// const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 //All category to page
 let categoryData = [];
 //All items from server
@@ -8,7 +8,6 @@ let itemsToPage = [];
 let orderItems = [];
 //Shift state
 let shift=[]
-
 let cashPaid=0;
 let cashLessPaid=0;
 let establishmentPaid=0;
@@ -78,7 +77,7 @@ function displayMainContainer() {
 function showListOfUser(rightContainerChild2) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getOpenShift', true);
-    xhr.setRequestHeader(csrfHeader, csrfToken);
+    // xhr.setRequestHeader(csrfHeader, csrfToken);
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -89,7 +88,7 @@ function showListOfUser(rightContainerChild2) {
             if (shift) {
                 let xhr = new XMLHttpRequest();
                 xhr.open('GET', '/getListOfUsers', true);
-                xhr.setRequestHeader(csrfHeader, csrfToken);
+                // xhr.setRequestHeader(csrfHeader, csrfToken);
 
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4 && xhr.status === 200) {
@@ -357,7 +356,7 @@ function displayCheck() {
 
 function setSumAfterPaidOperation(){
     let sumToPai = (total-cashPaid-cashLessPaid-establishmentPaid);
-    if(sumToPai===0){
+    if(sumToPai.toFixed(2)<=0){
         return submitOrder();
     }
     document.getElementById('sum-input').textContent =(sumToPai/100).toFixed(2);
@@ -369,7 +368,7 @@ function setSumAfterPaidOperation(){
 function checkOrderAndDisplayPayBlock() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getOpenShift', true);
-    xhr.setRequestHeader(csrfHeader, csrfToken);
+    // xhr.setRequestHeader(csrfHeader, csrfToken);
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -441,7 +440,7 @@ function getSumInCashRegister() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/sumInCashRegister', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+    // xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             document.getElementById('sum-in-cashRegister').textContent = 'В кассе: '+xhr.responseText+' руб';
@@ -457,7 +456,7 @@ function sendCollectionMove(collectionType) {
     });
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getOpenShift', true);
-    xhr.setRequestHeader(csrfHeader, csrfToken);
+    // xhr.setRequestHeader(csrfHeader, csrfToken);
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -471,7 +470,7 @@ function sendCollectionMove(collectionType) {
                 let xhr = new XMLHttpRequest();
                 xhr.open('POST', '/collectionMove', true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+                // xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         showMessage('Инкассация проведена успешно!!!','green');
@@ -745,7 +744,7 @@ function clearOrder() {
 function addUserToShift(){
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getOpenShift', true);
-    xhr.setRequestHeader(csrfHeader, csrfToken);
+    // xhr.setRequestHeader(csrfHeader, csrfToken);
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -759,7 +758,7 @@ function addUserToShift(){
                 let xhr = new XMLHttpRequest();
                 xhr.open('POST', '/addUserToShift', true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+                // xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         showMessage('Пользователь добавлен!!!','green');
@@ -783,7 +782,7 @@ function addUserToShift(){
 function submitOrder() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getOpenShift', true);
-    xhr.setRequestHeader(csrfHeader, csrfToken);
+    // xhr.setRequestHeader(csrfHeader, csrfToken);
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -804,7 +803,7 @@ function submitOrder() {
                 let xhr = new XMLHttpRequest();
                 xhr.open('POST', '/submitOrder', true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+                // xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         console.log('Заказ успешно отправлен!');
@@ -828,7 +827,7 @@ function submitOrder() {
 function checkShiftButtonState() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getOpenShift', true);
-    xhr.setRequestHeader(csrfHeader, csrfToken);
+    // xhr.setRequestHeader(csrfHeader, csrfToken);
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
@@ -880,7 +879,7 @@ function showMessage(message='Откройте смену!!!',color='red'){
 function openShift(shiftButton) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/openShift', true);
-    xhr.setRequestHeader(csrfHeader, csrfToken);
+    // xhr.setRequestHeader(csrfHeader, csrfToken);
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -902,7 +901,7 @@ function openShift(shiftButton) {
 function closeShift(shiftButton) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/closeShift', true);
-    xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+    // xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
     xhr.onreadystatechange =  function() {
         // и статус ответа сервера 200 (OK)
         if (xhr.readyState === 4 && xhr.status === 200)
@@ -922,7 +921,7 @@ function closeShift(shiftButton) {
 function xReportButtonClick() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getOpenShift', true);
-    xhr.setRequestHeader(csrfHeader, csrfToken);
+    // xhr.setRequestHeader(csrfHeader, csrfToken);
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -946,7 +945,7 @@ function xReportButtonClick() {
 function xReportSend(){
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getXReport', true);
-    xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+    // xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
     xhr.onreadystatechange = function () {
         // и статус ответа сервера 200 (OK)
         if (xhr.readyState === 4 && xhr.status === 200)
@@ -961,7 +960,7 @@ function xReportSend(){
 function getCategoriesToPage() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getCategory', true);
-    xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+    // xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
     xhr.onreadystatechange = function() {
         // Проверяем, что запрос завершен (readyState = 4)
         // и статус ответа сервера 200 (OK)
@@ -980,7 +979,7 @@ function getCategoriesToPage() {
 function getItemsToPage() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getItemsToPage', true);
-    xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
+    // xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
     xhr.onreadystatechange = function() {
         // Проверяем, что запрос завершен (readyState = 4)
         // и статус ответа сервера 200 (OK)
