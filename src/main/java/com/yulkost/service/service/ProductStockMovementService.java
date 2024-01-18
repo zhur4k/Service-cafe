@@ -27,8 +27,11 @@ public class ProductStockMovementService {
         movement.setTypeOfOperation("add");
         productStockMovementRepository.save(movement);
         ProductStock productStock = productStockRepository.findByProductId(movement.getProduct().getId());
+        int totalCost = productStock.getWeight() * productStock.getPrice() + movement.getWeight()  * movement.getPrice();
+        int totalWeight = productStock.getWeight()+movement.getWeight();
+        int averagePrice = totalCost / totalWeight;
         productStock.setWeight(productStock.getWeight()+ movement.getWeight());
-        productStock.setPrice(movement.getPrice());
+        productStock.setPrice(averagePrice);
         productStockRepository.save(productStock);
     }
     public void saveMovementRemove(ProductStockMovement movement) {
