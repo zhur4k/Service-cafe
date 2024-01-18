@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class ProductStockMovementService {
@@ -22,7 +23,7 @@ public class ProductStockMovementService {
     }
 
     public void saveMovementAdd(ProductStockMovement movement) {
-        movement.setDateOfOperation(LocalDateTime.now());
+        movement.setDateOfOperation(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         movement.setTypeOfOperation("add");
         productStockMovementRepository.save(movement);
         ProductStock productStock = productStockRepository.findByProductId(movement.getProduct().getId());
@@ -31,7 +32,7 @@ public class ProductStockMovementService {
         productStockRepository.save(productStock);
     }
     public void saveMovementRemove(ProductStockMovement movement) {
-        movement.setDateOfOperation(LocalDateTime.now());
+        movement.setDateOfOperation(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         movement.setTypeOfOperation("remove");
         productStockMovementRepository.save(movement);
         ProductStock productStock = productStockRepository.findByProductId(movement.getProduct().getId());
@@ -40,7 +41,7 @@ public class ProductStockMovementService {
     }
     public void saveMovementOrderItem(OrderItems item, ProductStock productStock, ProductWeight productWeight) {
         ProductStockMovement movement = new ProductStockMovement();
-        movement.setDateOfOperation(LocalDateTime.now());
+        movement.setDateOfOperation(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         movement.setTypeOfOperation("order");
         movement.setOrderItems(item);
         movement.setProduct(productWeight.getProduct());

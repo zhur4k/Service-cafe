@@ -42,6 +42,12 @@
                     </select>
                 </td>
                 <td>
+                    <select th:name="typeOfItem" required>
+                        <option th:value="true">Кухня</option>
+                        <option th:value="false">Бар</option>
+                    </select>
+                </td>
+                <td>
                     <select th:name="categories" required>
                         <option th:each="categor: ${category}" th:value="${categor.getId()}"
                             th:text="${categor.getCategoriesName()}"

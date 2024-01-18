@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Data
 @Entity
@@ -18,8 +19,4 @@ public class Collection {
 
     @ManyToOne
     Shift shift;
-
-    public Collection() {
-        this.dateOfOperation = LocalDateTime.now();
-    }
 }

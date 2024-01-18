@@ -1,7 +1,7 @@
 spring:
   flyway:
     locations: classpath:migrations
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/yulkost
+    url: jdbc:mysql://host.docker.internal:3306/yulkost
     user: kostya1205
     password: 19804731205
   jpa:
@@ -9,9 +9,6 @@ spring:
       ddl-auto: validate
     generate-ddl: false
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/yulkost
+    url: jdbc:mysql://host.docker.internal:3306/yulkost
     username: kostya1205
     password: 19804731205
-server:
-  address: 0.0.0.0
-  port: 8987

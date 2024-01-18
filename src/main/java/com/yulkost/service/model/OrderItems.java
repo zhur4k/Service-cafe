@@ -3,6 +3,7 @@ package com.yulkost.service.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class OrderItems {
     private int quantity;
     private int price;
     private int markup;
-    private String name;
+    private LocalDateTime dateOfItemChange;
 
     @ManyToOne
     @JoinColumn(name = "items_id", referencedColumnName = "id")
@@ -26,11 +27,10 @@ public class OrderItems {
     @PrePersist
     @PreUpdate
     private void calculateMarkup() {
-        //Установить наименование
-        this.name= this.items.getNameOfItems();
         //Установить цену
         this.price= this.items.getPrice();
         //Установить наценку
         this.markup = this.items.getMarkup();
+        this.dateOfItemChange = this.items.getDateOfChange();
     }
 }

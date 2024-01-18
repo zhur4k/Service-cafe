@@ -9,6 +9,7 @@ import com.yulkost.service.repository.OrdersRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class OrdersService {
         if(order.getOrderItems().isEmpty())
             return null;
         Orders newOrder = new Orders();
-        newOrder.setDate(LocalDateTime.now());
+        newOrder.setDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         newOrder.setShift(order.getShift());
         newOrder.setCashPaid(order.getCashPaid());
         newOrder.setCashLessPaid(order.getCashLessPaid());

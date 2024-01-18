@@ -27,6 +27,7 @@
                 <th>Кол-во в ед.</th>
                 <th>Наценка (%)</th>
                 <th>Видимость</th>
+                <th>Тип</th>
                 <th>Категория</th>
                 <th>Ед. изм.</th>
                 <th>Состав</th>
@@ -42,6 +43,12 @@
                     <select th:name="|items[${itemStat.index}].view|" required>
                         <option th:selected="${item.getView()}" th:value="true">Виден</option>
                         <option th:selected="!${item.getView()}" th:value="false">Не виден</option>
+                    </select>
+                </td>
+                <td>
+                    <select th:name="|items[${itemStat.index}].typeOfItem|" required>
+                        <option th:selected="${item.getTypeOfItem()}" th:value="true">Кухня</option>
+                        <option th:selected="!${item.getTypeOfItem()}" th:value="false">Бар</option>
                     </select>
                 </td>
                 <td>

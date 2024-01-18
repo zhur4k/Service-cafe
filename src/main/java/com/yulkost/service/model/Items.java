@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +21,12 @@ public class Items {
     private String code;
     private String nameOfItems;
     private Boolean view;
+    private Boolean typeOfItem;
+
     private int price;
     private int unitPrice;
     private String img;
-
+    private LocalDateTime dateOfChange;
     @ManyToOne
     @JoinColumn(name = "unit_id", referencedColumnName = "id")
     private Units unit;

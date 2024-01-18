@@ -6,6 +6,9 @@ import com.yulkost.service.repository.CashRegisterRepository;
 import com.yulkost.service.repository.CollectionRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 @Service
 public class CollectionService {
     private CollectionRepository collectionRepository;
@@ -39,6 +42,7 @@ public class CollectionService {
                 cashRegister.setCashAmount(cashRegisterMain.getCashAmount()-collection.getSumOfOperation());
             }
         }
+        collection.setDateOfOperation(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         cashRegister.setCollection(collectionRepository.save(collection));
         cashRegisterRepository.save(cashRegister);
         } catch (Exception e) {
