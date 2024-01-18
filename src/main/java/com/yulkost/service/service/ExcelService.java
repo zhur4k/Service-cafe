@@ -1,73 +1,186 @@
 package com.yulkost.service.service;
 
+import com.yulkost.service.model.OrderItems;
+import com.yulkost.service.model.Orders;
+import com.yulkost.service.model.ProductStockMovement;
+import com.yulkost.service.model.Products;
+import com.yulkost.service.repository.OrdersRepository;
+import com.yulkost.service.repository.ProductsRepository;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ExcelService {
+    private OrdersRepository ordersRepository;
+    private ProductsRepository productsRepository;
+
+    @Autowired
+    public void setOrdersRepository(OrdersRepository ordersRepository) {
+        this.ordersRepository = ordersRepository;
+    }
+
+    @Autowired
+    public void setProductsRepository(ProductsRepository productsRepository) {
+        this.productsRepository = productsRepository;
+    }
+
     public byte[] createExcelFile(LocalDate startDate, LocalDate endDate) throws IOException {
         try (Workbook workbook = new XSSFWorkbook();
              ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
 
             Sheet sheet = workbook.createSheet("Report");
-
             // Create header row
-            Row headerRow = sheet.createRow(0);
-            headerRow.createCell(0).setCellValue("ШАУРМА");
-            headerRow.createCell(1).setCellValue("К-во");
-            headerRow.createCell(2).setCellValue("Лаваш норм");
-            headerRow.createCell(3).setCellValue("Лаваш факт");
-            headerRow.createCell(4).setCellValue("Курица норм");
-            headerRow.createCell(5).setCellValue("Курица факт");
-            headerRow.createCell(6).setCellValue("Капуста норм");
-            headerRow.createCell(7).setCellValue("Капуста факт");
+            Row row0 = sheet.createRow(2);
+            Row row1 = sheet.createRow(3);
 
-            // Example data
-            String[] shawarmaTypes = {"- чикен", "- барбекю", "- Турецкая", "- Мексикан", "- Грибная", "- из говядины"};
-            int[] quantities = {34, 16, 15, 15, 20, 0};
-            double[] lavashNorm = {34, 16, 15, 15, 20, 0}; // Replace with actual data
-            double[] lavashFact = {1, 1, 1, 1, 1, 1}; // Replace with actual data
-            double[] chickenNorm = {0.12, 0.12, 0.12, 0.12, 0.14, 0}; // Replace with actual data
-            double[] chickenFact = {4.08, 1.92, 1.8, 1.8, 2.8, 0.1}; // Replace with actual data
-            double[] cabbageNorm = {0.1, 0.1, 0.1, 0.1, 0.05, 0}; // Replace with actual data
-            double[] cabbageFact = {3.4, 1.6, 1.5, 1.5, 1, 0}; // Replace with actual data
+            row0.createCell(0).setCellValue("Наименование");
+            row0.createCell(1).setCellValue("Категория");
+            row0.createCell(2).setCellValue("Дата");
+            row0.createCell(3).setCellValue("Кол-во");
 
-            // Populate the table with data
-            for (int i = 0; i < shawarmaTypes.length; i++) {
-                Row dataRow = sheet.createRow(i + 1);
-                dataRow.createCell(0).setCellValue(shawarmaTypes[i]);
-                dataRow.createCell(1).setCellValue(quantities[i]);
-                dataRow.createCell(2).setCellValue(lavashNorm[i]);
-                dataRow.createCell(3).setCellValue(lavashFact[i]);
-                dataRow.createCell(4).setCellValue(chickenNorm[i]);
-                dataRow.createCell(5).setCellValue(chickenFact[i]);
-                dataRow.createCell(6).setCellValue(cabbageNorm[i]);
-                dataRow.createCell(7).setCellValue(cabbageFact[i]);
+            List<Orders> orders = ordersRepository.findByDateBetween(startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX));
+            List<OrderItems> orderItems = new ArrayList<>();
+            boolean flag;
+            for (Orders order :
+                    orders) {
+                for (OrderItems orderItemInOrder :
+                        order.getOrderItems()) {
+                    if(orderItemInOrder.getItems().getTypeOfItem()){
+                        flag=false;
+                        for (OrderItems orderItemInExcelArray :
+                                orderItems) {
+                            if( orderItemInOrder.getDateOfItemChange().isEqual(orderItemInExcelArray.getDateOfItemChange())&&orderItemInOrder.getItems().equals(orderItemInExcelArray.getItems())){
+                                orderItemInExcelArray.setQuantity(orderItemInOrder.getQuantity()+orderItemInExcelArray.getQuantity());
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if (!flag){
+                            orderItems.add(orderItemInOrder);
+                        }
+                    }
+                }
             }
+            List<Products> products = productsRepository.findAll();
+// Создаем стиль для центрирования текста
+            CellStyle centerAlignStyle = workbook.createCellStyle();
+            centerAlignStyle.setAlignment(HorizontalAlignment.CENTER);
 
-            // Add a row for totals
-            Row totalRow = sheet.createRow(shawarmaTypes.length + 1);
-            totalRow.createCell(0).setCellValue("Итого");
-            totalRow.createCell(1).setCellValue(100);
-            totalRow.createCell(2).setCellFormula("SUM(C2:C" + (shawarmaTypes.length + 1) + ")");
-            totalRow.createCell(3).setCellFormula("SUM(D2:D" + (shawarmaTypes.length + 1) + ")");
-            totalRow.createCell(4).setCellFormula("SUM(E2:E" + (shawarmaTypes.length + 1) + ")");
-            totalRow.createCell(5).setCellFormula("SUM(F2:F" + (shawarmaTypes.length + 1) + ")");
-            totalRow.createCell(6).setCellFormula("SUM(G2:G" + (shawarmaTypes.length + 1) + ")");
-            totalRow.createCell(7).setCellFormula("SUM(H2:H" + (shawarmaTypes.length + 1) + ")");
+            CellStyle dateStyle = workbook.createCellStyle();
+            CreationHelper createHelper = workbook.getCreationHelper();
+            dateStyle.setDataFormat(createHelper.createDataFormat().getFormat("yyyy-MM-dd HH:mm:ss"));
+            int i = 0;
+            for (Products product : products) {
+                // Создаем ячейку для имени продукта
+                Cell cellProductName = row0.createCell(4 + i);
+                cellProductName.setCellValue(product.getName());
+                cellProductName.setCellStyle(centerAlignStyle);
 
-            // Add a row for costs (use 0 as a placeholder)
-            Row costRow = sheet.createRow(shawarmaTypes.length + 2);
-            costRow.createCell(0).setCellValue("Затраты");
-            for (int i = 1; i <= 7; i++) {
-                costRow.createCell(i).setCellValue(0); // or any other value as a placeholder
+                // Применяем объединение ячеек для имени продукта
+                sheet.addMergedRegion(new CellRangeAddress(2, 2, 4 + i, 5 + i));
+                // Автоматическое растягивание ячейки под содержимое
+                sheet.autoSizeColumn(4 + i);
+
+
+                // Создаем ячейку "нормы"
+                Cell cellNorm = row1.createCell(4 + i);
+                cellNorm.setCellValue("норм");
+                cellNorm.setCellStyle(centerAlignStyle);
+
+                // Создаем ячейку "факта"
+                Cell cellFact = row1.createCell(5 + i);
+                cellFact.setCellValue("факт");
+                cellFact.setCellStyle(centerAlignStyle);
+
+                i += 2;
             }
+            i=0;
+            for (OrderItems item :
+                    orderItems) {
+                Row row2 = sheet.createRow(4+i);
 
+                Cell cellName = row2.createCell(0);
+                cellName.setCellValue(item.getItems().getNameOfItems());
+                cellName.setCellStyle(centerAlignStyle);
+
+                Cell cellCategory = row2.createCell(1);
+                cellCategory.setCellValue(item.getItems().getCategories().getCategoriesName());
+                cellCategory.setCellStyle(centerAlignStyle);
+
+                Cell cellDate = row2.createCell(2);
+                cellDate.setCellValue(item.getDateOfItemChange());
+                cellDate.setCellStyle(dateStyle);
+
+                Cell cellQuantity = row2.createCell(3);
+                cellQuantity.setCellValue(item.getQuantity());
+                cellQuantity.setCellStyle(centerAlignStyle);
+                int j=0;
+                for (Products product :
+                        products) {
+                    for (ProductStockMovement productStockMovement:
+                            item.getProductStockMovements()) {
+                        if(Objects.equals(product.getId(), productStockMovement.getProduct().getId())){
+
+                            Cell cellNorm = row2.createCell(4 + j);
+
+                            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+                            symbols.setDecimalSeparator('.');
+                            cellNorm.setCellValue(
+                                    new DecimalFormat("0.000",symbols).format(((float)productStockMovement.getWeight()) / 1000/ item.getQuantity()));
+                            cellNorm.setCellStyle(centerAlignStyle);
+
+                            Cell cellFact = row2.createCell(5 + j);
+                            cellFact.setCellValue(productStockMovement.getWeightToPage());
+                            cellFact.setCellStyle(centerAlignStyle);
+                        }
+                    }
+                    j+=2;
+                }
+                i++;
+            }
+//            Row rowSum = sheet.createRow(i);
+//            Cell cellProductName = rowSum.createCell(0);
+//            cellProductName.setCellValue("Итого");
+//            cellProductName.setCellStyle(centerAlignStyle);
+//
+//
+//            // Создаем ячейку для количества
+//            Cell cellQuantity = rowSum.createCell(3);
+//            cellQuantity.setCellFormula("SUM(D5:D" + (4+i) + ")");
+//            cellQuantity.setCellStyle(centerAlignStyle); // Выравнивание по правому краю
+//
+//            // Добавляем сумму для каждого продукта
+//            int j = 0;
+//            for (Products product : products) {
+//                // Добавляем сумму для столбца "норма"
+//                Cell cellNorm = rowSum.createCell(4 + j);
+//                cellNorm.setCellFormula("SUM(" + getColumnName(4 + j) + "5:" + getColumnName(4 + j) + (4 + i) + ")");
+//                cellNorm.setCellStyle(centerAlignStyle); // Выравнивание по правому краю
+//
+//                // Добавляем сумму для столбца "факт"
+//                Cell cellFact = rowSum.createCell(5 + j);
+//                cellFact.setCellFormula("SUM(" + getColumnName(5 + j) + "5:" + getColumnName(5 + j) + (4 + i) + ")");
+//                cellFact.setCellStyle(centerAlignStyle); // Выравнивание по правому краю
+//
+//                j += 2;
+//            }
+            // Автоматическое растягивание колонок под содержимое
+            for (int columnIndex = 0; columnIndex < row0.getLastCellNum(); columnIndex++) {
+                sheet.autoSizeColumn(columnIndex);
+            }
             workbook.write(bos);
 
             return bos.toByteArray();
@@ -76,6 +189,14 @@ public class ExcelService {
             throw new IOException("Error creating Excel file", e);
         }
     }
-
+    private String getColumnName(int columnIndex) {
+        StringBuilder columnName = new StringBuilder();
+        while (columnIndex >= 0) {
+            int remainder = columnIndex % 26;
+            columnName.insert(0, (char) ('A' + remainder));
+            columnIndex = (columnIndex / 26) - 1;
+        }
+        return columnName.toString();
+    }
 
 }

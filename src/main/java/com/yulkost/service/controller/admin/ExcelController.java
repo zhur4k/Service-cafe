@@ -24,7 +24,6 @@ public class ExcelController {
     @PostMapping("/excel")
     public ResponseEntity<?> downloadExcel(@RequestBody DateFromPage dateFromPage) throws IOException {
         // Создайте Excel-файл (например, с использованием Apache POI)
-        System.out.println(dateFromPage);
         byte[] excelBytes = excelService.createExcelFile(
                 dateFromPage.startDate(),
                 dateFromPage.endDate()
