@@ -37,24 +37,40 @@ public class Items {
     @OneToMany
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     private List<ProductWeight> productsWeight = new ArrayList<>();
+    @OneToMany
+    @JoinColumn(name = "parent_item_id", referencedColumnName = "id")
+    private List<ItemsInItem> childItems = new ArrayList<>();
     public int getMarkup() {
-        double priceOfAllProducts= 0;
-        for (ProductWeight productWeight :
-                this.getProductsWeight()) {
-            priceOfAllProducts += ((double)productWeight.getProduct().getProductStock().getPrice()) *((double)productWeight.getWeight())/1000;
-        }
         try {
-            if (this.getProductsWeight().isEmpty()){
+
+            double priceOfAllProducts= sumOfAllProducts();
+            for (ItemsInItem itemsInItem :
+                    childItems) {
+                priceOfAllProducts += itemsInItem.getItem().sumOfAllProducts();
+
+            }
+            if(priceOfAllProducts==0){
                 return 0;
             }
-            else{
-                return (int)(((double)this.price-priceOfAllProducts)/priceOfAllProducts*100);
-            }
+            return (int)(((double)this.price-priceOfAllProducts)/priceOfAllProducts*100);
         }catch (ArithmeticException e)
         {
             System.out.println(e.getMessage());
             return 0;
         }
+    }
+    public double sumOfAllProducts() {
+        double priceOfAllProducts = 0;
+        for (ProductWeight productWeight :
+                this.getProductsWeight()) {
+            priceOfAllProducts += ((double) productWeight.getProduct().getProductStock().getPrice()) * (((double) productWeight.getWeight()) / 1000);
+        }
+        return priceOfAllProducts;
+    }
+    public String sumOfAllProductsToPage() {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        return new DecimalFormat("0.00",symbols).format(sumOfAllProducts()/100);
     }
     public String getPriceToPage() {
         double pr = (double) price;

@@ -3,6 +3,8 @@ package com.yulkost.service.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,8 @@ public class OrderItems {
     private int quantity;
     private int price;
     private int markup;
+    private int discount;
+
     private LocalDateTime dateOfItemChange;
 
     @ManyToOne
@@ -32,5 +36,15 @@ public class OrderItems {
         //Установить наценку
         this.markup = this.items.getMarkup();
         this.dateOfItemChange = this.items.getDateOfChange();
+    }
+    public String getSumToPage(){
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        return new DecimalFormat("0.00",symbols).format(((double)this.getPrice())/100*((double)this.getQuantity()));
+    }
+    public String getQuantityUnitPriceToPage(){
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        return new DecimalFormat("0.00",symbols).format(((double)this.getQuantity()*((double)this.getItems().getUnitPrice())/100));
     }
 }

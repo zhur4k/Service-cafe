@@ -16,7 +16,6 @@ public class ProductStock {
     private int price;
 
     @OneToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
     Products product;
 
     public String getPriceToPage() {

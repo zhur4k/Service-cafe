@@ -2,7 +2,7 @@ spring:
   flyway:
     locations: classpath:migrations
     url: jdbc:mysql://host.docker.internal:3306/yulkost
-    user: kostya1205
+    user: root
     password: 19804731205
   jpa:
     hibernate:
@@ -10,5 +10,5 @@ spring:
     generate-ddl: false
   datasource:
     url: jdbc:mysql://host.docker.internal:3306/yulkost
-    username: kostya1205
+    username: root
     password: 19804731205

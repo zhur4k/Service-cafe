@@ -5,7 +5,6 @@ import com.yulkost.service.repository.ProductStockMovementRepository;
 import com.yulkost.service.repository.ProductStockRepository;
 import com.yulkost.service.repository.ProductsRepository;
 import com.yulkost.service.service.ProductStockMovementService;
-import com.yulkost.service.service.ProductStockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

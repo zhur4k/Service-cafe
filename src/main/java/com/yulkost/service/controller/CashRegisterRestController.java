@@ -105,7 +105,9 @@ public class CashRegisterRestController {
     @PostMapping("/collectionMove")
     public void CollectionMove(@RequestBody Collection collection) {
         collection.setShift(shiftService.getOpenShift());
-        collectionService.save(collection);
+        if(cashRegisterRestService.sendIOCheck(collection)){
+            collectionService.save(collection);
+        }
     }
 
     @PostMapping("/addUserToShift")

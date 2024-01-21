@@ -18,7 +18,7 @@
     </header>
     <div class="container-fo">
         <table>
-            <form th:action="@{/admin/items/change}" th:object="${form}" method="post">
+            <form th:action="@{/admin/items/change/product_weight}" th:object="${form}" method="post">
 
                 <button class="btn-oko">Изменить</button>
 
@@ -39,7 +39,7 @@
                             ></option>
                         </select>
                     </td>
-                    <td><input th:name="|productWeights[${itemStat.index}].weightToPage|" th:value="${item.getWeightToPage()}" required/></td>
+                    <td><input type="number" step="0.001" th:name="|productWeights[${itemStat.index}].weightToPage|" th:value="${item.getWeightToPage()}" required/></td>
 
                     <td th:text="${item.getPriceToPage()}">
                     </td>
@@ -54,7 +54,7 @@
                 <th>Добавить</th>
 
             </tr>
-            <form th:action="'/admin/items/'+${items.getId()}+'/addProduct'"  method="post">
+            <form th:action="'/admin/items/'+${items.getId()}+'/add_product_weight'"  method="post">
             <tr>
 
                 <td>
@@ -64,9 +64,56 @@
                         ></option>
                     </select>
                 </td>
-                <td><input th:name="weightAdd" required/></td>
+                <td><input type="number" step="0.001" th:name="weightAdd" required/></td>
                 <td><button class="btn-oko">Добавить</button></td>
             </tr>
+            </form>
+        </table>
+        <table>
+            <form th:action="@{/admin/items/change/items}" th:object="${form2}" method="post">
+                <button class="btn-oko">Изменить</button>
+
+                <tr>
+                    <th>Товар</th>
+                    <th>Количество</th>
+                    <th>Себестоимость</th>
+                </tr>
+
+                <tr th:each="item2, itemStat : ${form2.itemsInItem}">
+                    <input th:name="|itemsInItem[${itemStat.index}].id|" th:value="${item2.getId()}" type="hidden" readonly />
+                    <td>
+                        <select th:name="|itemsInItem[${itemStat.index}].item|" required>
+                            <option th:each="itemOnPage: ${itemsToPage}" th:value="${itemOnPage.getId()}"
+                                    th:text="${itemOnPage.getNameOfItems()}"
+                                    th:selected="${itemOnPage.getId()} == ${item2.getItem().getId()}"
+                            ></option>
+                        </select>
+                    </td>
+                    <td><input type="number" step="1" th:name="|itemsInItem[${itemStat.index}].quantity|" th:value="${item2.getQuantity()}" required/></td>
+                    <td th:text="${item2.getItem().sumOfAllProductsToPage()}"></td>
+
+                    <input th:name="|itemsInItem[${itemStat.index}].parentItem|" th:value="${items.getId()}" type="hidden" required/>
+                </tr>
+            </form>
+            <tr>
+                <th>Товар</th>
+                <th>Количество</th>
+                <th>Добавить</th>
+
+            </tr>
+            <form th:action="'/admin/items/'+${items.getId()}+'/add_item'"  method="post">
+                <tr>
+
+                    <td>
+                        <select th:name="item" required>
+                            <option th:each="itemOnPage: ${itemsToPage}" th:value="${itemOnPage.getId()}"
+                                    th:text="${itemOnPage.getNameOfItems()}"
+                            ></option>
+                        </select>
+                    </td>
+                    <td><input type="number" step="1" th:name="quantity" required/></td>
+                    <td><button class="btn-oko">Добавить</button></td>
+                </tr>
             </form>
         </table>
     </div>

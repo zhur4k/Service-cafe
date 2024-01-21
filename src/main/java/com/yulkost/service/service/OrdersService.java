@@ -38,6 +38,7 @@ public class OrdersService {
         newOrder.setCashPaid(order.getCashPaid());
         newOrder.setCashLessPaid(order.getCashLessPaid());
         newOrder.setEstablishmentPaid(order.getEstablishmentPaid());
+        newOrder.setSumOfChange(order.getSumOfChange());
         List<OrderItems> orderItems = new ArrayList<>();
 
         for (int i = 0; i < order.getOrderItems().size(); i++) {

@@ -18,6 +18,7 @@ public class YulkostTelegramBotService {
     public void SendOrderToUser(Orders order){
         StringBuilder orderInfo = new StringBuilder();
         orderInfo.append("Заказ № ").append(order.getId()).append("\n");
+        orderInfo.append("Стол № ").append(order.getNumberOfTable()).append("\n");
         for (OrderItems item :order.getOrderItems()) {
             orderInfo.append(item.getItems().getNameOfItems())
                     .append(" - ").append(item.getQuantity()*Float.parseFloat(item.getItems().getUnitPriceToPage()))

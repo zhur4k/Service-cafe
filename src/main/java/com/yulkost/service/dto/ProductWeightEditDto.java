@@ -1,7 +1,6 @@
 package com.yulkost.service.dto;
 
 import com.yulkost.service.model.ProductWeight;
-import com.yulkost.service.model.Products;
 
 import java.util.ArrayList;
 import java.util.List;

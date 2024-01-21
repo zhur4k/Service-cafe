@@ -1,7 +1,5 @@
 package com.yulkost.service.service;
 
-import com.yulkost.service.model.Categories;
-import com.yulkost.service.model.Items;
 import com.yulkost.service.model.ProductStock;
 import com.yulkost.service.model.Products;
 import com.yulkost.service.repository.ProductStockRepository;

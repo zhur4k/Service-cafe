@@ -1,10 +1,13 @@
 package com.yulkost.service.controller.admin;
 
 import com.yulkost.service.dto.ItemsEditDto;
+import com.yulkost.service.dto.ItemsInItemEditDto;
 import com.yulkost.service.dto.ProductWeightEditDto;
 import com.yulkost.service.model.Items;
+import com.yulkost.service.model.ItemsInItem;
 import com.yulkost.service.model.ProductWeight;
 import com.yulkost.service.model.Products;
+import com.yulkost.service.repository.ItemsInItemRepository;
 import com.yulkost.service.repository.ProductWeightRepository;
 import com.yulkost.service.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,19 @@ public class ItemsController {
     private final ProductsService productsService;
     private final ProductWeightService productWeightService;
     private ProductWeightRepository productWeightRepository;
+    private ItemsInItemRepository itemsInItemRepository;
     private ImageService imageService;
+    private ItemsInItemService itemsInItemService;
+    @Autowired
+    public void setItemsInItemService(ItemsInItemService itemsInItemService) {
+        this.itemsInItemService = itemsInItemService;
+    }
+
+    @Autowired
+    public void setItemsInItemRepository(ItemsInItemRepository itemsInItemRepository) {
+        this.itemsInItemRepository = itemsInItemRepository;
+    }
+
     @Autowired
     public void setProductWeightRepository(ProductWeightRepository productWeightRepository) {
         this.productWeightRepository = productWeightRepository;
@@ -69,28 +84,65 @@ public class ItemsController {
         List<ProductWeight> productWeights = new ArrayList<>();
         items.getProductsWeight().iterator().forEachRemaining(productWeights::add);
         model.addAttribute("form", new ProductWeightEditDto(productWeights));
+
+        model.addAttribute("itemsToPage", itemsService.findAll());
+        List<ItemsInItem> itemsInItem = new ArrayList<>();
+        items.getChildItems().iterator().forEachRemaining(itemsInItem::add);
+        model.addAttribute("form2", new ItemsInItemEditDto(itemsInItem));
         return "adminItemChange"; }
 
-    @PostMapping("/change")
+    @PostMapping("/change/product_weight")
     public String ItemChange(@ModelAttribute ProductWeightEditDto form) {
+        Long id = form.getProductWeights().get(0).getItem().getId();
         productWeightService.saveAll(form.getProductWeights());
-        return "redirect:/admin/items/"+form.getProductWeights().get(0).getItem().getId(); }
+        itemsService.setChangeTime(id);
+        return "redirect:/admin/items/"+id; }
 
-    @PostMapping("{id}/addProduct")
+    @PostMapping("{id}/add_product_weight")
     public String ItemChange(@PathVariable Long id,String weightAdd,Long productAdd) {
         Products product = productsService.findById(productAdd);
         Items item = itemsService.findById(id);
-        ProductWeight productWeight = productWeightRepository.findByProductAndItem(product,item);
-        if(productWeight==null){
+        ProductWeight productWeight = productWeightRepository.findByProductAndItem(product, item);
+        if (productWeight == null) {
             productWeight = new ProductWeight();
             productWeight.setWeightToPage(weightAdd);
+            if (productWeight.getWeight() <= 0) {
+                return "redirect:/admin/items/" + id;
+            }
             productWeight.setProduct(product);
             productWeight.setItem(item);
-        } else{
+        } else {
             productWeight.addWeight(weightAdd);
+            if (productWeight.getWeight() <= 0) {
+                return "redirect:/admin/items/" + id;
+            }
         }
         productWeightService.save(productWeight);
+        itemsService.setChangeTime(item.getId());
+        return "redirect:/admin/items/" + id;
+    }
+    @PostMapping("/change/items")
+    public String ItemChangeItems(@ModelAttribute ItemsInItemEditDto form) {
+        Long id = form.getItemsInItem().get(0).getParentItem().getId();
+        itemsInItemService.saveAll(form.getItemsInItem());
+        itemsService.setChangeTime(id);
+        return "redirect:/admin/items/"+id; }
 
+    @PostMapping("{id}/add_item")
+    public String ItemChangeItem(@PathVariable Long id,ItemsInItem itemsInItem) {
+        if(itemsInItem.getQuantity() <=0){
+            return "redirect:/admin/items/"+id;
+        }
+        Items item = itemsService.findById(id);
+        itemsInItem.setParentItem(item);
+        ItemsInItem itemsInItem1 = itemsInItemRepository.findByItemAndParentItem(itemsInItem.getItem(),itemsInItem.getParentItem());
+        if(itemsInItem1==null){
+            itemsInItem1=itemsInItem;
+        }else{
+            itemsInItem1.setQuantity(itemsInItem.getQuantity()+itemsInItem1.getQuantity());
+        }
+        itemsInItemRepository.save(itemsInItem1);
+        itemsService.setChangeTime(item.getId());
         return "redirect:/admin/items/"+id;
     }
     @GetMapping("/add")

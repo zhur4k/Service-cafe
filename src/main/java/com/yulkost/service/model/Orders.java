@@ -3,7 +3,6 @@ package com.yulkost.service.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,8 @@ public class Orders {
     private int cashPaid;
     private int cashLessPaid;
     private int establishmentPaid;
-
+    private int sumOfChange;
+    private int numberOfTable;
     private LocalDateTime date;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "id")

@@ -26,6 +26,7 @@
             <tr th:each="product, itemStat : ${form.products}">
                 <input th:name="|products[${itemStat.index}].id|" th:value="${product.getId()}" type="hidden" readonly />
                 <td><input th:name="|products[${itemStat.index}].name|" th:value="${product.getName()}" required/></td>
+                <input th:name="|products[${itemStat.index}].productStock|" th:value="${product.getProductStock().getId()}" type="hidden" readonly />
             </tr>
         </table>
     </div>

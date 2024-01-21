@@ -18,14 +18,27 @@ public class ProductStockService {
         this.productStockMovementService = productStockMovementService;
     }
 
-    public void writeOffProductFromStockAndSaveToStockMovement(Orders order){
-        for (OrderItems orderItem : order.getOrderItems()) {
-            for (ProductWeight productWeight : orderItem.getItems().getProductsWeight()) {
-                ProductStock productStock = productStockRepository.findByProductId(productWeight.getProduct().getId());
-                productStockMovementService.saveMovementOrderItem(orderItem,productStock,productWeight);
-                productStock.setWeight(productStock.getWeight()-(productWeight.getWeight()*orderItem.getQuantity()));
-                productStockRepository.save(productStock);
-            }
-        }
+//    public void writeOffProductFromStockAndSaveToStockMovement(Orders order){
+//        for (OrderItems orderItem : order.getOrderItems()) {
+//            for (ProductWeight productWeight : orderItem.getItems().getProductsWeight()) {
+//                saveProductStock(productWeight,orderItem, orderItem.getQuantity());
+//            }
+//
+//        }
+//    }
+//    private Items childItemWriteOff(OrderItems orderItem) {
+//        for (ItemsInItem item :
+//                orderItem.getItems().getChildItems()) {
+//            for (ProductWeight productWeight :
+//                    item.getItem().getProductsWeight()) {
+//                saveProductStock(productWeight, orderItem, item.getQuantity());
+//            }
+//        }
+//    }
+    private void saveProductStock(ProductWeight productWeight,OrderItems orderItem,int quantity){
+            ProductStock productStock = productStockRepository.findByProductId(productWeight.getProduct().getId());
+            productStockMovementService.saveMovementOrderItem(orderItem,productStock,productWeight,quantity);
+            productStock.setWeight(productStock.getWeight()-(productWeight.getWeight()*quantity));
+            productStockRepository.save(productStock);
     }
 }
