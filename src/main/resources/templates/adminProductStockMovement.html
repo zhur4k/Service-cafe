@@ -23,6 +23,7 @@
                 <th>Вес</th>
                 <th>Цена</th>
                 <th>Сумма</th>
+                <th>Остаток на складе</th>
                 <th>Тип операции</th>
                 <th>Время</th>
                 <th>Описание</th>
@@ -34,6 +35,7 @@
                 <td th:text="${item.getWeightToPage()}"></td>
                 <td th:text="${item.getPriceToPage()}"></td>
                 <td th:text="${item.getSumToPage()}"></td>
+                <td th:text="${item.getBalanceWeightToPage()}"></td>
                 <td th:text="${item.getTypeOfOperation()}"></td>
                 <td th:text="${item.getDateOfOperation()}"></td>
                 <td th:text="${item.getDescription()}"></td>

@@ -15,6 +15,8 @@ public class ProductStockMovement {
     private Long id;
     private int weight;
     private int price;
+    private int balanceWeight;
+
     private String description;
     /**
      * true - adding false - care
@@ -40,6 +42,11 @@ public class ProductStockMovement {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator('.');
         return new DecimalFormat("0.000",symbols).format(((float)this.weight) / 1000);
+    }
+    public String getBalanceWeightToPage() {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        return new DecimalFormat("0.000",symbols).format(((float)this.balanceWeight) / 1000);
     }
     public void setWeightToPage(String weight) {
         this.weight=(int)(Double.parseDouble(weight)*1000);

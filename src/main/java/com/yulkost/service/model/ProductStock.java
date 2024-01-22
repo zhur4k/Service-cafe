@@ -17,7 +17,17 @@ public class ProductStock {
 
     @OneToOne
     Products product;
+    public ProductStock() {
+        // Конструктор по умолчанию
+    }
 
+    // Конструктор копирования
+    public ProductStock(ProductStock other) {
+        this.id = other.id;
+        this.weight = other.weight;
+        this.price = other.price;
+        // При необходимости скопируйте и другие поля
+    }
     public String getPriceToPage() {
         double pr = (double) this.price;
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();

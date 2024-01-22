@@ -51,6 +51,7 @@ public class ProductStockMovementService {
         movement.setProduct(productWeight.getProduct());
         movement.setPrice(productStock.getPrice());
         movement.setWeight(productWeight.getWeight()*quantity);
+        movement.setBalanceWeight(productStock.getWeight());
         productStockMovementRepository.save(movement);
     }
 }

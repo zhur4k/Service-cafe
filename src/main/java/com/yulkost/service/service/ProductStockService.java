@@ -26,27 +26,29 @@ public class ProductStockService {
                     orderItem.getItems().getProductsWeight()) {
                 saveProductStock(productWeight, orderItem, orderItem.getQuantity());
             }
-            itemWriteOff(orderItem.getItems().getChildItems(), orderItem,orderItem.getQuantity());
+            itemWriteOff(orderItem.getItems().getChildItems(), orderItem, orderItem.getQuantity());
         }
     }
-    private void itemWriteOff(List<ItemsInItem> childItems, OrderItems orderItem, int quantity) {
+    private void itemWriteOff(List<ItemsInItem> childItems, OrderItems orderItem,  int parentQuantity) {
         if (childItems==null){
             return;
         }
         for (ItemsInItem item:
              childItems) {
+            int quantityOfItems = parentQuantity * item.getQuantity();
             for (ProductWeight productWeight :
                     item.getItem().getProductsWeight()) {
-                saveProductStock(productWeight, orderItem, quantity);
+                saveProductStock(productWeight, orderItem,quantityOfItems);
             }
-            itemWriteOff(item.getItem().getChildItems(), orderItem, item.getQuantity());
+            itemWriteOff(item.getItem().getChildItems(), orderItem, quantityOfItems);
+            quantityOfItems=0;
         }
 
     }
     private void saveProductStock(ProductWeight productWeight,OrderItems orderItem,int quantity){
-            ProductStock productStock = productStockRepository.findByProductId(productWeight.getProduct().getId());
-            productStockMovementService.saveMovementOrderItem(orderItem,productStock,productWeight,quantity);
-            productStock.setWeight(productStock.getWeight()-(productWeight.getWeight()*quantity));
-            productStockRepository.save(productStock);
+        ProductStock productStock = productStockRepository.findByProductId(productWeight.getProduct().getId());
+        productStock.setWeight(productStock.getWeight()-(productWeight.getWeight()*quantity));
+        productStockMovementService.saveMovementOrderItem(orderItem,new ProductStock(productStock),productWeight,quantity);
+        productStockRepository.save(productStock);
     }
 }

@@ -151,32 +151,7 @@ public class ExcelService {
                 }
                 i++;
             }
-//            Row rowSum = sheet.createRow(i);
-//            Cell cellProductName = rowSum.createCell(0);
-//            cellProductName.setCellValue("Итого");
-//            cellProductName.setCellStyle(centerAlignStyle);
-//
-//
-//            // Создаем ячейку для количества
-//            Cell cellQuantity = rowSum.createCell(3);
-//            cellQuantity.setCellFormula("SUM(D5:D" + (4+i) + ")");
-//            cellQuantity.setCellStyle(centerAlignStyle); // Выравнивание по правому краю
-//
-//            // Добавляем сумму для каждого продукта
-//            int j = 0;
-//            for (Products product : products) {
-//                // Добавляем сумму для столбца "норма"
-//                Cell cellNorm = rowSum.createCell(4 + j);
-//                cellNorm.setCellFormula("SUM(" + getColumnName(4 + j) + "5:" + getColumnName(4 + j) + (4 + i) + ")");
-//                cellNorm.setCellStyle(centerAlignStyle); // Выравнивание по правому краю
-//
-//                // Добавляем сумму для столбца "факт"
-//                Cell cellFact = rowSum.createCell(5 + j);
-//                cellFact.setCellFormula("SUM(" + getColumnName(5 + j) + "5:" + getColumnName(5 + j) + (4 + i) + ")");
-//                cellFact.setCellStyle(centerAlignStyle); // Выравнивание по правому краю
-//
-//                j += 2;
-//            }
+
             // Автоматическое растягивание колонок под содержимое
             for (int columnIndex = 0; columnIndex < row0.getLastCellNum(); columnIndex++) {
                 sheet.autoSizeColumn(columnIndex);
