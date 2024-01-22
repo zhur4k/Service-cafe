@@ -85,7 +85,7 @@ public class ItemsController {
         items.getProductsWeight().iterator().forEachRemaining(productWeights::add);
         model.addAttribute("form", new ProductWeightEditDto(productWeights));
 
-        model.addAttribute("itemsToPage", itemsService.findAll());
+        model.addAttribute("itemsToPage", itemsService.findAllWithoutExist(items));
         List<ItemsInItem> itemsInItem = new ArrayList<>();
         items.getChildItems().iterator().forEachRemaining(itemsInItem::add);
         model.addAttribute("form2", new ItemsInItemEditDto(itemsInItem));
@@ -133,16 +133,12 @@ public class ItemsController {
         if(itemsInItem.getQuantity() <=0){
             return "redirect:/admin/items/"+id;
         }
-        Items item = itemsService.findById(id);
-        itemsInItem.setParentItem(item);
-        ItemsInItem itemsInItem1 = itemsInItemRepository.findByItemAndParentItem(itemsInItem.getItem(),itemsInItem.getParentItem());
-        if(itemsInItem1==null){
-            itemsInItem1=itemsInItem;
-        }else{
-            itemsInItem1.setQuantity(itemsInItem.getQuantity()+itemsInItem1.getQuantity());
-        }
-        itemsInItemRepository.save(itemsInItem1);
-        itemsService.setChangeTime(item.getId());
+        itemsInItem.setId(null);
+        itemsInItem.setParentItem(itemsService.findById(id));
+
+        List<ItemsInItem> itemsInItemList = new ArrayList<>(List.of(itemsInItem));
+        itemsInItemService.saveAll(itemsInItemList);
+        itemsService.setChangeTime(id);
         return "redirect:/admin/items/"+id;
     }
     @GetMapping("/add")

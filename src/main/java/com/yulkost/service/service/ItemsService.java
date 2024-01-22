@@ -1,7 +1,9 @@
 package com.yulkost.service.service;
 
 import com.yulkost.service.model.Items;
+import com.yulkost.service.model.ItemsInItem;
 import com.yulkost.service.repository.CategoriesRepository;
+import com.yulkost.service.repository.ItemsInItemRepository;
 import com.yulkost.service.repository.ItemsRepository;
 import com.yulkost.service.repository.ProductWeightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +12,20 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class ItemsService {
-    public ItemsRepository itemsRepository;
-    public CategoriesRepository categoryRepository;
-    public ProductWeightRepository productWeightRepository;
+    private ItemsRepository itemsRepository;
+    private CategoriesRepository categoryRepository;
+    private ProductWeightRepository productWeightRepository;
+    private ItemsInItemRepository itemsInItemRepository;
+    @Autowired
+    public void setItemsInItemRepository(ItemsInItemRepository itemsInItemRepository) {
+        this.itemsInItemRepository = itemsInItemRepository;
+    }
+
     @Autowired
     public void setProductWeightRepository(ProductWeightRepository productWeightRepository) {
         this.productWeightRepository = productWeightRepository;
@@ -59,5 +68,25 @@ public class ItemsService {
         Items item = findById(id);
         item.setDateOfChange(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         itemsRepository.save(item);
+    }
+
+    public List<Items> findAllWithoutExist(Items item1) {
+        List<Items> items = itemsRepository.findAll();
+        List<ItemsInItem> itemsInItems = itemsInItemRepository.findAll();
+        for (Items item :
+                items) {
+            if(Objects.equals(item.getId(), item1.getId())){
+                items.remove(item);
+                break;
+            }
+        }
+        for (ItemsInItem itemsInItem :
+                itemsInItems) {
+            if(Objects.equals(itemsInItem.getItem().getId(), item1.getId())){
+                items.remove(findById(itemsInItem.getParentItem().getId()));
+                break;
+            }
+        }
+        return items;
     }
 }

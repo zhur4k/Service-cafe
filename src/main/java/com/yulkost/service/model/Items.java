@@ -67,7 +67,7 @@ public class Items {
         }
         return priceOfAllProducts;
     }
-    public String sumOfAllProductsToPage() {
+    public String priceOfAllProductsToPage() {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator('.');
         return new DecimalFormat("0.00",symbols).format(sumOfAllProducts()/100);

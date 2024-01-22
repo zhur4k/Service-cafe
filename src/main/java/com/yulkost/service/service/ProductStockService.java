@@ -5,6 +5,8 @@ import com.yulkost.service.repository.ProductStockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductStockService {
     private ProductStockRepository productStockRepository;
@@ -18,23 +20,29 @@ public class ProductStockService {
         this.productStockMovementService = productStockMovementService;
     }
 
-//    public void writeOffProductFromStockAndSaveToStockMovement(Orders order){
-//        for (OrderItems orderItem : order.getOrderItems()) {
-//            for (ProductWeight productWeight : orderItem.getItems().getProductsWeight()) {
-//                saveProductStock(productWeight,orderItem, orderItem.getQuantity());
-//            }
-//
-//        }
-//    }
-//    private Items childItemWriteOff(OrderItems orderItem) {
-//        for (ItemsInItem item :
-//                orderItem.getItems().getChildItems()) {
-//            for (ProductWeight productWeight :
-//                    item.getItem().getProductsWeight()) {
-//                saveProductStock(productWeight, orderItem, item.getQuantity());
-//            }
-//        }
-//    }
+    public void writeOffProductFromStockAndSaveToStockMovement(Orders order){
+        for (OrderItems orderItem : order.getOrderItems()) {
+            for (ProductWeight productWeight :
+                    orderItem.getItems().getProductsWeight()) {
+                saveProductStock(productWeight, orderItem, orderItem.getQuantity());
+            }
+            itemWriteOff(orderItem.getItems().getChildItems(), orderItem,orderItem.getQuantity());
+        }
+    }
+    private void itemWriteOff(List<ItemsInItem> childItems, OrderItems orderItem, int quantity) {
+        if (childItems==null){
+            return;
+        }
+        for (ItemsInItem item:
+             childItems) {
+            for (ProductWeight productWeight :
+                    item.getItem().getProductsWeight()) {
+                saveProductStock(productWeight, orderItem, quantity);
+            }
+            itemWriteOff(item.getItem().getChildItems(), orderItem, item.getQuantity());
+        }
+
+    }
     private void saveProductStock(ProductWeight productWeight,OrderItems orderItem,int quantity){
             ProductStock productStock = productStockRepository.findByProductId(productWeight.getProduct().getId());
             productStockMovementService.saveMovementOrderItem(orderItem,productStock,productWeight,quantity);

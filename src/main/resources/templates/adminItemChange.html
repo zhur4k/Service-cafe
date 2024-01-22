@@ -77,6 +77,7 @@
                     <th>Товар</th>
                     <th>Количество</th>
                     <th>Себестоимость</th>
+                    <th>Сумма</th>
                 </tr>
 
                 <tr th:each="item2, itemStat : ${form2.itemsInItem}">
@@ -90,7 +91,8 @@
                         </select>
                     </td>
                     <td><input type="number" step="1" th:name="|itemsInItem[${itemStat.index}].quantity|" th:value="${item2.getQuantity()}" required/></td>
-                    <td th:text="${item2.getItem().sumOfAllProductsToPage()}"></td>
+                    <td th:text="${item2.getItem().priceOfAllProductsToPage()}"></td>
+                    <td th:text="${item2.getSumToPage()}"></td>
 
                     <input th:name="|itemsInItem[${itemStat.index}].parentItem|" th:value="${items.getId()}" type="hidden" required/>
                 </tr>
