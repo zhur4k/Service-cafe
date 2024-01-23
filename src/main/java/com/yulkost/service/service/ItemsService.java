@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,7 +40,7 @@ public class ItemsService {
         return itemsRepository.findAll();
     }
     public List<Items> findAllList(){
-        return (List<Items>) itemsRepository.findAll();
+        return itemsRepository.findAll();
     }
 
     public Items findByNameOfItemAndPrice(String nameOfItems, int price) {
@@ -66,27 +67,52 @@ public class ItemsService {
     }
     public void setChangeTime(Long id){
         Items item = findById(id);
+        setChangeTimeToItem(item);
+    }
+    public void setChangeTimeToItem(Items item){
+        if(item==null){
+            return;
+        }
         item.setDateOfChange(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         itemsRepository.save(item);
+        for (ItemsInItem itemInItem :
+                itemsInItemRepository.findAllByItemId(item.getId())) {
+            setChangeTimeToItem(itemInItem.getParentItem());
+        }
     }
-
-    public List<Items> findAllWithoutExist(Items item1) {
+    public List<Items> findAllWithoutExist(Items currentItem) {
         List<Items> items = itemsRepository.findAll();
         List<ItemsInItem> itemsInItems = itemsInItemRepository.findAll();
         for (Items item :
                 items) {
-            if(Objects.equals(item.getId(), item1.getId())){
+            if(Objects.equals(item.getId(), currentItem.getId())){
                 items.remove(item);
                 break;
             }
         }
+
         for (ItemsInItem itemsInItem :
                 itemsInItems) {
-            if(Objects.equals(itemsInItem.getItem().getId(), item1.getId())){
-                items.remove(findById(itemsInItem.getParentItem().getId()));
-                break;
+            if(Objects.equals(itemsInItem.getItem().getId(), currentItem.getId())){
+                items.remove(itemsInItem.getParentItem());
             }
         }
+        Iterator<Items> iterator = items.iterator();
+        while (iterator.hasNext()) {
+            Items item = iterator.next();
+            findAllWithoutExistRecurs(items,item.getChildItems(),currentItem, iterator);
+        }
         return items;
+    }
+
+    public void findAllWithoutExistRecurs(List<Items> items,List<ItemsInItem> itemsInItems,Items currentItem,Iterator<Items> checkedItem) {
+        for (ItemsInItem itemInItem :
+                itemsInItems) {
+            if (itemInItem.getItem()==currentItem){
+                checkedItem.remove();
+                break;
+            }
+            findAllWithoutExistRecurs(items,itemInItem.getItem().getChildItems(),currentItem,checkedItem);
+        }
     }
 }
