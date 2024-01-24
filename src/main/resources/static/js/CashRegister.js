@@ -259,7 +259,10 @@ function displayPayBlock(){
     establishmentContainer.classList.add('child-block-pay');
     establishmentContainer.textContent = 'За счёт заведения';
     establishmentContainer.onclick = function () {
-        establishmentPaid+= document.getElementById('sum-input').textContent*100;
+        establishmentPaid = total;
+        cashPaid=0;
+        cashLessPaid=0;
+        sumOfChange=0;
         setSumAfterPaidOperation();
     }
 

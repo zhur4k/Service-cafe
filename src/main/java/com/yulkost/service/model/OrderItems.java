@@ -40,11 +40,11 @@ public class OrderItems {
     public String getSumToPage(){
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator('.');
-        return new DecimalFormat("0.00",symbols).format(((double)this.getPrice())/100*((double)this.getQuantity()));
+        return new DecimalFormat("0.00",symbols).format(((double)this.items.getPrice())/100*((double)this.getQuantity()));
     }
     public String getQuantityUnitPriceToPage(){
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator('.');
-        return new DecimalFormat("0.00",symbols).format(((double)this.getQuantity()*((double)this.getItems().getUnitPrice())/100));
+        return new DecimalFormat("0.000",symbols).format(this.getQuantity()*((double)this.getItems().getUnitPrice())/1000);
     }
 }

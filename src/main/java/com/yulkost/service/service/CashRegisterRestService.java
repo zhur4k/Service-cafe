@@ -18,34 +18,49 @@ public class CashRegisterRestService {
         StringBuilder json = new StringBuilder("{\"F\":[" +
                 "{\"C\":{\"cm\":\"Кассир:" + (order.getShift().getUsers().get(0)).getName() + "\"}}");
         for (OrderItems orderItem : order.getOrderItems()) {
-            json.append(",{\"S\":{\"code\":\"").
+            json.append(",{\"S\":{\"code\":").
                     append(orderItem.getItems().getCode()).
 
-                    append("\",").append("\"name\":\"").
+                    append(",").append("\"name\":\"").
                     append(orderItem.getItems().getNameOfItems()).
+                    append(" ").
+                    append(orderItem.getItems().getUnitPriceToPage()).
+                    append(" ").
+                    append(orderItem.getItems().getUnit().getName()).
 
-                    append("\",").append("\"qty\":\"").
-                    append(orderItem.getQuantityUnitPriceToPage()).
+                    append("\",").append("\"qty\":").
+                    append(orderItem.getQuantity()).
 
-                    append("\",").append("\"price\":\"").
+                    append(",").append("\"price\":").
                     append(orderItem.getItems().getPriceToPage()).
-
-                    append("\",").append("\"sum\":\"").
-                    append(orderItem.getSumToPage()).
-                    append("\"}}");
-            if (orderItem.getDiscount() > 0) {
-                json.append(",{\"D\":{\"prc\":\"-").
-                        append(orderItem.getDiscount()).
-                        append("\"}}");
-            }
+                    append("}}");
+//            if (orderItem.getDiscount() > 0) {
+//                json.append(",{\"D\":{\"prc\":\"-").
+//                        append(orderItem.getDiscount()).
+//                        append("\"}}");
+//            }
         }
-            json.append(",{\"P\":{\"sum\":").append(((float) order.getCashPaid()) / 100).append("\"no\":1}}");
-            json.append(",{\"P\":{\"sum\":").append(((float) order.getCashLessPaid()) / 100).append("\"no\":2}}");
-            json.append("]}");
+        if (order.getCashPaid()>0) {
 
-//        return sendPost(json.toString(), "/cgi/chk");\
-            System.out.println(json);
-            return true;
+            json.append(",{\"P\":{").
+                    append("\"no\":1,").
+                    append("\"sum\":").
+                    append(order.getCashPaidToPage()).
+                    append("}}");
+        }
+            if (order.getCashLessPaid()>0){
+                json.append(",{\"P\":{").
+                        append("\"no\":2,").
+                        append("\"sum\":").
+                        append(order.getCashLessPaidToPage()).
+                        append("}}");
+            }
+        json.append("]}");
+
+            System.out.println(json+"\n\n\n\n");
+
+        return sendPost(json.toString(), "/cgi/chk");
+//            return true;
     }
     public Boolean sendIOCheck(Collection collection){
         StringBuilder json = new StringBuilder("{\"IO\":[" +
@@ -56,9 +71,9 @@ public class CashRegisterRestService {
         }
         json.append(((float) collection.getSumOfOperation()) / 100).append("}}");
         json.append("]}");
-//        return sendPost(json.toString(), "/cgi/chk");\
         System.out.println(json);
-        return true;
+        return sendPost(json.toString(), "/cgi/chk");
+//        return true;
     }
     private Boolean sendPost(String json, String url) {
         try {
@@ -93,12 +108,12 @@ public class CashRegisterRestService {
     }
     public  boolean sendXReport() {
         System.out.println("Send X-report");
-        return true;
-//        return sendGet("/cgi/proc/printreport?10");
+//        return true;
+        return sendGet("/cgi/proc/printreport?10");
     }
     public boolean sendZReport() {
         System.out.println("Send Z-report");
-        return true;
-//        return sendGet("/cgi/proc/printreport?0");
+//        return true;
+        return sendGet("/cgi/proc/printreport?0");
     }
 }

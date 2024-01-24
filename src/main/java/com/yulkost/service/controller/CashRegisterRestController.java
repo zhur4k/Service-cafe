@@ -94,13 +94,21 @@ public class CashRegisterRestController {
         }
     }
     @PostMapping("/submitOrder")
-    public void SubmitOrder(@RequestBody Orders order) {
+    public ResponseEntity<?> SubmitOrder(@RequestBody Orders order) {
         order.setShift(shiftService.getOpenShift());
         Orders orderToSave= ordersService.OrderFromPageToOrders(order);
-        if(cashRegisterRestService.sendFCheck(orderToSave)){
+        if(orderToSave.getEstablishmentPaid()>0){
             ordersService.save(orderToSave);
             yulkostTelegramBotService.SendOrderToUser(orderToSave);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }else {
+            if (cashRegisterRestService.sendFCheck(orderToSave)) {
+                ordersService.save(orderToSave);
+                yulkostTelegramBotService.SendOrderToUser(orderToSave);
+                return ResponseEntity.status(HttpStatus.OK).build();
+            }
         }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
     @PostMapping("/collectionMove")
     public void CollectionMove(@RequestBody Collection collection) {
