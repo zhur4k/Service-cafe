@@ -1,5 +1,6 @@
 package com.yulkost.service.service;
 
+import com.yulkost.service.model.Items;
 import com.yulkost.service.model.ItemsInItem;
 import com.yulkost.service.repository.ItemsInItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,29 @@ public class ItemsInItemService {
             removeErrorsWithItemInItem(itemsInItem);
             foldSameItems(itemsInItem);
             checkZero(itemsInItem);
-
+            checkLoopOfItems(itemsInItem);
             if(!itemsInItem.isEmpty()) {
                 itemsInItemRepository.saveAll(itemsInItem);
             }
+        }
+    }
+
+    private void checkLoopOfItems(List<ItemsInItem> items){
+        Iterator<ItemsInItem> iterator = items.iterator();
+        while (iterator.hasNext()) {
+            ItemsInItem item = iterator.next();
+            findAllWithoutExistRecurs(items, item.getParentItem(), iterator);
+        }
+}
+
+    public void findAllWithoutExistRecurs(List<ItemsInItem> itemsInItems,Items currentItem,Iterator<ItemsInItem> checkedItem) {
+        for (ItemsInItem itemInItem :
+                itemsInItems) {
+            if (itemInItem.getItem()==currentItem){
+                checkedItem.remove();
+                break;
+            }
+            findAllWithoutExistRecurs(itemInItem.getItem().getChildItems(),currentItem,checkedItem);
         }
     }
     private List<ItemsInItem> foldSameItems(List<ItemsInItem> itemsInItem) {

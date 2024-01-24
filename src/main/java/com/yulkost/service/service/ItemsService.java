@@ -100,19 +100,19 @@ public class ItemsService {
         Iterator<Items> iterator = items.iterator();
         while (iterator.hasNext()) {
             Items item = iterator.next();
-            findAllWithoutExistRecurs(items,item.getChildItems(),currentItem, iterator);
+            findAllWithoutExistRecurs(item.getChildItems(),currentItem, iterator);
         }
         return items;
     }
 
-    public void findAllWithoutExistRecurs(List<Items> items,List<ItemsInItem> itemsInItems,Items currentItem,Iterator<Items> checkedItem) {
+    public void findAllWithoutExistRecurs(List<ItemsInItem> itemsInItems,Items currentItem,Iterator<Items> checkedItem) {
         for (ItemsInItem itemInItem :
                 itemsInItems) {
             if (itemInItem.getItem()==currentItem){
                 checkedItem.remove();
                 break;
             }
-            findAllWithoutExistRecurs(items,itemInItem.getItem().getChildItems(),currentItem,checkedItem);
+            findAllWithoutExistRecurs(itemInItem.getItem().getChildItems(),currentItem,checkedItem);
         }
     }
 }
