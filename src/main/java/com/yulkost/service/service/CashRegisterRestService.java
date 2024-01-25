@@ -61,8 +61,6 @@ public class CashRegisterRestService {
             }
         json.append("]}");
 
-            System.out.println(json+"\n\n\n\n");
-
         sendPost(json.toString(), "/cgi/chk");
 
     }
@@ -88,9 +86,7 @@ public class CashRegisterRestService {
         // Отправляем POST-запрос на сервер
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(CASH_REGISTER_ID + url, request, String.class);
-        System.out.println("Ответ от сервера: " + response.getBody());
-            // Получаем код ошибки из ответа сервера
-            String errorCode = extractErrorCodeFromResponse(response.getBody());
+        String errorCode = extractErrorCodeFromResponse(response.getBody());
         if (!response.getStatusCode().is2xxSuccessful()){
                 // Получаем описание ошибки по коду из карты ошибок
                 String errorDescription = ErrorCodeMapper.getErrorDescription(errorCode);
@@ -111,11 +107,14 @@ public class CashRegisterRestService {
             System.out.println("Ответ от сервера: " + response.getBody());
         // Получаем код ошибки из ответа сервера
         String errorCode = extractErrorCodeFromResponse(response.getBody());
+        if (!response.getStatusCode().is2xxSuccessful()){
+            // Получаем описание ошибки по коду из карты ошибок
+            String errorDescription = ErrorCodeMapper.getErrorDescription(errorCode);
 
-        // Получаем описание ошибки по коду из карты ошибок
-        String errorDescription = ErrorCodeMapper.getErrorDescription(errorCode);
-
-        throw new RuntimeException(errorDescription);
+            System.out.println("Код ошибки: " + errorCode);
+            System.out.println("Описание ошибки: " + errorDescription);
+            throw new RuntimeException(errorDescription);
+        }
     }
     public  void sendXReport() {
         System.out.println("Send X-report");

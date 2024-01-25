@@ -21,7 +21,8 @@
             <tr>
                 <th>Название продукта</th>
                 <th>Вес</th>
-                <th>Цена</th>
+                <th>Цена операции</th>
+                <th>Цена на складе</th>
                 <th>Сумма</th>
                 <th>Остаток на складе</th>
                 <th>Тип операции</th>
@@ -33,7 +34,8 @@
             <tr th:each="item, itemStat : ${form}">
                 <td th:text="${item.getProduct().getName()}"></td>
                 <td th:text="${item.getWeightToPage()}"></td>
-                <td th:text="${item.getPriceToPage()}"></td>
+                <td th:text="${item.getPriceMovementToPage()}"></td>
+                <td th:text="${item.getPriceOnStockToPage()}"></td>
                 <td th:text="${item.getSumToPage()}"></td>
                 <td th:text="${item.getBalanceWeightToPage()}"></td>
                 <td th:text="${item.getTypeOfOperation()}"></td>

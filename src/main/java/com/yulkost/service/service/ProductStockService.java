@@ -41,14 +41,13 @@ public class ProductStockService {
                 saveProductStock(productWeight, orderItem,quantityOfItems);
             }
             itemWriteOff(item.getItem().getChildItems(), orderItem, quantityOfItems);
-            quantityOfItems=0;
         }
 
     }
     private void saveProductStock(ProductWeight productWeight,OrderItems orderItem,int quantity){
         ProductStock productStock = productStockRepository.findByProductId(productWeight.getProduct().getId());
-        productStock.setWeight(productStock.getWeight()-(productWeight.getWeight()*quantity));
         productStockMovementService.saveMovementOrderItem(orderItem,new ProductStock(productStock),productWeight,quantity);
+        productStock.setWeight(productStock.getWeight()-(productWeight.getWeight()*quantity));
         productStockRepository.save(productStock);
     }
 }

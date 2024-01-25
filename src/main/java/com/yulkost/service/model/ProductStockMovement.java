@@ -14,7 +14,9 @@ public class ProductStockMovement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int weight;
-    private int price;
+    private int priceOnStock;
+    private int priceMovement;
+
     private int balanceWeight;
 
     private String description;
@@ -29,14 +31,23 @@ public class ProductStockMovement {
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     Products product;
-    public String getPriceToPage() {
-        double pr = (double) price;
+    public String getPriceMovementToPage() {
+        double pr = priceMovement;
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator('.');
         return new DecimalFormat("0.00",symbols).format(pr/100);
     }
-    public void setPriceToPage(String price) {
-        this.price = (int)(Double.parseDouble(price)*100);;
+    public void setPriceMovementToPage(String price) {
+        this.priceMovement = (int)(Double.parseDouble(price)*100);;
+    }
+    public String getPriceOnStockToPage() {
+        double pr = priceOnStock;
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        return new DecimalFormat("0.00",symbols).format(pr/100);
+    }
+    public void setPriceOnStockToPage(String price) {
+        this.priceOnStock = (int)(Double.parseDouble(price)*100);;
     }
     public String getWeightToPage() {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
@@ -53,6 +64,6 @@ public class ProductStockMovement {
 
     }
     public String getSumToPage() {
-        return new DecimalFormat("0.00").format(((float)this.weight)/1000 *((float)this.price)/100);
+        return new DecimalFormat("0.00").format(((float)this.weight)/1000 *((float)this.priceMovement)/100);
     }
 }

@@ -25,24 +25,31 @@ public class ProductStockMovementService {
     public void saveMovementAdd(ProductStockMovement movement) {
         movement.setDateOfOperation(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         movement.setTypeOfOperation("add");
-        productStockMovementRepository.save(movement);
+
         ProductStock productStock = productStockRepository.findByProductId(movement.getProduct().getId());
+        movement.setBalanceWeight(productStock.getWeight());
+        movement.setPriceOnStock(productStock.getPrice());
+        productStockMovementRepository.save(movement);
         if(productStock.getWeight()>0){
-            int totalCost = productStock.getWeight() * productStock.getPrice() + movement.getWeight()  * movement.getPrice();
+            int totalCost = productStock.getWeight() * productStock.getPrice() + movement.getWeight()  * movement.getPriceMovement();
             int totalWeight = productStock.getWeight()+movement.getWeight();
             int averagePrice = totalCost / totalWeight;
             productStock.setPrice(averagePrice);
         }
-        productStock.setPrice(movement.getPrice());
+        else{
+            productStock.setPrice(movement.getPriceMovement());
+        }
         productStock.setWeight(productStock.getWeight()+ movement.getWeight());
         productStockRepository.save(productStock);
     }
     public void saveMovementRemove(ProductStockMovement movement) {
         movement.setDateOfOperation(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         movement.setTypeOfOperation("remove");
-        movement.setPrice(productStockRepository.findByProductId(movement.getProduct().getId()).getPrice());
-        productStockMovementRepository.save(movement);
         ProductStock productStock = productStockRepository.findByProductId(movement.getProduct().getId());
+        movement.setPriceMovement(productStock.getPrice());
+        movement.setPriceOnStock(productStock.getPrice());
+        movement.setBalanceWeight(productStock.getWeight());
+        productStockMovementRepository.save(movement);
         productStock.setWeight(productStock.getWeight()- movement.getWeight());
         productStockRepository.save(productStock);
     }
@@ -52,7 +59,8 @@ public class ProductStockMovementService {
         movement.setTypeOfOperation("order");
         movement.setOrderItems(item);
         movement.setProduct(productWeight.getProduct());
-        movement.setPrice(productStock.getPrice());
+        movement.setPriceOnStock(productStock.getPrice());
+        movement.setPriceMovement(productStock.getPrice());
         movement.setWeight(productWeight.getWeight()*quantity);
         movement.setBalanceWeight(productStock.getWeight());
         productStockMovementRepository.save(movement);

@@ -51,6 +51,9 @@ public class OrdersService {
         return newOrder;
     }
         public void save(Orders order){
+            orderItemsRepository.saveAll(order.getOrderItems());
+            Orders orders = ordersRepository.save(order);
+        if (order.getEstablishmentPaid()<=0){
             CashRegister cashRegister = new CashRegister();
             CashRegister cashRegister1 = cashRegisterRepository.findCashRegisterWithMaxId();
             if(cashRegister1==null){
@@ -58,11 +61,9 @@ public class OrdersService {
             }else{
                 cashRegister.setCashAmount(cashRegister1.getCashAmount()+order.getCashPaid());
             }
-
-            orderItemsRepository.saveAll(order.getOrderItems());
-            Orders orders = ordersRepository.save(order);
             cashRegister.setOrder(orders);
             cashRegisterRepository.save(cashRegister);
+        }
             productStockService.writeOffProductFromStockAndSaveToStockMovement(order);
     }
 }
