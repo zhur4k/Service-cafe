@@ -72,16 +72,13 @@ public class CashRegisterRestController {
     }
 
     @GetMapping("/closeShift")
-    public ResponseEntity<String> closeShift(@AuthenticationPrincipal User user) {
+    public ResponseEntity<?> closeShift(@AuthenticationPrincipal User user) {
         try {
-            if(cashRegisterRestService.sendZReport()){
-                shiftService.closeShift();
-                return ResponseEntity.ok("Success Shift was closed");
-            }
-            return null;
-        } catch (Exception e) {
-            // Ошибка, отправьте соответствующий HTTP-статус
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            cashRegisterRestService.sendZReport();
+            shiftService.closeShift();
+            return ResponseEntity.ok("Success Shift was closed");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
     @GetMapping("/sumInCashRegister")
@@ -100,21 +97,28 @@ public class CashRegisterRestController {
         if(orderToSave.getEstablishmentPaid()>0){
             ordersService.save(orderToSave);
             yulkostTelegramBotService.SendOrderToUser(orderToSave);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.OK).body("Успешно");
         }else {
-            if (cashRegisterRestService.sendFCheck(orderToSave)) {
+            try {
+                cashRegisterRestService.sendFCheck(orderToSave);
                 ordersService.save(orderToSave);
                 yulkostTelegramBotService.SendOrderToUser(orderToSave);
-                return ResponseEntity.status(HttpStatus.OK).build();
+                return ResponseEntity.status(HttpStatus.OK).body("Успешно");
+            }catch (RuntimeException e){
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
             }
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
     @PostMapping("/collectionMove")
-    public void CollectionMove(@RequestBody Collection collection) {
-        collection.setShift(shiftService.getOpenShift());
-        if(cashRegisterRestService.sendIOCheck(collection)){
+    public ResponseEntity<?> CollectionMove(@RequestBody Collection collection) {
+        try {
+            collection.setShift(shiftService.getOpenShift());
+            cashRegisterRestService.sendIOCheck(collection);
             collectionService.save(collection);
+            return ResponseEntity.status(HttpStatus.OK).body("Успешно");
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -125,14 +129,12 @@ public class CashRegisterRestController {
     @GetMapping("/getXReport")
     public ResponseEntity<String> getXReport() {
         try {
-            if(cashRegisterRestService.sendXReport())
-                return ResponseEntity.ok("Success send X-Report");
-
-            throw new Exception();
+            cashRegisterRestService.sendXReport();
+            return ResponseEntity.ok("X-отчёт успешно отправлен");
 
         } catch (Exception e) {
             // Ошибка, отправьте соответствующий HTTP-статус
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
     @GetMapping("/getListOfUsers")

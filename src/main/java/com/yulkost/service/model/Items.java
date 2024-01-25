@@ -16,8 +16,9 @@ public class Items {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 13)
 
+    @Column(length = 13)
+    private String uniqueCode;
     private String code;
     private String nameOfItems;
     private Boolean view;
@@ -40,6 +41,21 @@ public class Items {
     @OneToMany
     @JoinColumn(name = "parent_item_id", referencedColumnName = "id")
     private List<ItemsInItem> childItems = new ArrayList<>();
+    @PrePersist
+    @PreUpdate
+    private void generateUniqueCode() {
+        // Генерация уникального значения для code
+        this.uniqueCode = generateUniqueCodeValue();
+    }
+    private String generateUniqueCodeValue() {
+        // Ваша логика генерации уникального значения
+        // В этом примере, мы используем текущее время в миллисекундах
+        Long currentTime = System.currentTimeMillis();
+
+        // Преобразуем в строку и обрезаем до 13 символов
+        String codeValue = currentTime.toString();
+        return codeValue.substring(0, Math.min(codeValue.length(), 13));
+    }
     public int getMarkup() {
         try {
 

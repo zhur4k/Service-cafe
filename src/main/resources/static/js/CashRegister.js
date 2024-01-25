@@ -491,11 +491,13 @@ function sendCollectionMove(collectionType) {
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 // xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
                 xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        showMessage('Инкассация проведена успешно!!!','green');
-                        getSumInCashRegister();
+                    if (xhr.readyState === 4 && xhr.status === 200){
+                        console.log(xhr.responseText);
+                        showMessage(xhr.responseText,'green');
                     }else{
-                        showMessage("В кассе нет столько денег!!!");}
+                        console.log(xhr.responseText);
+                        showMessage(xhr.responseText);
+                    }
                 };
                 xhr.send(JSON.stringify(collection));
             } else {
@@ -828,10 +830,13 @@ function submitOrder() {
                 xhr.open('POST', '/submitOrder', true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        console.log('Заказ успешно отправлен!');
-                        // Очищаем корзину после успешной отправки
+                    if (xhr.readyState === 4 && xhr.status === 200){
+                        console.log(xhr.responseText);
+                        showMessage(xhr.responseText,'green');
                         clearOrder();
+                    }else{
+                        console.log(xhr.responseText);
+                        showMessage(xhr.responseText);
                     }
                 };
                 xhr.send(JSON.stringify(orders));
@@ -902,8 +907,6 @@ function showMessage(message='Откройте смену!!!',color='red'){
 function openShift(shiftButton) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/openShift', true);
-    // xhr.setRequestHeader(csrfHeader, csrfToken);
-
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             // Обработка успешного ответа от сервера
@@ -924,7 +927,6 @@ function openShift(shiftButton) {
 function closeShift(shiftButton) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/closeShift', true);
-    // xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
     xhr.onreadystatechange =  function() {
         // и статус ответа сервера 200 (OK)
         if (xhr.readyState === 4 && xhr.status === 200)
@@ -968,12 +970,16 @@ function xReportButtonClick() {
 function xReportSend(){
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getXReport', true);
-    // xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
     xhr.onreadystatechange = function () {
         // и статус ответа сервера 200 (OK)
-        if (xhr.readyState === 4 && xhr.status === 200)
-            // Обработка успешного ответа от сервера
+        if (xhr.readyState === 4 && xhr.status === 200){
             console.log(xhr.responseText);
+            showMessage(xhr.responseText,'green');
+        }else{
+            console.log(xhr.responseText);
+            showMessage(xhr.responseText);
+        }
+
     };
     // Отправляем запрос
     xhr.send();

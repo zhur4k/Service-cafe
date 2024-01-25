@@ -1,5 +1,6 @@
 package com.yulkost.service.service;
 
+import com.yulkost.service.dto.mapper.ErrorCodeMapper;
 import com.yulkost.service.model.Collection;
 import com.yulkost.service.model.OrderItems;
 import com.yulkost.service.model.Orders;
@@ -10,16 +11,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Service
 public class CashRegisterRestService {
 
     private final String CASH_REGISTER_ID ="http://169.254.35.154" ;
-    public Boolean sendFCheck(Orders order) {
+    public void sendFCheck(Orders order) {
         StringBuilder json = new StringBuilder("{\"F\":[" +
                 "{\"C\":{\"cm\":\"Кассир:" + (order.getShift().getUsers().get(0)).getName() + "\"}}");
         for (OrderItems orderItem : order.getOrderItems()) {
             json.append(",{\"S\":{\"code\":").
-                    append(orderItem.getItems().getCode()).
+                    append(orderItem.getItems().getUniqueCode()).
 
                     append(",").append("\"name\":\"").
                     append(orderItem.getItems().getNameOfItems()).
@@ -59,10 +63,10 @@ public class CashRegisterRestService {
 
             System.out.println(json+"\n\n\n\n");
 
-        return sendPost(json.toString(), "/cgi/chk");
-//            return true;
+        sendPost(json.toString(), "/cgi/chk");
+
     }
-    public Boolean sendIOCheck(Collection collection){
+    public void sendIOCheck(Collection collection){
         StringBuilder json = new StringBuilder("{\"IO\":[" +
                 "{\"C\":{\"cm\":\"Кассир:"+(collection.getShift().getUsers().get(0)).getName()+"\"}}");
         json.append(",{\"IO\":{\"sum\":");
@@ -72,11 +76,9 @@ public class CashRegisterRestService {
         json.append(((float) collection.getSumOfOperation()) / 100).append("}}");
         json.append("]}");
         System.out.println(json);
-        return sendPost(json.toString(), "/cgi/chk");
-//        return true;
+        sendPost(json.toString(), "/cgi/chk");
     }
-    private Boolean sendPost(String json, String url) {
-        try {
+    private void sendPost(String json, String url) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -87,33 +89,54 @@ public class CashRegisterRestService {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(CASH_REGISTER_ID + url, request, String.class);
         System.out.println("Ответ от сервера: " + response.getBody());
-        return true;
-        }catch (RuntimeException e){
-            return false;
-        }
+            // Получаем код ошибки из ответа сервера
+            String errorCode = extractErrorCodeFromResponse(response.getBody());
+        if (!response.getStatusCode().is2xxSuccessful()){
+                // Получаем описание ошибки по коду из карты ошибок
+                String errorDescription = ErrorCodeMapper.getErrorDescription(errorCode);
+
+                System.out.println("Код ошибки: " + errorCode);
+                System.out.println("Описание ошибки: " + errorDescription);
+                throw new RuntimeException(errorDescription);
+            }
+
     }
-    private Boolean sendGet(String url) {
-        try {
+
+    private void sendGet(String url) {
             // Отправляем GET-запрос на сервер
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<String> response = restTemplate.getForEntity(CASH_REGISTER_ID + url, String.class);
 
             // Обрабатываем ответ (если нужно)
             System.out.println("Ответ от сервера: " + response.getBody());
-            return true;
-        }catch (RuntimeException e){
-            return false;
-        }
+        // Получаем код ошибки из ответа сервера
+        String errorCode = extractErrorCodeFromResponse(response.getBody());
 
+        // Получаем описание ошибки по коду из карты ошибок
+        String errorDescription = ErrorCodeMapper.getErrorDescription(errorCode);
+
+        throw new RuntimeException(errorDescription);
     }
-    public  boolean sendXReport() {
+    public  void sendXReport() {
         System.out.println("Send X-report");
 //        return true;
-        return sendGet("/cgi/proc/printreport?10");
+        sendGet("/cgi/proc/printreport?10");
     }
-    public boolean sendZReport() {
+    public void sendZReport() {
         System.out.println("Send Z-report");
 //        return true;
-        return sendGet("/cgi/proc/printreport?0");
+        sendGet("/cgi/proc/printreport?0");
+    }
+    private String extractErrorCodeFromResponse(String responseBody) {
+        String errorCodePattern = "\"e\":\"(\\w+)\"";
+        Pattern pattern = Pattern.compile(errorCodePattern);
+        Matcher matcher = pattern.matcher(responseBody);
+
+        if (matcher.find()) {
+            return matcher.group(1);
+        } else {
+            // В случае отсутствия совпадений, можно вернуть значение по умолчанию или null
+            return null;
+        }
     }
 }
