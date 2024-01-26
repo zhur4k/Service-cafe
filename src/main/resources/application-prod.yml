@@ -1,19 +1,17 @@
 spring:
   flyway:
     locations: classpath:migrations
-    url: jdbc:mysql://host.docker.internal:3306/yulkost
+    url: jdbc:mysql://192.168.1.100:3306/yulkost
     user: kostya
     password: 19804731205
   datasource:
-    url: jdbc:mysql://host.docker.internal:3306/yulkost
+    url: jdbc:mysql://192.168.1.100:3306/yulkost
     username: kostya
     password: 19804731205
   jpa:
     hibernate:
       ddl-auto: validate
-    properties:
-      hibernate:
-      dialect: org.hibernate.dialect.MySQLDialect
+
 server:
   address: 0.0.0.0
-  port: 8080
+  port: 8081
