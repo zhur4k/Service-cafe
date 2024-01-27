@@ -29,6 +29,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/").hasAnyAuthority("CASHIER","ADMIN")
                         .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
+                        .requestMatchers("/css/**","/images/**","/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -40,10 +41,6 @@ public class WebSecurityConfig {
         .build();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/css/**","/images/**","/js/**");
-    }
     @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);

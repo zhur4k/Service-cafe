@@ -15,10 +15,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    properties:
-      hibernate:
-      dialect: org.hibernate.dialect.MySQLDialect
-
 server:
   address: 0.0.0.0
   port: 8080
