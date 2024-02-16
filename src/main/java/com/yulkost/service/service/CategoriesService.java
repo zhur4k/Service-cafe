@@ -1,6 +1,8 @@
 package com.yulkost.service.service;
 
+import com.yulkost.service.dto.CategoriesDtoToItemsEdit;
 import com.yulkost.service.dto.CategoriesDtoToPage;
+import com.yulkost.service.dto.mapper.CategoriesDtoToItemsEditMapper;
 import com.yulkost.service.dto.mapper.CategoriesDtoToPageMapper;
 import com.yulkost.service.model.Categories;
 import com.yulkost.service.repository.CategoriesRepository;
@@ -13,10 +15,12 @@ import java.util.stream.Collectors;
 public class CategoriesService {
     private final CategoriesRepository categoriesRepository;
     private final CategoriesDtoToPageMapper categoriesDtoToPageMapper;
+    private final CategoriesDtoToItemsEditMapper categoriesDtoToItemsEditMapper;
 
-    public CategoriesService(CategoriesRepository categoriesRepository, CategoriesDtoToPageMapper categoriesDtoToPageMapper) {
+    public CategoriesService(CategoriesRepository categoriesRepository, CategoriesDtoToPageMapper categoriesDtoToPageMapper, CategoriesDtoToItemsEditMapper categoriesDtoToItemsEditMapper) {
         this.categoriesRepository = categoriesRepository;
         this.categoriesDtoToPageMapper = categoriesDtoToPageMapper;
+        this.categoriesDtoToItemsEditMapper = categoriesDtoToItemsEditMapper;
     }
 
     public void save(Categories categories){
@@ -28,6 +32,13 @@ public class CategoriesService {
                 .stream()
                 .map(categoriesDtoToPageMapper)
         .collect(Collectors.toList());
+    }
+    public List<CategoriesDtoToItemsEdit> findAllToItemsEdit(){
+
+        return categoriesRepository.findAll()
+                .stream()
+                .map(categoriesDtoToItemsEditMapper)
+                .collect(Collectors.toList());
     }
     public List<Categories> findAllCategories(){
 

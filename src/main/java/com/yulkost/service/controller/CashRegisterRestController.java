@@ -44,7 +44,7 @@ public class CashRegisterRestController {
         }
     }
     @GetMapping("/getItemsToPage")
-    public ResponseEntity<List<Items>> getItemsToPage() {
+    public ResponseEntity<?> getItemsToPage() {
         try {
             return ResponseEntity.ok(itemsService.findAllList());
         } catch (Exception e) {

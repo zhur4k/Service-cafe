@@ -3,14 +3,13 @@ package com.yulkost.service.controller.admin;
 import com.yulkost.service.dto.ItemsEditDto;
 import com.yulkost.service.dto.ItemsInItemEditDto;
 import com.yulkost.service.dto.ProductWeightEditDto;
-import com.yulkost.service.model.Items;
-import com.yulkost.service.model.ItemsInItem;
-import com.yulkost.service.model.ProductWeight;
-import com.yulkost.service.model.Products;
+import com.yulkost.service.model.*;
 import com.yulkost.service.repository.ItemsInItemRepository;
 import com.yulkost.service.repository.ProductWeightRepository;
 import com.yulkost.service.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -62,20 +61,45 @@ public class ItemsController {
     }
 
     @GetMapping
-    public String Items(Model model){
-        List<Items> items = new ArrayList<>();
-        itemsService.findAll().iterator().forEachRemaining(items::add);
-        model.addAttribute("form", new ItemsEditDto(items));
-        model.addAttribute("category", categoriesService.findAll());
-        model.addAttribute("units", unitsService.findAll());
+    public String Items(){
         return "adminItems";
         }
-
-    @PostMapping
-    public String ItemsEdit(@ModelAttribute ItemsEditDto form) {
-        itemsService.saveAll(form.getItems());
-        return "redirect:/admin/items"; }
-
+    @GetMapping("/getAll")
+    public ResponseEntity<?> getItemsToPage() {
+        try {
+            return ResponseEntity.ok(itemsService.findAllList());
+        } catch (Exception e) {
+            // Ошибка, отправьте соответствующий HTTP-статус
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @GetMapping("/getUnits")
+    public ResponseEntity<?> getUnits() {
+        try {
+            return ResponseEntity.ok(unitsService.findAll());
+        } catch (Exception e) {
+            // Ошибка, отправьте соответствующий HTTP-статус
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @GetMapping("/getCategories")
+    public ResponseEntity<?> getCategories() {
+        try {
+            return ResponseEntity.ok(categoriesService.findAllToItemsEdit());
+        } catch (Exception e) {
+            // Ошибка, отправьте соответствующий HTTP-статус
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @PostMapping("/saveAll")
+    public ResponseEntity<?> SubmitOrder(@RequestBody List<Items> items) {
+        try {
+            itemsService.saveAll(items);
+            return ResponseEntity.status(HttpStatus.OK).body("Успешно");
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
     @GetMapping("/{id}")
     public String ItemsAdd(@PathVariable Long id, Model model) {
         model.addAttribute("products", productsService.findAll());

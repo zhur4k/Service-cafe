@@ -1,6 +1,7 @@
 package com.yulkost.service.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -31,9 +32,9 @@ public class Items {
     @ManyToOne
     @JoinColumn(name = "unit_id", referencedColumnName = "id")
     private Units unit;
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "categories_id", referencedColumnName = "id")
+    @JsonIgnoreProperties("items")
     private Categories categories;
     @OneToMany
     @JoinColumn(name = "item_id", referencedColumnName = "id")

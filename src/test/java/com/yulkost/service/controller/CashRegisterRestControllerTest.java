@@ -87,7 +87,7 @@ public class CashRegisterRestControllerTest {
         when(itemsService.findAllList()).thenReturn(items);
 
         // Perform the test
-        ResponseEntity<List<Items>> response = cashRegisterRestController.getItemsToPage();
+        ResponseEntity<?> response = cashRegisterRestController.getItemsToPage();
 
         // Assertions
         verify(itemsService, times(1)).findAllList();
