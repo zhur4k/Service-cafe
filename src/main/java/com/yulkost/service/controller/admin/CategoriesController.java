@@ -1,5 +1,6 @@
 package com.yulkost.service.controller.admin;
 
+import com.yulkost.service.dto.CategoriesDtoToPage;
 import com.yulkost.service.dto.CategoriesEditDto;
 import com.yulkost.service.model.Categories;
 import com.yulkost.service.service.CategoriesService;
@@ -25,8 +26,10 @@ public class CategoriesController {
     @GetMapping
         public String Categories(Model model){
         List<Categories> category = new ArrayList<>();
-        categoriesService.findAll().iterator().forEachRemaining(category::add);
+        categoriesService.findAllCategories().iterator().forEachRemaining(category::add);
         model.addAttribute("form", new CategoriesEditDto(category));
+        model.addAttribute("category", categoriesService.findAllCategories());
+
         return "adminCategories";
         }
 
@@ -36,7 +39,8 @@ public class CategoriesController {
         return "redirect:/admin/categories"; }
 
     @GetMapping("/add")
-    public String CategoriesAdd() {
+    public String CategoriesAdd(Model model) {
+        model.addAttribute("category", categoriesService.findAllCategories());
         return "adminCategoriesAdd"; }
 
     @PostMapping("/add")

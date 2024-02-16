@@ -1,8 +1,11 @@
 create table categories
 (
-    id              bigint auto_increment
+    id                 bigint auto_increment
         primary key,
-    categories_name varchar(255) null
+    categories_name    varchar(255) null,
+    parent_category_id bigint       null,
+    constraint FK9il7y6fehxwunjeepq0n7g5rd
+        foreign key (parent_category_id) references categories (id)
 );
 
 create table product_stock

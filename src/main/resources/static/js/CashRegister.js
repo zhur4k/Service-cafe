@@ -71,7 +71,10 @@ function displayMainContainer() {
     // Добавляем левую и правую части в основной контейнер
     mainContainer.appendChild(leftContainer);
     mainContainer.appendChild(rightContainer);
-    displayCategories();
+
+    //Display categories to page
+    displayMainCategories();
+
     displayOrder();
 }
 
@@ -509,39 +512,48 @@ function sendCollectionMove(collectionType) {
     // Отправляем запрос
     xhr.send();
 }
-//Display categories to page
-function displayCategories() {
+function displayMainCategories() {
     let leftContainer = document.getElementById('leftContainer');
     leftContainer.innerHTML = "";
-    // Итерация по данным и создание элементов
-    categoryData.forEach(function(categories) {
-        const categoryDiv = document.createElement('div');
-        categoryDiv.classList.add('child-block');
+    categoryData.forEach(function (category){
+        if(category.parentCategory==null){
+            const categoryDiv = document.createElement('div');
+            categoryDiv.classList.add('child-block');
 
-        categoryDiv.textContent = categories.categoriesName;
-        categoryDiv.onclick = function() {
-            displayProducts(categories);
-        };
-        leftContainer.appendChild(categoryDiv);
+            categoryDiv.textContent = category.categoriesName;
+            categoryDiv.onclick = function() {
+                displayLeftBlocks(category,category.childCategories);
+            };
+            leftContainer.appendChild(categoryDiv);
+        }
     });
 }
 
 //Display order to page
-function displayProducts(categories) {
+function displayLeftBlocks(categories,childCategories) {
     let leftContainer = document.getElementById('leftContainer');
     leftContainer.innerHTML = "";
 
     let backDiv = document.createElement('div');
     backDiv.classList.add('child-block');
     backDiv.onclick = function() {
-        displayCategories();
+        displayMainCategories();
     }
     let backDivHeading = document.createElement('h2');
     backDivHeading.textContent = 'Вернуться';
     backDiv.appendChild(backDivHeading);
     backDiv.style.backgroundColor = "red";
     leftContainer.appendChild(backDiv);
+    childCategories.forEach(function(item) {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.classList.add('child-block');
 
+        categoryDiv.textContent = item.categoriesName;
+        categoryDiv.onclick = function() {
+            displayLeftBlocks(item,item.childCategories);
+        };
+        leftContainer.appendChild(categoryDiv);
+    });
     categories.items.forEach(function(item) {
         let productDiv = document.createElement('div');
         productDiv.classList.add('child-block');
@@ -997,7 +1009,6 @@ function getCategoriesToPage() {
             // Обработка успешного ответа от сервера
             categoryData = JSON.parse(xhr.responseText);
             displayMainContainer()
-            displayCategories();
         }
     };
     // Отправляем запрос

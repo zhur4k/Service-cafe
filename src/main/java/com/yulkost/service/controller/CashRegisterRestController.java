@@ -1,5 +1,6 @@
 package com.yulkost.service.controller;
 
+import com.yulkost.service.dto.CategoriesDtoToPage;
 import com.yulkost.service.model.*;
 import com.yulkost.service.service.*;
 import org.springframework.http.HttpStatus;
@@ -33,9 +34,9 @@ public class CashRegisterRestController {
     }
 
     @GetMapping("/getCategory")
-    public ResponseEntity<List<Categories>> getCategory() {
+    public ResponseEntity<?> getCategory() {
         try {
-            List<Categories> categories = categoriesService.findAll();
+            List<CategoriesDtoToPage> categories = categoriesService.findAll();
             return ResponseEntity.ok(categories);
         } catch (Exception e) {
             // Ошибка, отправьте соответствующий HTTP-статус

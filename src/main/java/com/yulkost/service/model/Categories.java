@@ -1,5 +1,6 @@
 package com.yulkost.service.model;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -17,12 +18,11 @@ public class Categories {
     @ToString.Exclude
     @OneToMany(mappedBy = "categories")
     private List<Items> items = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "parent_category_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Categories parentCategory;
 
-    public List<Items> getItemsToPage() {
-       List<Items> items1 = new ArrayList<>();
-        for (Items item : items) {
-            if(item.getView()) items1.add(item);
-        }
-        return items1;
-    }
+    @OneToMany(mappedBy = "parentCategory")
+    private List<Categories> childCategories = new ArrayList<>();
 }

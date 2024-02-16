@@ -22,10 +22,23 @@
         <table>
             <tr>
                 <th>Имя</th>
+                <th>Родительская категория</th>
             </tr>
             <tr th:each="categories, itemStat : ${form.category}">
                 <input th:name="|category[${itemStat.index}].id|" th:value="${categories.getId()}" type="hidden" readonly/>
                 <td><input th:name="|category[${itemStat.index}].categoriesName|" th:value="${categories.getCategoriesName()}" required/></td>
+                <td>
+                    <select th:name="|category[${itemStat.index}].parentCategory|" required>
+                        <option th:each="categor: ${category}"
+                                th:if="${categor.getId() ne categories.id}"
+                                th:value="${categor.getId()}"
+                                th:text="${categor.getCategoriesName()}"
+                                th:selected="${categor.getId() == null or categor.getId() == categories.getParentCategory()?.getId()}"
+                        ></option>
+                        <option th:value="null" th:selected="${categories.parentCategory == null}">Нету</option>
+                    </select>
+                </td>
+
             </tr>
         </table>
     </div>

@@ -8,6 +8,7 @@ spring:
     url: jdbc:mysql://localhost:3306/yulkost
     user: kostya
     password: 19804731205
+    baselineOnMigrate: true
   datasource:
     url: jdbc:mysql://localhost:3306/yulkost
     username: kostya
@@ -17,4 +18,4 @@ spring:
       ddl-auto: validate
 server:
   address: 0.0.0.0
-  port: 8080
+  port: 8081

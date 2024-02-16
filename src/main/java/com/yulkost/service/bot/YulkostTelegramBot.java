@@ -1,5 +1,7 @@
 package com.yulkost.service.bot;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -7,6 +9,11 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.*;
 
 @Slf4j
 @Component
@@ -28,6 +35,9 @@ public class YulkostTelegramBot extends TelegramLongPollingBot{
                     break;
                 case "/id":
                     ChatIdBot(chatId, memberName);
+                    break;
+                case "/serverId":
+                    sendMessage(chatId, getServerIP());
                     break;
                 default: log.info("Unexpected message");
             }
@@ -52,5 +62,26 @@ public class YulkostTelegramBot extends TelegramLongPollingBot{
             log.error(e.getMessage());
         }
     }
+    public static String getServerIP() {
+        try {
 
+        URL url = new URL("https://api64.ipify.org?format=json");
+
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(connection.getInputStream());
+
+        // Получаем значение поля "ip" из JSON
+        String routerIP = rootNode.get("ip").asText();
+
+        connection.disconnect();
+            return routerIP;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

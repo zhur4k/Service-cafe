@@ -1,4 +1,4 @@
-async function downloadExcel() {
+async function downloadExcel1() {
     let startDateInput = document.getElementById("startDate");
     let endDateInput = document.getElementById("endDate");
 
@@ -10,15 +10,32 @@ async function downloadExcel() {
     console.log(dateFromPage);
 
     try {
-        let excelBlob = await createExcel(dateFromPage);
+        let excelBlob = await createExcel(dateFromPage,'1');
+        downloadBlob(excelBlob, 'report.xlsx');
+    } catch (error) {
+        console.error(error);
+    }
+}async function downloadExcel2() {
+    let startDateInput = document.getElementById("startDate");
+    let endDateInput = document.getElementById("endDate");
+
+    let dateFromPage = {
+        startDate: startDateInput.value,
+        endDate: endDateInput.value,
+    };
+
+    console.log(dateFromPage);
+
+    try {
+        let excelBlob = await createExcel(dateFromPage,'2');
         downloadBlob(excelBlob, 'report.xlsx');
     } catch (error) {
         console.error(error);
     }
 }
 
-async function createExcel(dateFromPage) {
-    let response = await fetch('/admin/stock/excel', {
+async function createExcel(dateFromPage,url) {
+    let response = await fetch('/admin/stock/excel/'+url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
