@@ -36,7 +36,7 @@ public class YulkostTelegramBot extends TelegramLongPollingBot{
                 case "/id":
                     ChatIdBot(chatId, memberName);
                     break;
-                case "/serverId":
+                case "/server":
                     sendMessage(chatId, getServerIP());
                     break;
                 default: log.info("Unexpected message");
@@ -78,7 +78,7 @@ public class YulkostTelegramBot extends TelegramLongPollingBot{
         String routerIP = rootNode.get("ip").asText();
 
         connection.disconnect();
-            return routerIP;
+            return "http://"+routerIP+":8081";
 
         } catch (IOException e) {
             throw new RuntimeException(e);
