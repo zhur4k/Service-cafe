@@ -50,8 +50,8 @@
                 </td>
                 <td>
                     <select th:name="categories" required>
-                        <option th:each="categor: ${category}" th:value="${categor.getId()}"
-                            th:text="${categor.getCategoriesName()}"
+                        <option th:each="categor: ${category}" th:value="${categor.id}"
+                            th:text="${categor.categoriesName}"
                         ></option>
                     </select>
                 </td>
