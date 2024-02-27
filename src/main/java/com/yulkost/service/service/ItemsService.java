@@ -115,4 +115,8 @@ public class ItemsService {
             findAllWithoutExistRecurs(itemInItem.getItem().getChildItems(),currentItem,checkedItem);
         }
     }
+
+    public void delete(Long id) {
+        itemsRepository.deleteById(id);
+    }
 }

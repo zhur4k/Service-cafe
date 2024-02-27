@@ -8,6 +8,7 @@ let itemsToPage = [];
 let orderItems = [];
 //Shift state
 let shift=[]
+let numberOfTable = 0;
 let cashPaid=0;
 let cashLessPaid=0;
 let establishmentPaid=0;
@@ -78,6 +79,9 @@ function displayMainContainer() {
     displayOrder();
 }
 
+function setTableNumber(number){
+    numberOfTable = parseInt(number);
+}
 function showListOfUser(rightContainerChild2) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getOpenShift', true);
@@ -696,7 +700,7 @@ function createButtonToSumElement(value) {
 //Add product to order
 function addProduct(id) {
     // Поиск продукта в массиве по имени
-    const existingProduct = orderItems.find(orderItems => (orderItems.items.id === id));
+    const existingProduct = orderItems.find(orderItems => (orderItems.item === id));
 
     if (existingProduct) {
         // Если продукт с таким именем уже существует, увеличиваем количество
@@ -706,7 +710,11 @@ function addProduct(id) {
         // Иначе создаем новый продукт
         orderItems.push({
             quantity: 1,
-            items
+            item: id,
+            nameOfItems:items.nameOfItems,
+            unitPrice: items.unitPrice,
+            price: items.price,
+            unit: items.unit.name,
         });
     }
     displayOrder();
@@ -726,9 +734,9 @@ function displayOrder() {
         const removeCell = document.createElement("td");
         const removeButton = document.createElement("button");
 
-        itemCell.textContent = item.items.nameOfItems;
-        quantityCell.textContent = (item.quantity*item.items.unitPriceToPage).toFixed(3)+item.items.unit.name;
-        const itemTotal = (item.items.priceToPage * item.quantity).toFixed(2) + " р";
+        itemCell.textContent = item.nameOfItems;
+        quantityCell.textContent = (item.quantity*(item.unitPrice/1000)).toFixed(3)+item.unit;
+        const itemTotal = ((item.price/100) * item.quantity).toFixed(2) + " р";
         totalCell.textContent = itemTotal;
         removeButton.textContent = "Удалить";
         removeButton.classList.add("remove-button");
@@ -835,6 +843,7 @@ function submitOrder() {
                     cashPaid:(cashPaid-sumOfChange),
                     cashLessPaid:cashLessPaid,
                     sumOfChange:sumOfChange,
+                    numberOfTable:numberOfTable,
                     orderItems, // Массив с информацией о товарах в заказе
                 });
                 // Отправляем заказ на сервер

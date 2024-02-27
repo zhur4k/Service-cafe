@@ -23,6 +23,7 @@
             <tr>
                 <th>Имя</th>
                 <th>Родительская категория</th>
+                <th>Удалить</th>
             </tr>
             <tr th:each="categories, itemStat : ${form.category}">
                 <input th:name="|category[${itemStat.index}].id|" th:value="${categories.getId()}" type="hidden" readonly/>
@@ -37,6 +38,9 @@
                         ></option>
                         <option th:value="null" th:selected="${categories.parentCategory == null}">Нету</option>
                     </select>
+                </td>
+                <td>
+                    <a th:href="'/admin/categories/delete/'+${categories.getId()}" class="btnchange">Выйти</a>
                 </td>
 
             </tr>

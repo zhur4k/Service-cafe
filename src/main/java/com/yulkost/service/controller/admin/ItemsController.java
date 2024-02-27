@@ -182,5 +182,14 @@ public class ItemsController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-         }
+    }
+    @GetMapping("/delete/{id}")
+    public ResponseEntity<?> ItemDelete(@PathVariable Long id) {
+        try {
+            itemsService.delete(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 }

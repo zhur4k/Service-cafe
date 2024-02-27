@@ -71,6 +71,26 @@ create table orders
         foreign key (shift_id) references shift (id)
 );
 
+create table order_items
+(
+    id                  bigint auto_increment
+        primary key,
+    category            varchar(255) null,
+    date_of_item_change datetime(6)  null,
+    discount            int          not null,
+    item                bigint       null,
+    name_of_items       varchar(255) null,
+    price               int          not null,
+    quantity            int          not null,
+    type_of_item        bit          null,
+    unique_code         varchar(255) null,
+    unit                varchar(255) null,
+    unit_price          int          not null,
+    order_id            bigint       null,
+    constraint FKbioxgbv59vetrxe0ejfubep1w
+        foreign key (order_id) references orders (id)
+);
+
 create table cash_register
 (
     cash_amount  int    not null,
@@ -127,23 +147,6 @@ create table items_in_item
         foreign key (parent_item_id) references items (id),
     constraint FKjwyusnlyfuav1u8kc4fq1jp3r
         foreign key (item_id) references items (id)
-);
-
-create table order_items
-(
-    discount            int         not null,
-    markup              int         not null,
-    price               int         not null,
-    quantity            int         not null,
-    date_of_item_change datetime(6) null,
-    id                  bigint auto_increment
-        primary key,
-    items_id            bigint      null,
-    order_id            bigint      null,
-    constraint FKbioxgbv59vetrxe0ejfubep1w
-        foreign key (order_id) references orders (id),
-    constraint FKtmh8xasqlekqomdmqn7kc59wq
-        foreign key (items_id) references items (id)
 );
 
 create table product_stock_movement

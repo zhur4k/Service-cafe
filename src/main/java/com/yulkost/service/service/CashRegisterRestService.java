@@ -23,20 +23,20 @@ public class CashRegisterRestService {
                 "{\"C\":{\"cm\":\"Кассир:" + (order.getShift().getUsers().get(0)).getName() + "\"}}");
         for (OrderItems orderItem : order.getOrderItems()) {
             json.append(",{\"S\":{\"code\":").
-                    append(orderItem.getItems().getUniqueCode()).
+                    append(orderItem.getUniqueCode()).
 
                     append(",").append("\"name\":\"").
-                    append(orderItem.getItems().getNameOfItems()).
+                    append(orderItem.getNameOfItems()).
                     append(" ").
-                    append(orderItem.getItems().getUnitPriceToPage()).
+                    append(orderItem.getUnitPriceToPage()).
                     append(" ").
-                    append(orderItem.getItems().getUnit().getName()).
+                    append(orderItem.getUnit()).
 
                     append("\",").append("\"qty\":").
                     append(orderItem.getQuantity()).
 
                     append(",").append("\"price\":").
-                    append(orderItem.getItems().getPriceToPage()).
+                    append(orderItem.getPriceToPage()).
                     append("}}");
 //            if (orderItem.getDiscount() > 0) {
 //                json.append(",{\"D\":{\"prc\":\"-").
@@ -60,8 +60,7 @@ public class CashRegisterRestService {
                         append("}}");
             }
         json.append("]}");
-
-        sendPost(json.toString(), "/cgi/chk");
+//        sendPost(json.toString(), "/cgi/chk");
 
     }
     public void sendIOCheck(Collection collection){

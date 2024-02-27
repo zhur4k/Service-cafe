@@ -20,11 +20,10 @@ public class YulkostTelegramBotService {
         orderInfo.append("Заказ № ").append(order.getId()).append("\n");
         orderInfo.append("Стол № ").append(order.getNumberOfTable()).append("\n");
         for (OrderItems item :order.getOrderItems()) {
-            orderInfo.append(item.getItems().getNameOfItems())
-                    .append(" - ").append(item.getQuantity()*Float.parseFloat(item.getItems().getUnitPriceToPage()))
+            orderInfo.append(item.getNameOfItems())
+                    .append(" - ").append(item.getQuantity()*Float.parseFloat(item.getUnitPriceToPage()))
                     .append(" ")
-                    .append(item.getItems()
-                            .getUnit().getName())
+                    .append(item.getUnit())
                     .append("\n");
         }
         for (User user : order.getShift().getUsers())

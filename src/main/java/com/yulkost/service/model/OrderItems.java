@@ -6,8 +6,6 @@ import lombok.Data;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity
@@ -16,35 +14,39 @@ public class OrderItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int quantity;
+    private String uniqueCode;
+
+    private String nameOfItems;
+    private Boolean typeOfItem;
     private int price;
-    private int markup;
+    private int unitPrice;
+    private LocalDateTime dateOfItemChange;
+    private String unit;
+    private String category;
     private int discount;
 
-    private LocalDateTime dateOfItemChange;
+    private Long item;
 
-    @ManyToOne
-    @JoinColumn(name = "items_id", referencedColumnName = "id")
-    private Items items;
-
-    @OneToMany(mappedBy = "orderItems", cascade = CascadeType.ALL)
-    private List<ProductStockMovement> productStockMovements = new ArrayList<>();
-    @PrePersist
-    @PreUpdate
-    private void calculateMarkup() {
-        //Установить цену
-        this.price= this.items.getPrice();
-        //Установить наценку
-        this.markup = this.items.getMarkup();
-        this.dateOfItemChange = this.items.getDateOfChange();
-    }
     public String getSumToPage(){
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator('.');
-        return new DecimalFormat("0.00",symbols).format(((double)this.items.getPrice())/100*((double)this.getQuantity()));
+        return new DecimalFormat("0.00",symbols).format(((double)price)/100*((double)this.getQuantity()));
     }
     public String getQuantityUnitPriceToPage(){
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator('.');
-        return new DecimalFormat("0.000",symbols).format(this.getQuantity()*((double)this.getItems().getUnitPrice())/1000);
+        return new DecimalFormat("0.000",symbols).format(this.getQuantity()*((double)unitPrice)/1000);
+    }
+    public String getPriceToPage() {
+        double pr = (double) price;
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        return new DecimalFormat("0.00",symbols).format(pr/100);
+    }
+    public String getUnitPriceToPage() {
+        double pr = (double) unitPrice;
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        return new DecimalFormat("0.000",symbols).format(pr/1000);
     }
 }

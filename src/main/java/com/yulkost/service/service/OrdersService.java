@@ -1,6 +1,7 @@
 package com.yulkost.service.service;
 
 import com.yulkost.service.model.CashRegister;
+import com.yulkost.service.model.Items;
 import com.yulkost.service.model.OrderItems;
 import com.yulkost.service.model.Orders;
 import com.yulkost.service.repository.CashRegisterRepository;
@@ -39,12 +40,23 @@ public class OrdersService {
         newOrder.setCashLessPaid(order.getCashLessPaid());
         newOrder.setEstablishmentPaid(order.getEstablishmentPaid());
         newOrder.setSumOfChange(order.getSumOfChange());
+        newOrder.setNumberOfTable(order.getNumberOfTable());
         List<OrderItems> orderItems = new ArrayList<>();
 
-        for (int i = 0; i < order.getOrderItems().size(); i++) {
+        for (OrderItems orderItem1: order.getOrderItems())
+        {
+            Items item = itemsService.findById(orderItem1.getItem());
             OrderItems orderItem = new OrderItems();
-            orderItem.setItems(itemsService.findById(order.getOrderItems().get(i).getItems().getId()));
-            orderItem.setQuantity(order.getOrderItems().get(i).getQuantity());
+            orderItem.setQuantity(orderItem1.getQuantity());
+            orderItem.setPrice(orderItem1.getPrice());
+            orderItem.setDateOfItemChange(item.getDateOfChange());
+            orderItem.setNameOfItems(item.getNameOfItems());
+            orderItem.setItem(item.getId());
+            orderItem.setTypeOfItem(item.getTypeOfItem());
+            orderItem.setCategory(item.getCategories().getCategoriesName());
+            orderItem.setUniqueCode(item.getUniqueCode());
+            orderItem.setUnit(item.getUnit().getName());
+            orderItem.setUnitPrice(item.getUnitPrice());
             orderItems.add(orderItem);
         }
         newOrder.setOrderItems(orderItems);

@@ -11,6 +11,12 @@ import java.util.List;
 public class ProductStockService {
     private ProductStockRepository productStockRepository;
     private ProductStockMovementService productStockMovementService;
+    private ItemsService itemsService;
+
+    public ProductStockService(ItemsService itemsService) {
+        this.itemsService = itemsService;
+    }
+
     @Autowired
     public void setProductStockRepository(ProductStockRepository productStockRepository) {
         this.productStockRepository = productStockRepository;
@@ -22,11 +28,12 @@ public class ProductStockService {
 
     public void writeOffProductFromStockAndSaveToStockMovement(Orders order){
         for (OrderItems orderItem : order.getOrderItems()) {
+            Items item = itemsService.findById(orderItem.getItem());
             for (ProductWeight productWeight :
-                    orderItem.getItems().getProductsWeight()) {
+                    item.getProductsWeight()) {
                 saveProductStock(productWeight, orderItem, orderItem.getQuantity());
             }
-            itemWriteOff(orderItem.getItems().getChildItems(), orderItem, orderItem.getQuantity());
+            itemWriteOff(item.getChildItems(), orderItem, orderItem.getQuantity());
         }
     }
     private void itemWriteOff(List<ItemsInItem> childItems, OrderItems orderItem,  int parentQuantity) {

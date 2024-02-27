@@ -1,7 +1,7 @@
 let items = [];
 let category = [];
 let units = [];
-let headers = ["Код", "Имя", "Цена", "Кол-во в ед.", "Наценка (%)", "Видимость", "Тип", "Категория", "Ед. изм.", "Состав"];
+let headers = ["Код", "Имя", "Цена", "Кол-во в ед.", "Наценка (%)", "Видимость", "Тип", "Категория", "Ед. изм.", "Состав","Удалить"];
 
 getItems();
 
@@ -52,6 +52,14 @@ function createTableRow(item) {
     editLinkAnchor.textContent = 'Изменить';
     editLink.appendChild(editLinkAnchor);
 
+    let deleteButtonTd = document.createElement('td');
+    let deleteButton = document.createElement('button');
+    deleteButton.className = 'btnchange';
+    deleteButton.value = 'Изменить';
+    deleteButton.onclick = function() {
+        deleteItem(item.id);
+    };
+    deleteButtonTd.appendChild(deleteButton);
     // Добавляем ячейки в строку
     row.appendChild(codeInput);
     row.appendChild(nameInput);
@@ -63,6 +71,7 @@ function createTableRow(item) {
     row.appendChild(categoriesSelect);
     row.appendChild(unitsSelect);
     row.appendChild(editLink);
+    row.appendChild(deleteButtonTd);
 
     return row;
 }
@@ -188,4 +197,32 @@ function saveChanges(){
         console.log(xhr.responseText);
     };
     xhr.send(JSON.stringify(items));
+}
+
+function showMessage(message='Откройте смену!!!',color='red'){
+    let messageElement = document.getElementById('messages');
+    messageElement.style.fontSize = "26px";
+    messageElement.style.color = color;
+    messageElement.textContent = message;
+    let displayTime = 5000; // например, 5000 миллисекунд (5 секунд)
+    setTimeout(function() {
+        messageElement.textContent = ''; // Очищаем содержимое элемента
+    }, displayTime);
+}
+function deleteItem(id) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', '/admin/items/delete/'+id, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                items.filter(item => item.id !== id)
+                displayTable();
+                showMessage('Успешно' + xhr.responseText, 'Green');
+            } else {
+                showMessage('Товар имеет внешние связи' + xhr.responseText, 'red');
+            }
+            console.log(xhr.responseText);
+        }
+    };
+    xhr.send();
 }

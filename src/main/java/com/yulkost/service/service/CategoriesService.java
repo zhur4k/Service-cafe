@@ -48,4 +48,8 @@ public class CategoriesService {
     public void saveAll(List<Categories> categories) {
         categoriesRepository.saveAll(categories);
     }
+
+    public void deleteById(Long id) {
+        categoriesRepository.deleteById(id);
+    }
 }
