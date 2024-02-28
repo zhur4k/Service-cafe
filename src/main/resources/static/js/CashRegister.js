@@ -84,42 +84,27 @@ function setTableNumber(number){
 }
 function showListOfUser(rightContainerChild2) {
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/getOpenShift', true);
+    xhr.open('GET', '/getListOfUsers', true);
     // xhr.setRequestHeader(csrfHeader, csrfToken);
 
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Обработка успешного ответа от сервера
-            if (xhr.responseText)
-            shift = xhr.responseText;
-            // После получения ответа, проверяем условие
-            if (shift) {
-                let xhr = new XMLHttpRequest();
-                xhr.open('GET', '/getListOfUsers', true);
-                // xhr.setRequestHeader(csrfHeader, csrfToken);
-
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        // Обработка успешного ответа от сервера
-                        if (xhr.responseText){
-                            let listOfUser = document.createElement('div');
-                            listOfUser.style.fontSize= '40px';
-                            listOfUser.style.color = 'white';
-                            listOfUser.innerHTML =  xhr.responseText;
-                            rightContainerChild2.appendChild(listOfUser);
-                        }
-                    }
-                };
-                // Отправляем запрос
-                xhr.send();
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                showMessage('Успешно!!!', 'green');
+                if (xhr.responseText) {
+                    let listOfUser = document.createElement('div');
+                    listOfUser.style.fontSize = '40px';
+                    listOfUser.style.color = 'white';
+                    listOfUser.innerHTML = xhr.responseText;
+                    rightContainerChild2.appendChild(listOfUser);
+                }
             } else {
-                showMessage();
+                showMessage(xhr.responseText);
             }
         }
     };
     // Отправляем запрос
     xhr.send();
-
 }
 
 function showUserAdd() {
@@ -195,7 +180,7 @@ function displaySettings() {
     xButton.className = 'button-in-settings';
     xButton.textContent = 'X-Отчёт';
     xButton.onclick = function() {
-        xReportButtonClick();
+        xReportSend();
     };
     let collectionButton = document.createElement('button');
     collectionButton.type = 'button';
@@ -284,6 +269,9 @@ function displayCheck() {
     backButton.classList.add('button-in-header');
     backButton.textContent = '🔙';
     backButton.onclick = function() {
+        cashPaid = 0;
+        cashLessPaid = 0;
+        establishmentPaid=0;
         displayMainContainer();
     }
     headButtons.appendChild(backButton);
@@ -355,9 +343,9 @@ function displayCheck() {
         const quantityCell = document.createElement("td");
         const totalCell = document.createElement("td");
 
-        itemCell.textContent = item.items.nameOfItems;
+        itemCell.textContent = item.nameOfItems;
         quantityCell.textContent = item.quantity;
-        totalCell.textContent = ((item.items.price * item.quantity) / 100).toFixed(2) + " р";
+        totalCell.textContent = ((item.price * item.quantity) / 100).toFixed(2) + " р";
 
         quantityCell.style.width = "20%";
         quantityCell.style.textAlign = "center"
@@ -481,40 +469,18 @@ function sendCollectionMove(collectionType) {
         sumOfOperation: (parseFloat(document.getElementById('sum-input').innerText).toFixed(2)*100) // Массив с информацией о товарах в заказе
     });
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/getOpenShift', true);
-    // xhr.setRequestHeader(csrfHeader, csrfToken);
-
+    xhr.open('POST', '/collectionMove', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    // xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Обработка успешного ответа от сервера
-            if(xhr.responseText)
-                shift = JSON.parse(xhr.responseText);
-            shift=xhr.responseText;
-            // После получения ответа, проверяем условие
-            if (shift) {
-                // Отправляем заказ на сервер
-                let xhr = new XMLHttpRequest();
-                xhr.open('POST', '/collectionMove', true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                // xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200){
-                        console.log(xhr.responseText);
-                        showMessage(xhr.responseText,'green');
-                    }else{
-                        console.log(xhr.responseText);
-                        showMessage(xhr.responseText);
-                    }
-                };
-                xhr.send(JSON.stringify(collection));
-            } else {
-                showMessage();
-            }
+        if (xhr.readyState === 4 && xhr.status === 200){
+            getSumInCashRegister();
+            showMessage(xhr.responseText,'green');
+        }else{
+            showMessage(xhr.responseText);
         }
     };
-
-    // Отправляем запрос
-    xhr.send();
+    xhr.send(JSON.stringify(collection));
 }
 function displayMainCategories() {
     let leftContainer = document.getElementById('leftContainer');
@@ -786,89 +752,60 @@ function clearOrder() {
 }
 
 
-function addUserToShift(){
+function addUserToShift() {
+    // Отправляем запрос на сервер
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/getOpenShift', true);
-    // xhr.setRequestHeader(csrfHeader, csrfToken);
+    xhr.open('POST', '/addUserToShift', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Обработка успешного ответа от сервера
-            if(xhr.responseText)
-                shift = JSON.parse(xhr.responseText);
-            shift=xhr.responseText;
-            // После получения ответа, проверяем условие
-            if (shift) {
-                // Отправляем заказ на сервер
-                let xhr = new XMLHttpRequest();
-                xhr.open('POST', '/addUserToShift', true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                // xhr.setRequestHeader(csrfHeader, csrfToken); // Передача CSRF-токена в заголовке
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        showMessage('Пользователь добавлен!!!','green');
-                    }else{
-                        showMessage('Пользователь уже добавлен!!!');
-                    }
-                };
-                let login =document.getElementById('login');
-                xhr.send(login.value);
-                login.value = '';
+    // Обработчик события изменения состояния запроса
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                showMessage('Пользователь добавлен!!!', 'green');
             } else {
-                showMessage();
+                showMessage(xhr.responseText);
             }
         }
     };
 
-    // Отправляем запрос
-    xhr.send();
+    // Получаем значение login
+    let login = document.getElementById('login').value;
+
+    // Создаем объект с данными
+    let data = { "login": login };
+
+    // Преобразуем объект данных в JSON-строку и отправляем на сервер
+    xhr.send(JSON.stringify(data));
+
+    // Очищаем поле ввода login
+    document.getElementById('login').value = '';
 }
+
 //Send order to server
 function submitOrder() {
+    // Создаем объект заказа
+    let orders = ({
+        establishmentPaid:establishmentPaid,
+        cashPaid:(cashPaid-sumOfChange),
+        cashLessPaid:cashLessPaid,
+        sumOfChange:sumOfChange,
+        numberOfTable:numberOfTable,
+        orderItems, // Массив с информацией о товарах в заказе
+    });
+    // Отправляем заказ на сервер
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/getOpenShift', true);
-    // xhr.setRequestHeader(csrfHeader, csrfToken);
-
+    xhr.open('POST', '/submitOrder', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Обработка успешного ответа от сервера
-            if(xhr.responseText)
-                shift = JSON.parse(xhr.responseText);
-            shift=xhr.responseText;
-            // После получения ответа, проверяем условие
-            if (shift) {
-                // Создаем объект заказа
-                let orders = ({
-                    establishmentPaid:establishmentPaid,
-                    cashPaid:(cashPaid-sumOfChange),
-                    cashLessPaid:cashLessPaid,
-                    sumOfChange:sumOfChange,
-                    numberOfTable:numberOfTable,
-                    orderItems, // Массив с информацией о товарах в заказе
-                });
-                // Отправляем заказ на сервер
-                let xhr = new XMLHttpRequest();
-                xhr.open('POST', '/submitOrder', true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200){
-                        console.log(xhr.responseText);
-                        showMessage(xhr.responseText,'green');
-                        clearOrder();
-                    }else{
-                        console.log(xhr.responseText);
-                        showMessage(xhr.responseText);
-                    }
-                };
-                xhr.send(JSON.stringify(orders));
-            } else {
-                showMessage('error');
-            }
+        if (xhr.readyState === 4 && xhr.status === 200){
+            showMessage(xhr.responseText,'green');
+            clearOrder();
+        }else{
+            showMessage(xhr.responseText);
         }
     };
-
-    // Отправляем запрос
-    xhr.send();
+    xhr.send(JSON.stringify(orders));
 }
 
 
@@ -963,30 +900,6 @@ function closeShift(shiftButton) {
     xhr.send();
 }
 
-//Checking state of shift and calls xReportSend
-function xReportButtonClick() {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/getOpenShift', true);
-    // xhr.setRequestHeader(csrfHeader, csrfToken);
-
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Обработка успешного ответа от сервера
-            if (xhr.responseText)
-                shift = JSON.parse(xhr.responseText);
-            shift = xhr.responseText;
-            // После получения ответа, проверяем условие
-            if (shift) {
-                xReportSend();
-            } else {
-                showMessage();
-            }
-        }
-    };
-    // Отправляем запрос
-    xhr.send();
-}
-
 //Sending GET request to X-Report
 function xReportSend(){
     let xhr = new XMLHttpRequest();
@@ -1004,7 +917,7 @@ function xReportSend(){
     };
     // Отправляем запрос
     xhr.send();
-    }
+}
 
 //Sending GET request that returns all Categories
 function getCategoriesToPage() {

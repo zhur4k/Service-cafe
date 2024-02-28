@@ -73,11 +73,17 @@ public class CashRegisterRestController {
     }
 
     @GetMapping("/closeShift")
-    public ResponseEntity<?> closeShift(@AuthenticationPrincipal User user) {
+    public ResponseEntity<?> closeShift() {
         try {
-            cashRegisterRestService.sendZReport();
-            shiftService.closeShift();
-            return ResponseEntity.ok("Success Shift was closed");
+            Shift shift = shiftService.getOpenShift();
+            if(shift.getOrders().isEmpty()){
+                shiftService.deleteShift(shift);
+                return ResponseEntity.ok("Shift was deleted");
+            }else {
+                cashRegisterRestService.sendZReport();
+                shiftService.closeShift(shift);
+                return ResponseEntity.ok("Success Shift was closed");
+            }
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -85,6 +91,7 @@ public class CashRegisterRestController {
     @GetMapping("/sumInCashRegister")
     public ResponseEntity<String> sumInCashRegister() {
         try {
+                shiftService.shiftIsOpen();
                 return ResponseEntity.ok(cashRegisterService.getSumInCashRegister());
         } catch (Exception e) {
             // Ошибка, отправьте соответствующий HTTP-статус
@@ -93,26 +100,24 @@ public class CashRegisterRestController {
     }
     @PostMapping("/submitOrder")
     public ResponseEntity<?> SubmitOrder(@RequestBody Orders order) {
+        try {
+        shiftService.shiftIsOpen();
         order.setShift(shiftService.getOpenShift());
         Orders orderToSave= ordersService.OrderFromPageToOrders(order);
-        if(orderToSave.getEstablishmentPaid()>0){
+            if (orderToSave.getEstablishmentPaid() <= 0) {
+                cashRegisterRestService.sendFCheck(orderToSave);
+            }
             ordersService.save(orderToSave);
             yulkostTelegramBotService.SendOrderToUser(orderToSave);
             return ResponseEntity.status(HttpStatus.OK).body("Успешно");
-        }else {
-            try {
-                cashRegisterRestService.sendFCheck(orderToSave);
-                ordersService.save(orderToSave);
-                yulkostTelegramBotService.SendOrderToUser(orderToSave);
-                return ResponseEntity.status(HttpStatus.OK).body("Успешно");
-            }catch (RuntimeException e){
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-            }
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
     @PostMapping("/collectionMove")
     public ResponseEntity<?> CollectionMove(@RequestBody Collection collection) {
         try {
+            shiftService.shiftIsOpen();
             collection.setShift(shiftService.getOpenShift());
             cashRegisterRestService.sendIOCheck(collection);
             collectionService.save(collection);
@@ -124,12 +129,19 @@ public class CashRegisterRestController {
     }
 
     @PostMapping("/addUserToShift")
-    public void AddUserToShift(@RequestBody String login) {
-        shiftService.addUser(shiftService.getOpenShift(), login);
+    public ResponseEntity<?> AddUserToShift(@RequestBody String login) {
+        try {
+            shiftService.shiftIsOpen();
+            shiftService.addUser(shiftService.getOpenShift(), login);
+            return ResponseEntity.status(HttpStatus.OK).body("Успешно");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     @GetMapping("/getXReport")
     public ResponseEntity<String> getXReport() {
         try {
+            shiftService.shiftIsOpen();
             cashRegisterRestService.sendXReport();
             return ResponseEntity.ok("X-отчёт успешно отправлен");
 
@@ -140,6 +152,11 @@ public class CashRegisterRestController {
     }
     @GetMapping("/getListOfUsers")
     public ResponseEntity<String> getListOfUsers() {
-        return ResponseEntity.ok(shiftService.getListOfUsers());
+        try {
+            shiftService.shiftIsOpen();
+            return ResponseEntity.ok(shiftService.getListOfUsers());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 }

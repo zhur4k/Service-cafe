@@ -30,31 +30,33 @@ public class ShiftService {
         return openShift;
     }
     public Shift addUser(Shift shift,String login){
-        try {
             User user = userService.findByLogin(login);
         if (shift.getUsers().contains(user))
-                throw new Exception("Пользователь уже добавлен!!!");
+                throw new RuntimeException("Пользователь уже добавлен!!!");
         List<User> users = shift.getUsers();
         users.add(user);
         shift.setUsers(users);
         return shiftRepository.save(shift);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    }
+    public void shiftIsOpen(){
+        if(getOpenShift()==null){
+            throw new RuntimeException("Откройте смену");
         }
     }
     public Shift getOpenShift() {
         Shift openShift = shiftRepository.findByStateOfShift(true);
         if(openShift!=null&&openShift.getStartDate().until(LocalDateTime.now(), ChronoUnit.HOURS)>=24){
             openShift.setStateOfShift(false);
-            openShift.setEndDate(LocalDateTime.now());
+            openShift.setEndDate(openShift.getStartDate().plusHours(24));
             shiftRepository.save(openShift);
             return null;
         }
         return openShift;
     }
-
-    public void closeShift(){
-        Shift shift = getOpenShift();
+    public void deleteShift(Shift shift){
+        shiftRepository.delete(shift);
+    }
+    public void closeShift(Shift shift){
         shift.setStateOfShift(false);
         shift.setEndDate(LocalDateTime.now());
         shiftRepository.save(shift);

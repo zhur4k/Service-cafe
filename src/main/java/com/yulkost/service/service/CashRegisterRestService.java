@@ -60,7 +60,7 @@ public class CashRegisterRestService {
                         append("}}");
             }
         json.append("]}");
-//        sendPost(json.toString(), "/cgi/chk");
+        sendPost(json.toString(), "/cgi/chk");
 
     }
     public void sendIOCheck(Collection collection){
@@ -73,7 +73,7 @@ public class CashRegisterRestService {
         json.append(((float) collection.getSumOfOperation()) / 100).append("}}");
         json.append("]}");
         System.out.println(json);
-        sendPost(json.toString(), "/cgi/chk");
+//        sendPost(json.toString(), "/cgi/chk");
     }
     private void sendPost(String json, String url) {
         HttpHeaders headers = new HttpHeaders();
@@ -118,12 +118,12 @@ public class CashRegisterRestService {
     public  void sendXReport() {
         System.out.println("Send X-report");
 //        return true;
-        sendGet("/cgi/proc/printreport?10");
+//        sendGet("/cgi/proc/printreport?10");
     }
     public void sendZReport() {
         System.out.println("Send Z-report");
 //        return true;
-        sendGet("/cgi/proc/printreport?0");
+//        sendGet("/cgi/proc/printreport?0");
     }
     private String extractErrorCodeFromResponse(String responseBody) {
         String errorCodePattern = "\"e\":\"(\\w+)\"";
