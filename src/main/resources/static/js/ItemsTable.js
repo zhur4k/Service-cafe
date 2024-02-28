@@ -1,10 +1,45 @@
 let items = [];
+let itemsOnPage = [];
 let category = [];
 let units = [];
 let headers = ["Код", "Имя", "Цена", "Кол-во в ед.", "Наценка (%)", "Видимость", "Тип", "Категория", "Ед. изм.", "Состав","Удалить"];
 
 getItems();
 
+function sortItems(){
+    let option = document.getElementById('sortBy').value;
+    if(option==='categories'){
+        items.sort(function(a, b) {
+            let nameA = a.categories.categoriesName.toLowerCase();
+            let nameB = b.categories.categoriesName.toLowerCase();
+
+            if (nameA < nameB) return -1;
+            if (nameA > nameB) return 1;
+            return 0;
+        });
+    }else if(option==='alf'){
+        console.log("alf");
+        items.sort(function(a, b) {
+            let nameA = a.nameOfItems.toLowerCase();
+            let nameB = b.nameOfItems.toLowerCase();
+
+            if (nameA < nameB) return -1;
+            if (nameA > nameB) return 1;
+            return 0;
+        });
+        console.log(items);
+    }else {
+        items.sort(function(a, b) {
+            let nameA = a.id;
+            let nameB = b.id;
+
+            if (nameA < nameB) return -1;
+            if (nameA > nameB) return 1;
+            return 0;
+        });
+    }
+    displayTable();
+}
 function displayTable() {
     const tableBody = document.getElementById('table');
     tableBody.innerText = '';

@@ -13,6 +13,12 @@
                 <a href="/admin/items/add" class="btnchange">Добавить</a>
                 <button class="btn-oko" onclick="saveChanges()">Изменить</button>
                 <a href="/admin" class="btnchange">Выйти</a>
+                <button class="btn-oko" onclick="sortItems()">Сортировать</button>
+                <select id="sortBy">
+                    <option value="id">Айди</option>
+                    <option value="categories">Категория</option>
+                    <option value="alf">Алфавит</option>
+                </select>
             </div>
         </div>
         <p id="messages"></p>
