@@ -151,22 +151,22 @@ create table items_in_item
 
 create table product_stock_movement
 (
-    balance_weight    int          not null,
-    price_movement    int          not null,
-    price_on_stock    int          not null,
-    weight            int          not null,
-    date_of_operation datetime(6)  null,
     id                bigint auto_increment
         primary key,
-    order_item_id     bigint       null,
-    product_id        bigint       null,
+    balance_weight    int          not null,
+    date_of_operation datetime(6)  null,
     description       varchar(255) null,
+    price_movement    int          not null,
+    price_on_stock    int          not null,
+    product           bigint       null,
+    product_name      varchar(255) null,
     type_of_operation varchar(255) null,
-    constraint FKdphfk6b6tx5wto99xvj4i99jm
-        foreign key (product_id) references products (id),
+    weight            int          not null,
+    order_item_id     bigint       null,
     constraint FKk8hoid3ds6y5d1qrauxmic1ig
         foreign key (order_item_id) references order_items (id)
 );
+
 
 create table product_weight
 (

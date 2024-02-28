@@ -25,8 +25,8 @@ public class ProductStockMovementService {
     public void saveMovementAdd(ProductStockMovement movement) {
         movement.setDateOfOperation(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         movement.setTypeOfOperation("add");
-
-        ProductStock productStock = productStockRepository.findByProductId(movement.getProduct().getId());
+        ProductStock productStock = productStockRepository.findByProductId(movement.getProduct());
+        movement.setProductName(productStock.getProduct().getName());
         movement.setBalanceWeight(productStock.getWeight());
         movement.setPriceOnStock(productStock.getPrice());
         productStockMovementRepository.save(movement);
@@ -45,7 +45,8 @@ public class ProductStockMovementService {
     public void saveMovementRemove(ProductStockMovement movement) {
         movement.setDateOfOperation(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         movement.setTypeOfOperation("remove");
-        ProductStock productStock = productStockRepository.findByProductId(movement.getProduct().getId());
+        ProductStock productStock = productStockRepository.findByProductId(movement.getProduct());
+        movement.setProductName(productStock.getProduct().getName());
         movement.setPriceMovement(productStock.getPrice());
         movement.setPriceOnStock(productStock.getPrice());
         movement.setBalanceWeight(productStock.getWeight());
@@ -58,7 +59,8 @@ public class ProductStockMovementService {
         movement.setDateOfOperation(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         movement.setTypeOfOperation("order");
         movement.setOrderItems(item);
-        movement.setProduct(productWeight.getProduct());
+        movement.setProduct(productWeight.getProduct().getId());
+        movement.setProductName(productWeight.getProduct().getName());
         movement.setPriceOnStock(productStock.getPrice());
         movement.setPriceMovement(productStock.getPrice());
         movement.setWeight(productWeight.getWeight()*quantity);

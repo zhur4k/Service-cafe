@@ -28,9 +28,8 @@ public class ProductStockMovement {
     @ManyToOne
     @JoinColumn(name = "order_item_id", referencedColumnName = "id")
     private OrderItems orderItems;
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    Products product;
+    private Long product;
+    private String productName;
     public String getPriceMovementToPage() {
         double pr = priceMovement;
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();

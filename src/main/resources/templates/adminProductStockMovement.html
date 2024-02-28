@@ -32,7 +32,7 @@
             </tr>
 
             <tr th:each="item, itemStat : ${form}">
-                <td th:text="${item.getProduct().getName()}"></td>
+                <td th:text="${item.getProductName()}"></td>
                 <td th:text="${item.getWeightToPage()}"></td>
                 <td th:text="${item.getPriceMovementToPage()}"></td>
                 <td th:text="${item.getPriceOnStockToPage()}"></td>
