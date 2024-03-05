@@ -15,10 +15,10 @@ public class ItemsInItem {
     private Long id;
     private int quantity;
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Items item;
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Items parentItem;
 
     public String getSumToPage() {

@@ -17,12 +17,12 @@ public class ProductWeight {
     private int weight;
     @ToString.Exclude
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     Products product;
     @ToString.Exclude
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     Items item;
     public String getSumToPage() {
         return new DecimalFormat("0.00").format(((float)this.weight)/1000 *((float)product.getProductStock().getPrice())/100);

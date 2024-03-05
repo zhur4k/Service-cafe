@@ -16,6 +16,6 @@ public class Collection {
     private Boolean typeOfOperation;
     private Integer sumOfOperation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     Shift shift;
 }

@@ -14,6 +14,6 @@ public class Products {
     private String name;
     @ToString.Exclude
     @JsonIgnore
-    @OneToOne
+    @OneToOne(fetch=FetchType.EAGER)
     ProductStock productStock;
 }

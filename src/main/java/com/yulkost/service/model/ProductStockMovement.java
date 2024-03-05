@@ -25,8 +25,8 @@ public class ProductStockMovement {
      */
     private String typeOfOperation;
     private LocalDateTime dateOfOperation;
-    @ManyToOne
-    @JoinColumn(name = "order_item_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "order_items_id", referencedColumnName = "id")
     private OrderItems orderItems;
     private Long product;
     private String productName;

@@ -15,7 +15,7 @@ public class ProductStock {
     private int weight;
     private int price;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     Products product;
     public ProductStock() {
         // Конструктор по умолчанию

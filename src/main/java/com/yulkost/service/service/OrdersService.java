@@ -16,11 +16,11 @@ import java.util.List;
 
 @Service
 public class OrdersService {
-    public OrdersRepository ordersRepository;
-    public ItemsService itemsService;
-    public OrderItemsRepository orderItemsRepository;
-    private CashRegisterRepository cashRegisterRepository;
-    private ProductStockService productStockService;
+    public final OrdersRepository ordersRepository;
+    public final ItemsService itemsService;
+    public final OrderItemsRepository orderItemsRepository;
+    private final CashRegisterRepository cashRegisterRepository;
+    private final ProductStockService productStockService;
 
     public OrdersService(OrdersRepository ordersRepository, ItemsService itemsService, OrderItemsRepository orderItemsRepository, CashRegisterRepository cashRegisterRepository, ProductStockService productStockService) {
         this.ordersRepository = ordersRepository;
@@ -54,7 +54,6 @@ public class OrdersService {
             orderItem.setItem(item.getId());
             orderItem.setTypeOfItem(item.getTypeOfItem());
             orderItem.setCategory(item.getCategories().getCategoriesName());
-            orderItem.setUniqueCode(item.getUniqueCode());
             orderItem.setUnit(item.getUnit().getName());
             orderItem.setUnitPrice(item.getUnitPrice());
             orderItems.add(orderItem);
@@ -62,7 +61,7 @@ public class OrdersService {
         newOrder.setOrderItems(orderItems);
         return newOrder;
     }
-        public void save(Orders order){
+    public Orders save(Orders order){
             orderItemsRepository.saveAll(order.getOrderItems());
             Orders orders = ordersRepository.save(order);
         if (order.getEstablishmentPaid()<=0){
@@ -77,5 +76,6 @@ public class OrdersService {
             cashRegisterRepository.save(cashRegister);
         }
             productStockService.writeOffProductFromStockAndSaveToStockMovement(order);
+        return orders;
     }
 }

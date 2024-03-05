@@ -53,7 +53,6 @@ function displayTable() {
 function createTableRow(item) {
     let row = document.createElement('tr');
 
-    let codeInput = createInput('text', item,'code', true);
     let nameInput = createInput('text', item,'nameOfItems', true);
     let priceInput = createInput('number', item,'priceToPage', true, 0.01);
     let unitPriceInput = createInput('number', item,'unitPriceToPage', true, 0.001);
@@ -96,7 +95,6 @@ function createTableRow(item) {
     };
     deleteButtonTd.appendChild(deleteButton);
     // Добавляем ячейки в строку
-    row.appendChild(codeInput);
     row.appendChild(nameInput);
     row.appendChild(priceInput);
     row.appendChild(unitPriceInput);

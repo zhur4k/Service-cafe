@@ -18,7 +18,7 @@ public class Shift {
     private boolean stateOfShift;
     private LocalDateTime endDate;
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinTable(
             name = "shift_users",
             joinColumns = @JoinColumn(name = "shift_id"),
@@ -27,12 +27,12 @@ public class Shift {
     private List<User> users = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "shift_id", referencedColumnName = "id")
     private List<Orders> orders = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "shift_id", referencedColumnName = "id")
     private List<Collection> collections = new ArrayList<>();
 

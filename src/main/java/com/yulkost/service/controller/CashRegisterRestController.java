@@ -2,6 +2,7 @@ package com.yulkost.service.controller;
 
 import com.yulkost.service.dto.CategoriesDtoToPage;
 import com.yulkost.service.model.*;
+import com.yulkost.service.repository.OrderItemsRepository;
 import com.yulkost.service.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +14,16 @@ import java.util.List;
 @RestController
 public class CashRegisterRestController {
 
-    private CashRegisterRestService cashRegisterRestService;
-    private OrdersService ordersService;
-    private YulkostTelegramBotService yulkostTelegramBotService;
-    private CategoriesService categoriesService;
-    private ItemsService itemsService;
-    private CollectionService collectionService;
-    private ShiftService shiftService;
-    private CashRegisterService cashRegisterService;
-
-    public CashRegisterRestController(CashRegisterRestService cashRegisterRestService, OrdersService ordersService, YulkostTelegramBotService yulkostTelegramBotService, CategoriesService categoriesService, ItemsService itemsService, CollectionService collectionService, ShiftService shiftService, CashRegisterService cashRegisterService) {
+    private final CashRegisterRestService cashRegisterRestService;
+    private final OrdersService ordersService;
+    private final YulkostTelegramBotService yulkostTelegramBotService;
+    private final CategoriesService categoriesService;
+    private final ItemsService itemsService;
+    private final CollectionService collectionService;
+    private final ShiftService shiftService;
+    private final CashRegisterService cashRegisterService;
+    private final OrderItemsRepository orderItemsRepository;
+    public CashRegisterRestController(CashRegisterRestService cashRegisterRestService, OrdersService ordersService, YulkostTelegramBotService yulkostTelegramBotService, CategoriesService categoriesService, ItemsService itemsService, CollectionService collectionService, ShiftService shiftService, CashRegisterService cashRegisterService, OrderItemsRepository orderItemsRepository) {
         this.cashRegisterRestService = cashRegisterRestService;
         this.ordersService = ordersService;
         this.yulkostTelegramBotService = yulkostTelegramBotService;
@@ -31,6 +32,7 @@ public class CashRegisterRestController {
         this.collectionService = collectionService;
         this.shiftService = shiftService;
         this.cashRegisterService = cashRegisterService;
+        this.orderItemsRepository = orderItemsRepository;
     }
 
     @GetMapping("/getCategory")
@@ -100,15 +102,15 @@ public class CashRegisterRestController {
     }
     @PostMapping("/submitOrder")
     public ResponseEntity<?> SubmitOrder(@RequestBody Orders order) {
+            shiftService.shiftIsOpen();
+            order.setShift(shiftService.getOpenShift());
+            Orders order1= ordersService.OrderFromPageToOrders(order);
         try {
-        shiftService.shiftIsOpen();
-        order.setShift(shiftService.getOpenShift());
-        Orders orderToSave= ordersService.OrderFromPageToOrders(order);
-            if (orderToSave.getEstablishmentPaid() <= 0) {
-                cashRegisterRestService.sendFCheck(orderToSave);
+            if (order1.getEstablishmentPaid() <= 0) {
+                cashRegisterRestService.sendFCheck(order1,orderItemsRepository.findOrderItemsWithMaxId().getId());
             }
-            ordersService.save(orderToSave);
-            yulkostTelegramBotService.SendOrderToUser(orderToSave);
+            ordersService.save(order1);
+            yulkostTelegramBotService.SendOrderToUser(order1);
             return ResponseEntity.status(HttpStatus.OK).body("Успешно");
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

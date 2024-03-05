@@ -1,5 +1,6 @@
 package com.yulkost.service.service;
 
+import com.yulkost.service.model.Shift;
 import com.yulkost.service.model.User;
 import com.yulkost.service.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service

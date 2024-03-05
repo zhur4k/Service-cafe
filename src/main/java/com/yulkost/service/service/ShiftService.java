@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,12 +30,23 @@ public class ShiftService {
         }
         return openShift;
     }
-    public Shift addUser(Shift shift,String login){
-            User user = userService.findByLogin(login);
-        if (shift.getUsers().contains(user))
-                throw new RuntimeException("Пользователь уже добавлен!!!");
-        List<User> users = shift.getUsers();
-        users.add(user);
+    public Shift addUser(Shift shift, String login) {
+        User user = userService.findByLogin(login);
+        System.out.println(login);
+        if (user == null) {
+            throw new RuntimeException("Пользователь с таким логином не найден!");
+        }
+
+
+        if (shift.getUsers() != null && shift.getUsers().contains(user)) {
+            throw new RuntimeException("Пользователь уже добавлен!!!");
+        }
+
+        List<User> users = new ArrayList<>();
+        if (shift.getUsers() != null) {
+            users.addAll(shift.getUsers());
+        }
+        users.add(user); // Добавьте объект User в список
         shift.setUsers(users);
         return shiftRepository.save(shift);
     }

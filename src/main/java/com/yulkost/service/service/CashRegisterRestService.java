@@ -18,12 +18,13 @@ import java.util.regex.Pattern;
 public class CashRegisterRestService {
 
     private final String CASH_REGISTER_ID ="http://169.254.35.154" ;
-    public void sendFCheck(Orders order) {
+    public void sendFCheck(Orders order,Long orderItemId) {
         StringBuilder json = new StringBuilder("{\"F\":[" +
                 "{\"C\":{\"cm\":\"Кассир:" + (order.getShift().getUsers().get(0)).getName() + "\"}}");
         for (OrderItems orderItem : order.getOrderItems()) {
+            orderItemId++;
             json.append(",{\"S\":{\"code\":").
-                    append(orderItem.getUniqueCode()).
+                    append(orderItemId).
 
                     append(",").append("\"name\":\"").
                     append(orderItem.getNameOfItems()).
@@ -60,7 +61,8 @@ public class CashRegisterRestService {
                         append("}}");
             }
         json.append("]}");
-        sendPost(json.toString(), "/cgi/chk");
+        System.out.println(json);
+//        sendPost(json.toString(), "/cgi/chk");
 
     }
     public void sendIOCheck(Collection collection){
@@ -72,8 +74,7 @@ public class CashRegisterRestService {
         }
         json.append(((float) collection.getSumOfOperation()) / 100).append("}}");
         json.append("]}");
-        System.out.println(json);
-//        sendPost(json.toString(), "/cgi/chk");
+        sendPost(json.toString(), "/cgi/chk");
     }
     private void sendPost(String json, String url) {
         HttpHeaders headers = new HttpHeaders();
@@ -93,8 +94,7 @@ public class CashRegisterRestService {
                 System.out.println("Код ошибки: " + errorCode);
                 System.out.println("Описание ошибки: " + errorDescription);
                 throw new RuntimeException(errorDescription);
-            }
-
+        }
     }
 
     private void sendGet(String url) {
@@ -117,13 +117,11 @@ public class CashRegisterRestService {
     }
     public  void sendXReport() {
         System.out.println("Send X-report");
-//        return true;
-//        sendGet("/cgi/proc/printreport?10");
+        sendGet("/cgi/proc/printreport?10");
     }
     public void sendZReport() {
         System.out.println("Send Z-report");
-//        return true;
-//        sendGet("/cgi/proc/printreport?0");
+        sendGet("/cgi/proc/printreport?0");
     }
     private String extractErrorCodeFromResponse(String responseBody) {
         String errorCodePattern = "\"e\":\"(\\w+)\"";

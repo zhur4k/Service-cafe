@@ -16,7 +16,7 @@ public class CashRegister {
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Orders order;
 
-    @OneToOne
-    @JoinColumn(name = "colection_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "collection_id", referencedColumnName = "id")
     private Collection collection;
 }

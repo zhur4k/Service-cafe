@@ -770,13 +770,10 @@ function addUserToShift() {
     };
 
     // Получаем значение login
-    let login = document.getElementById('login').value;
+    let login = document.getElementById('login');
 
-    // Создаем объект с данными
-    let data = { "login": login };
-
-    // Преобразуем объект данных в JSON-строку и отправляем на сервер
-    xhr.send(JSON.stringify(data));
+    // Отправляем запрос с данными в формате JSON
+    xhr.send(login.value);
 
     // Очищаем поле ввода login
     document.getElementById('login').value = '';
@@ -822,7 +819,6 @@ function checkShiftButtonState() {
                 try {
                     let shift = xhr.responseText ? JSON.parse(xhr.responseText) : null;
                     let shiftButton = document.getElementById("shiftButton");
-                    console.log(shift);
                     if (shift) {
                         shiftButton.textContent = 'Закрыть смену';
                         shiftButton.onclick = function() {

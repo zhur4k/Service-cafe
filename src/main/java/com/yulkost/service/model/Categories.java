@@ -18,11 +18,11 @@ public class Categories {
     @ToString.Exclude
     @OneToMany(mappedBy = "categories")
     private List<Items> items = new ArrayList<>();
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_category_id", referencedColumnName = "id")
     @JsonIgnore
     private Categories parentCategory;
 
-    @OneToMany(mappedBy = "parentCategory")
+    @OneToMany(mappedBy = "parentCategory",fetch = FetchType.EAGER)
     private List<Categories> childCategories = new ArrayList<>();
 }

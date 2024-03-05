@@ -21,10 +21,13 @@ public class Orders {
     private int sumOfChange;
     private int numberOfTable;
     private LocalDateTime date;
-    @OneToMany(cascade = CascadeType.ALL)
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private List<OrderItems> orderItems = new ArrayList<>();
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "shift_id", referencedColumnName = "id")
     private Shift shift;
     public String getCashPaidToPage(){
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();

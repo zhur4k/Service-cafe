@@ -1,6 +1,5 @@
 package com.yulkost.service.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -18,9 +17,6 @@ public class Items {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 13)
-    private String uniqueCode;
-    private String code;
     private String nameOfItems;
     private Boolean view;
     private Boolean typeOfItem;
@@ -29,34 +25,23 @@ public class Items {
     private int unitPrice;
     private String img;
     private LocalDateTime dateOfChange;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "unit_id", referencedColumnName = "id")
     private Units unit;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categories_id", referencedColumnName = "id")
     @JsonIgnoreProperties("items")
     private Categories categories;
-    @OneToMany
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     private List<ProductWeight> productsWeight = new ArrayList<>();
-    @OneToMany
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_item_id", referencedColumnName = "id")
     private List<ItemsInItem> childItems = new ArrayList<>();
-    @PrePersist
-    @PreUpdate
-    private void generateUniqueCode() {
-        // Генерация уникального значения для code
-        this.uniqueCode = generateUniqueCodeValue();
-    }
-    private String generateUniqueCodeValue() {
-        // Ваша логика генерации уникального значения
-        // В этом примере, мы используем текущее время в миллисекундах
-        Long currentTime = System.currentTimeMillis();
-
-        // Преобразуем в строку и обрезаем до 13 символов
-        String codeValue = currentTime.toString();
-        return codeValue.substring(0, Math.min(codeValue.length(), 13));
-    }
     public int getMarkup() {
         try {
 

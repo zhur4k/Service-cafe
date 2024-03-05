@@ -6,6 +6,7 @@ import lombok.Data;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -14,7 +15,6 @@ public class OrderItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int quantity;
-    private String uniqueCode;
 
     private String nameOfItems;
     private Boolean typeOfItem;
@@ -24,7 +24,8 @@ public class OrderItems {
     private String unit;
     private String category;
     private int discount;
-
+    @OneToMany(mappedBy = "orderItems", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ProductStockMovement> productStockMovement;
     private Long item;
 
     public String getSumToPage(){
