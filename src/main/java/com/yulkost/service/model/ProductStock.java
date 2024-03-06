@@ -16,6 +16,7 @@ public class ProductStock {
     private int price;
 
     @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_id")
     Products product;
     public ProductStock() {
         // Конструктор по умолчанию

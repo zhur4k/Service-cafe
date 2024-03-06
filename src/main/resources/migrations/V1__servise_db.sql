@@ -8,6 +8,13 @@ create table categories
         foreign key (parent_category_id) references categories (id)
 );
 
+create table products
+(
+    id               bigint auto_increment
+        primary key,
+    name             varchar(255) null
+);
+
 create table product_stock
 (
     id         bigint auto_increment
@@ -15,25 +22,10 @@ create table product_stock
     price      int    not null,
     weight     int    not null,
     product_id bigint null,
-    constraint UK_hj4kvinsv4h5gi8xi09xbdl46
-        unique (product_id)
+    constraint FK_stock_products_product
+        foreign key (product_id) references products(id)
 );
 
-create table products
-(
-    id               bigint auto_increment
-        primary key,
-    name             varchar(255) null,
-    product_stock_id bigint       null,
-    constraint UK_65kldw1nc93dejxd0fw5fad2b
-        unique (product_stock_id),
-    constraint FK_product_stock_products
-        foreign key (product_stock_id) references product_stock (id)
-);
-
-alter table product_stock
-    add constraint FK_product_product_stock
-        foreign key (product_id) references products (id);
 
 create table shift
 (

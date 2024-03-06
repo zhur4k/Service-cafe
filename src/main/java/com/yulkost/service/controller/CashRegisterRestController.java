@@ -107,7 +107,12 @@ public class CashRegisterRestController {
             Orders order1= ordersService.OrderFromPageToOrders(order);
         try {
             if (order1.getEstablishmentPaid() <= 0) {
-                cashRegisterRestService.sendFCheck(order1,orderItemsRepository.findOrderItemsWithMaxId().getId());
+                OrderItems orderItem = orderItemsRepository.findOrderItemsWithMaxId();
+                Long id = 0L;
+                if(orderItem!=null){
+                    id = orderItem.getId();
+                }
+                cashRegisterRestService.sendFCheck(order1,id);
             }
             ordersService.save(order1);
             yulkostTelegramBotService.SendOrderToUser(order1);
