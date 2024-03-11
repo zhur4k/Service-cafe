@@ -1,8 +1,10 @@
 package com.yulkost.service.service;
 
 import com.yulkost.service.dto.CategoriesDtoToItemsEdit;
+import com.yulkost.service.dto.CategoriesDtoToMenu;
 import com.yulkost.service.dto.CategoriesDtoToPage;
 import com.yulkost.service.dto.mapper.CategoriesDtoToItemsEditMapper;
+import com.yulkost.service.dto.mapper.CategoriesDtoToMenuMapper;
 import com.yulkost.service.dto.mapper.CategoriesDtoToPageMapper;
 import com.yulkost.service.model.Categories;
 import com.yulkost.service.repository.CategoriesRepository;
@@ -16,11 +18,13 @@ public class CategoriesService {
     private final CategoriesRepository categoriesRepository;
     private final CategoriesDtoToPageMapper categoriesDtoToPageMapper;
     private final CategoriesDtoToItemsEditMapper categoriesDtoToItemsEditMapper;
+    private final CategoriesDtoToMenuMapper categoriesDtoToMenuMapper;
 
-    public CategoriesService(CategoriesRepository categoriesRepository, CategoriesDtoToPageMapper categoriesDtoToPageMapper, CategoriesDtoToItemsEditMapper categoriesDtoToItemsEditMapper) {
+    public CategoriesService(CategoriesRepository categoriesRepository, CategoriesDtoToPageMapper categoriesDtoToPageMapper, CategoriesDtoToItemsEditMapper categoriesDtoToItemsEditMapper, CategoriesDtoToMenuMapper categoriesDtoToMenuMapper) {
         this.categoriesRepository = categoriesRepository;
         this.categoriesDtoToPageMapper = categoriesDtoToPageMapper;
         this.categoriesDtoToItemsEditMapper = categoriesDtoToItemsEditMapper;
+        this.categoriesDtoToMenuMapper = categoriesDtoToMenuMapper;
     }
 
     public void save(Categories categories){
@@ -31,6 +35,13 @@ public class CategoriesService {
         return categoriesRepository.findAll()
                 .stream()
                 .map(categoriesDtoToPageMapper)
+        .collect(Collectors.toList());
+    }
+    public List<CategoriesDtoToMenu> findAllForMenu(){
+
+        return categoriesRepository.findAllByParentCategory(null)
+                .stream()
+                .map(categoriesDtoToMenuMapper)
         .collect(Collectors.toList());
     }
     public List<CategoriesDtoToItemsEdit> findAllToItemsEdit(){

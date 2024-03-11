@@ -29,17 +29,12 @@ public class YulkostTelegramBot extends TelegramLongPollingBot{
             long chatId = update.getMessage().getChatId();
             String memberName = update.getMessage().getFrom().getFirstName();
 
-            switch (messageText){
-                case "/start":
-                    startBot(chatId, memberName);
-                    break;
-                case "/id":
-                    ChatIdBot(chatId, memberName);
-                    break;
-                case "/server":
-                    sendMessage(chatId, getServerIP());
-                    break;
-                default: log.info("Unexpected message");
+            switch (messageText) {
+                case "/start" -> startBot(chatId, memberName);
+                case "/id" -> ChatIdBot(chatId, memberName);
+                case "/server" -> sendMessage(chatId, getServerIP());
+                case "/menu" -> sendMessage(chatId, getServerIP() + "/menu");
+                default -> log.info("Unexpected message");
             }
         }
     }

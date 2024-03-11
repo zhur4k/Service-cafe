@@ -1,6 +1,5 @@
 package com.yulkost.service.controller.admin;
 
-import com.yulkost.service.dto.ItemsEditDto;
 import com.yulkost.service.dto.ItemsInItemEditDto;
 import com.yulkost.service.dto.ProductWeightEditDto;
 import com.yulkost.service.model.*;
@@ -29,17 +28,11 @@ public class ItemsController {
     private final ProductsService productsService;
     private final ProductWeightService productWeightService;
     private ProductWeightRepository productWeightRepository;
-    private ItemsInItemRepository itemsInItemRepository;
     private ImageService imageService;
     private ItemsInItemService itemsInItemService;
     @Autowired
     public void setItemsInItemService(ItemsInItemService itemsInItemService) {
         this.itemsInItemService = itemsInItemService;
-    }
-
-    @Autowired
-    public void setItemsInItemRepository(ItemsInItemRepository itemsInItemRepository) {
-        this.itemsInItemRepository = itemsInItemRepository;
     }
 
     @Autowired
