@@ -27,7 +27,7 @@ li {
     display: inline-block; /* Ширина по содержимому текста */
 }
 .main-category{
-    width: 40%;
+    width: 550px;
 }
 .category {
     width: 90%;
