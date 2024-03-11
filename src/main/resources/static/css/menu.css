@@ -1,0 +1,43 @@
+body {
+    font-family: 'Rubik', sans-serif;
+    background-color: #f2f2f2;
+    padding: 5px;
+    display: flex;
+}
+
+ul {
+    list-style: none;
+    margin: 5px;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 0;
+}
+
+.category-name {
+    padding: 5px;
+    font-weight: bold;
+    background-color: black; /* Задний фон черный */
+    border-radius: 4px; /* Небольшие скругления углов */
+    color: white; /* Белый цвет текста */
+    font-size: 18px; /* Размер шрифта */
+    display: inline-block; /* Ширина по содержимому текста */
+}
+.main-category{
+    width: 40%;
+}
+.category {
+    width: 90%;
+    padding-left: 10%;
+}
+.item-name {
+    /* Add your styling for the item name here */
+}
+.item-price {
+    margin-left: 5px;
+    margin-right: 5px;
+    display: inline-block;
+}
