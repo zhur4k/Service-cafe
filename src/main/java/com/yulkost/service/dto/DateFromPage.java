@@ -1,9 +1,9 @@
 package com.yulkost.service.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record DateFromPage(
-                           LocalDate startDate,
-                           LocalDate endDate
+        LocalDateTime startDate,
+        LocalDateTime endDate
 ) {
 }

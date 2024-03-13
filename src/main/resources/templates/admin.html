@@ -3,6 +3,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="/css/admin.css">
+  <link rel="stylesheet" href="/css/adminEdit.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
@@ -17,6 +18,13 @@
       <li><a href="/admin/units">Ед. измерения</a></li>
       <li><a href="/admin/products">Продукты</a></li>
       <li><a href="/admin/stock">Склад</a></li>
+
+      <label for="startDate">От :</label>
+      <input type="datetime-local" id="startDate" name="startDate" required>
+      <label for="endDate">До :</label>
+      <input type="datetime-local" id="endDate" name="endDate" required>
+      <button type="button" onclick="showReport()">Показать отчёт</button>
+
       <form th:action="@{/logout}" method="post">
         <input type="submit" value="Выйти из аккаунта"/>
       </form>
@@ -24,7 +32,9 @@
   </div>
 </header>
 <div class="container-fo">
-  <!-- Your admin homepage content goes here -->
+  <table id="table">
+  </table>
 </div>
+<script src="/js/Admin.js"></script>
 </body>
 </html>
