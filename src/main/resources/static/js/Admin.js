@@ -7,7 +7,7 @@ function showReport() {
 function sortItems(){
     let option = document.getElementById('sortBy').value;
     if(option==='categories'){
-        items.sort(function(a, b) {
+        orderItems.sort(function(a, b) {
             let nameA = a.category.toLowerCase();
             let nameB = b.category.toLowerCase();
 
@@ -16,7 +16,7 @@ function sortItems(){
             return 0;
         });
     }else if(option==='alf'){
-        items.sort(function(a, b) {
+        orderItems.sort(function(a, b) {
             let nameA = a.nameOfItems.toLowerCase();
             let nameB = b.nameOfItems.toLowerCase();
 
@@ -25,25 +25,25 @@ function sortItems(){
             return 0;
         });
     }else if(option==='quantity'){
-        items.sort(function(a, b) {
+        orderItems.sort(function(a, b) {
             let nameA = a.quantity;
             let nameB = b.quantity;
 
-            if (nameA < nameB) return -1;
-            if (nameA > nameB) return 1;
+            if (nameA < nameB) return 1;
+            if (nameA > nameB) return -1;
             return 0;
         });
-    }else if(option==='sum'){
-        items.sort(function(a, b) {
-            let nameA = (a.price / 100)*a.quantity;
-            let nameB = (b.price / 100)*b.quantity;
+    }else if(option==='summ'){
+        orderItems.sort(function(a, b) {
+            let nameA = a.price*a.quantity;
+            let nameB = b.price*b.quantity;
 
-            if (nameA < nameB) return -1;
-            if (nameA > nameB) return 1;
+            if (nameA < nameB) return 1;
+            if (nameA > nameB) return -1;
             return 0;
         });
     }else {
-        items.sort(function(a, b) {
+        orderItems.sort(function(a, b) {
             let nameA = a.id;
             let nameB = b.id;
 
