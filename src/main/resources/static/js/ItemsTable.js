@@ -18,7 +18,6 @@ function sortItems(){
             return 0;
         });
     }else if(option==='alf'){
-        console.log("alf");
         items.sort(function(a, b) {
             let nameA = a.nameOfItems.toLowerCase();
             let nameB = b.nameOfItems.toLowerCase();
@@ -27,7 +26,6 @@ function sortItems(){
             if (nameA > nameB) return 1;
             return 0;
         });
-        console.log(items);
     }else {
         items.sort(function(a, b) {
             let nameA = a.id;

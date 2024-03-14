@@ -32,6 +32,16 @@
   </div>
 </header>
 <div class="container-fo">
+  <div>
+  <h3>Сортировать по:</h3>
+  <select id="sortBy" onchange="sortItems()">
+    <option value="id">Айди</option>
+    <option value="categories">Категория</option>
+    <option value="alf">Алфавит</option>
+    <option value="quantity">Кол-во</option>
+    <option value="summ">Сумма</option>
+  </select>
+  </div>
   <table id="table">
   </table>
 </div>
