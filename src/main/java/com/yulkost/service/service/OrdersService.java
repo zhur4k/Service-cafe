@@ -1,5 +1,7 @@
 package com.yulkost.service.service;
 
+import com.yulkost.service.dto.OrdersReportDto;
+import com.yulkost.service.dto.mapper.OrdersReportDtoMapper;
 import com.yulkost.service.model.CashRegister;
 import com.yulkost.service.model.Items;
 import com.yulkost.service.model.OrderItems;
@@ -13,21 +15,24 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrdersService {
-    public final OrdersRepository ordersRepository;
-    public final ItemsService itemsService;
-    public final OrderItemsRepository orderItemsRepository;
+    private final OrdersRepository ordersRepository;
+    private final ItemsService itemsService;
+    private final OrderItemsRepository orderItemsRepository;
     private final CashRegisterRepository cashRegisterRepository;
     private final ProductStockService productStockService;
+    private final OrdersReportDtoMapper ordersReportDtoMapper;
 
-    public OrdersService(OrdersRepository ordersRepository, ItemsService itemsService, OrderItemsRepository orderItemsRepository, CashRegisterRepository cashRegisterRepository, ProductStockService productStockService) {
+    public OrdersService(OrdersRepository ordersRepository, ItemsService itemsService, OrderItemsRepository orderItemsRepository, CashRegisterRepository cashRegisterRepository, ProductStockService productStockService, OrdersReportDtoMapper ordersReportDtoMapper) {
         this.ordersRepository = ordersRepository;
         this.itemsService = itemsService;
         this.orderItemsRepository = orderItemsRepository;
         this.cashRegisterRepository = cashRegisterRepository;
         this.productStockService = productStockService;
+        this.ordersReportDtoMapper = ordersReportDtoMapper;
     }
 
     public Orders OrderFromPageToOrders(Orders order){
@@ -77,5 +82,12 @@ public class OrdersService {
         }
             productStockService.writeOffProductFromStockAndSaveToStockMovement(order);
         return orders;
+    }
+
+    public List<OrdersReportDto> findAllSameByDate(LocalDateTime startDate, LocalDateTime endDate) {
+        return ordersRepository.findByDateBetween(startDate,endDate)
+                .stream()
+                .map(ordersReportDtoMapper)
+                .collect(Collectors.toList());
     }
 }

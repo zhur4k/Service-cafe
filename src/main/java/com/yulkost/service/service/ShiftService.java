@@ -1,5 +1,7 @@
 package com.yulkost.service.service;
 
+import com.yulkost.service.dto.ShiftReportDto;
+import com.yulkost.service.dto.mapper.ShiftReportDtoMapper;
 import com.yulkost.service.model.Shift;
 import com.yulkost.service.model.User;
 import com.yulkost.service.repository.ShiftRepository;
@@ -10,17 +12,25 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ShiftService {
-    private UserService userService;
-    private ShiftRepository shiftRepository;
+    private final UserService userService;
+    private final ShiftRepository shiftRepository;
+    private final ShiftReportDtoMapper shiftReportDtoMapper;
 
-    public ShiftService(UserService userService, ShiftRepository shiftRepository) {
+    public ShiftService(UserService userService, ShiftRepository shiftRepository, ShiftReportDtoMapper shiftReportDtoMapper) {
         this.userService = userService;
         this.shiftRepository = shiftRepository;
+        this.shiftReportDtoMapper = shiftReportDtoMapper;
     }
-
+    public List<ShiftReportDto> findAllSameByDate(LocalDateTime startDate, LocalDateTime endDate) {
+        return shiftRepository.findByStartDateBetween(startDate,endDate)
+                .stream()
+                .map(shiftReportDtoMapper)
+                .collect(Collectors.toList());
+    }
     public Shift openShift(User user) {
         Shift openShift = getOpenShift();
         if(openShift==null)  {
