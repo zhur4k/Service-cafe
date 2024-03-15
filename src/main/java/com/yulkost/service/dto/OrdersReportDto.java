@@ -11,7 +11,7 @@ public record OrdersReportDto(
         String sumCashLessPaid,
         @JsonProperty("За счёт заведения")
         String sumEstablishmentPaid,
-        @JsonProperty("Наличные")
+        @JsonProperty("Сдача")
         String sumOfChange
 ){
 }

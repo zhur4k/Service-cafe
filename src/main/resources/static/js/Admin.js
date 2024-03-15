@@ -21,10 +21,10 @@ function sortItems() {
         } else {
             // Если хотя бы одно значение не число, сравниваем их как строки
             if (valueA < valueB) {
-                return 1;
+                return -1;
             }
             if (valueA > valueB) {
-                return -1;
+                return 1;
             }
             return 0; // Если значения равны
         }

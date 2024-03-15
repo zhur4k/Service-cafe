@@ -17,7 +17,7 @@ public class ShiftReportDtoMapper implements Function<Shift, ShiftReportDto> {
 
     @Override
     public ShiftReportDto apply(Shift shift) {
-        String shiftState = shift.isStateOfShift() ? "Закрыта" : "Открыта";
+        String shiftState = shift.isStateOfShift() ? "Открыта" :"Закрыта";
 
 
         StringBuilder usersOnShift = new StringBuilder();

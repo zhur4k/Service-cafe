@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +41,7 @@ public class OrderItemsService {
                     flag = false;
                     for (OrderItems orderItemsArray :
                             orderItems) {
-                        if (orderItemInOrder.getDateOfItemChange()==orderItemsArray.getDateOfItemChange() && orderItemInOrder.getItem()==orderItemsArray.getItem()) {
+                        if (Objects.equals(orderItemInOrder.getDateOfItemChange(), orderItemsArray.getDateOfItemChange()) && Objects.equals(orderItemInOrder.getItem(), orderItemsArray.getItem())) {
                             orderItemsArray.setQuantity(orderItemInOrder.getQuantity() + orderItemsArray.getQuantity());
                             flag = true;
                             break;
