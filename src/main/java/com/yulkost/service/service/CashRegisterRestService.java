@@ -61,8 +61,7 @@ public class CashRegisterRestService {
                         append("}}");
             }
         json.append("]}");
-        System.out.println(json);
-//        sendPost(json.toString(), "/cgi/chk");
+        sendPost(json.toString(), "/cgi/chk");
 
     }
     public void sendIOCheck(Collection collection){

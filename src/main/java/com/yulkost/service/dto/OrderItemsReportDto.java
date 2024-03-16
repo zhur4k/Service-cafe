@@ -14,6 +14,8 @@ public record OrderItemsReportDto(
         @JsonProperty("Цена")
         String price,
         @JsonProperty("Сумма")
-        String sumPrice
+        String sumPrice,
+        @JsonProperty("За счёт заведения")
+        String establish
 ){
 }
