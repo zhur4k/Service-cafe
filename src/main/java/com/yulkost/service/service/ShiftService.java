@@ -2,6 +2,7 @@ package com.yulkost.service.service;
 
 import com.yulkost.service.dto.ShiftReportDto;
 import com.yulkost.service.dto.mapper.ShiftReportDtoMapper;
+import com.yulkost.service.model.Collection;
 import com.yulkost.service.model.Shift;
 import com.yulkost.service.model.User;
 import com.yulkost.service.repository.ShiftRepository;
@@ -19,11 +20,15 @@ public class ShiftService {
     private final UserService userService;
     private final ShiftRepository shiftRepository;
     private final ShiftReportDtoMapper shiftReportDtoMapper;
+    private final CashRegisterRestService cashRegisterRestService;
+    private final CashRegisterService cashRegisterService;
 
-    public ShiftService(UserService userService, ShiftRepository shiftRepository, ShiftReportDtoMapper shiftReportDtoMapper) {
+    public ShiftService(UserService userService, ShiftRepository shiftRepository, ShiftReportDtoMapper shiftReportDtoMapper, CashRegisterRestService cashRegisterRestService, CashRegisterService cashRegisterService) {
         this.userService = userService;
         this.shiftRepository = shiftRepository;
         this.shiftReportDtoMapper = shiftReportDtoMapper;
+        this.cashRegisterRestService = cashRegisterRestService;
+        this.cashRegisterService = cashRegisterService;
     }
     public List<ShiftReportDto> findAllSameByDate(LocalDateTime startDate, LocalDateTime endDate) {
         return shiftRepository.findByStartDateBetween(startDate,endDate)
@@ -36,6 +41,11 @@ public class ShiftService {
         if(openShift==null)  {
         Shift shift = new Shift();
             shift.getUsers().add(userService.save(user));
+            Collection collection = new Collection();
+            collection.setSumOfOperation(cashRegisterService.getSumInCashRegisterInteger());
+            collection.setShift(shift);
+            collection.setTypeOfOperation(true);
+            cashRegisterRestService.sendIOCheck(collection);
             return shiftRepository.save(shift);
         }
         return openShift;

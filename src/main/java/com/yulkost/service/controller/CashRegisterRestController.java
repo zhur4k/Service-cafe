@@ -78,14 +78,9 @@ public class CashRegisterRestController {
     public ResponseEntity<?> closeShift() {
         try {
             Shift shift = shiftService.getOpenShift();
-            if(shift.getOrders().isEmpty()){
-                shiftService.deleteShift(shift);
-                return ResponseEntity.ok("Shift was deleted");
-            }else {
                 cashRegisterRestService.sendZReport();
                 shiftService.closeShift(shift);
                 return ResponseEntity.ok("Success Shift was closed");
-            }
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

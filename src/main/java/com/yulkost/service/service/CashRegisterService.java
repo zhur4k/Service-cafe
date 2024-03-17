@@ -20,4 +20,12 @@ public class CashRegisterService {
         }
         return String.valueOf(((float)cashRegister.getCashAmount() )/100);
     }
+    public Integer getSumInCashRegisterInteger()
+    {
+        CashRegister cashRegister = cashRegisterRepository.findCashRegisterWithMaxId();
+        if (cashRegister ==null){
+            return 0;
+        }
+        return cashRegister.getCashAmount();
+    }
 }
