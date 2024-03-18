@@ -12,6 +12,10 @@ header{
     justify-content: space-between;
     background-color: #ffffff;
 }
+.input-quantity{
+    font-size: 25px;
+    width: 60%;
+}
 .button-in-header{
     display: flex;
     justify-content: center;

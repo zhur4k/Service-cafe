@@ -696,12 +696,14 @@ function displayOrder() {
         const row = document.createElement("tr");
         const itemCell = document.createElement("td");
         const quantityCell = document.createElement("td");
+        const quantityCellInput = document.createElement("input");
         const totalCell = document.createElement("td");
         const removeCell = document.createElement("td");
         const removeButton = document.createElement("button");
 
         itemCell.textContent = item.nameOfItems;
-        quantityCell.textContent = (item.quantity*(item.unitPrice/1000)).toFixed(3)+item.unit;
+        quantityCellInput.value = item.quantity;
+        // quantityCellInput.value = (item.quantity*(item.unitPrice/1000)).toFixed(3);
         const itemTotal = ((item.price/100) * item.quantity).toFixed(2) + " р";
         totalCell.textContent = itemTotal;
         removeButton.textContent = "Удалить";
@@ -711,6 +713,11 @@ function displayOrder() {
         quantityCell.style.width = "20%";
         quantityCell.style.textAlign = "center"
         quantityCell.classList.add("order-table-td");
+        quantityCellInput.type = "number";
+        quantityCellInput.step = "1";
+        quantityCellInput.classList.add("input-quantity");
+        quantityCellInput.onchange = () => changeQuantity(item, quantityCellInput);
+        quantityCell.appendChild(quantityCellInput);
 
         itemCell.style.width = "40%";
         itemCell.classList.add("order-table-td");
@@ -736,6 +743,18 @@ function displayOrder() {
     document.getElementById("total").textContent = (total / 100).toFixed(2) + " р";
 }
 
+function changeQuantity(item,quantityCellInput) {
+    // Поиск продукта в массиве по имени
+    if (item) {
+        let quantityOP = quantityCellInput.value;
+        if (isNaN(quantityOP) || quantityOP < 1) {
+            orderItems.splice(orderItems.indexOf(item), 1);
+        } else {
+            item.quantity = quantityOP;
+        }
+        displayOrder();
+    }
+}
 //Remove item from page
 function removeItem(index) {
     orderItems.splice(index, 1);
