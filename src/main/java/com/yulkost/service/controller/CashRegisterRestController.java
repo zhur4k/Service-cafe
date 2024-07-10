@@ -41,6 +41,7 @@ public class CashRegisterRestController {
             List<CategoriesDtoToPage> categories = categoriesService.findAll();
             return ResponseEntity.ok(categories);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             // Ошибка, отправьте соответствующий HTTP-статус
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -50,6 +51,7 @@ public class CashRegisterRestController {
         try {
             return ResponseEntity.ok(itemsService.findAllList());
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             // Ошибка, отправьте соответствующий HTTP-статус
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -60,6 +62,7 @@ public class CashRegisterRestController {
         try {
             return ResponseEntity.ok(shiftService.getOpenShift());
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             // Ошибка, отправьте соответствующий HTTP-статус
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -70,6 +73,7 @@ public class CashRegisterRestController {
             return ResponseEntity.ok(shiftService.openShift(user));
         } catch (Exception e) {
             // Ошибка, отправьте соответствующий HTTP-статус
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -82,6 +86,7 @@ public class CashRegisterRestController {
                 shiftService.closeShift(shift);
                 return ResponseEntity.ok("Success Shift was closed");
         } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -92,6 +97,7 @@ public class CashRegisterRestController {
                 return ResponseEntity.ok(cashRegisterService.getSumInCashRegister());
         } catch (Exception e) {
             // Ошибка, отправьте соответствующий HTTP-статус
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -113,6 +119,7 @@ public class CashRegisterRestController {
             yulkostTelegramBotService.SendOrderToUser(order1);
             return ResponseEntity.status(HttpStatus.OK).body("Успешно");
         }catch (RuntimeException e){
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -126,6 +133,7 @@ public class CashRegisterRestController {
             return ResponseEntity.status(HttpStatus.OK).body("Успешно");
 
         } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -137,6 +145,7 @@ public class CashRegisterRestController {
             shiftService.addUser(shiftService.getOpenShift(), login);
             return ResponseEntity.status(HttpStatus.OK).body("Успешно");
         }catch (Exception e){
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -149,6 +158,7 @@ public class CashRegisterRestController {
 
         } catch (Exception e) {
             // Ошибка, отправьте соответствующий HTTP-статус
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -158,6 +168,7 @@ public class CashRegisterRestController {
             shiftService.shiftIsOpen();
             return ResponseEntity.ok(shiftService.getListOfUsers());
         }catch (Exception e){
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
