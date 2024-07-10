@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 public class CashRegisterRestService {
 
     private final String CASH_REGISTER_ID ="http://169.254.35.154" ;
+    private final String URL ="/cgi/chk" ;
     public void sendFCheck(Orders order,Long orderItemId) {
         StringBuilder json = new StringBuilder("{\"F\":[" +
                 "{\"C\":{\"cm\":\"Кассир:" + (order.getShift().getUsers().get(0)).getName() + "\"}}");
@@ -61,7 +62,7 @@ public class CashRegisterRestService {
                         append("}}");
             }
         json.append("]}");
-        sendPost(json.toString(), "/cgi/chk");
+        sendPost(json.toString(), URL);
 
     }
     public void sendIOCheck(Collection collection){
@@ -74,7 +75,7 @@ public class CashRegisterRestService {
         json.append(((float) collection.getSumOfOperation()) / 100).append("}}");
         json.append("]}");
         System.out.println("sendIO");
-        sendPost(json.toString(), "/cgi/chk");
+        sendPost(json.toString(), URL);
     }
     private void sendPost(String json, String url) {
         HttpHeaders headers = new HttpHeaders();
