@@ -160,7 +160,7 @@ public class ItemsController {
     }
     @GetMapping("/add")
     public String ItemsAdd(Model model) {
-        model.addAttribute("category", categoriesService.findAll());
+        model.addAttribute("category", categoriesService.findAllToPage());
         model.addAttribute("units", unitsService.findAll());
         return "adminItemAdd"; }
 

@@ -38,7 +38,7 @@ public class CashRegisterRestController {
     @GetMapping("/getCategory")
     public ResponseEntity<?> getCategory() {
         try {
-            List<CategoriesDtoToPage> categories = categoriesService.findAll();
+            List<CategoriesDtoToPage> categories = categoriesService.findAllWithViewItemsToPage();
             return ResponseEntity.ok(categories);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -49,7 +49,7 @@ public class CashRegisterRestController {
     @GetMapping("/getItemsToPage")
     public ResponseEntity<?> getItemsToPage() {
         try {
-            return ResponseEntity.ok(itemsService.findAllList());
+            return ResponseEntity.ok(itemsService.findAllExistList());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             // Ошибка, отправьте соответствующий HTTP-статус
