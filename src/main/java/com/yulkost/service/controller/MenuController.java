@@ -23,7 +23,7 @@ public class MenuController {
     @GetMapping("/getCategoriesForMenu")
     public ResponseEntity<?> getCategories(){
         try {
-            return ResponseEntity.ok(categoriesService.findAllForMenu());
+            return ResponseEntity.ok(categoriesService.findAllWithViewItemsToPage());
         } catch (Exception e) {
             // Ошибка, отправьте соответствующий HTTP-статус
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

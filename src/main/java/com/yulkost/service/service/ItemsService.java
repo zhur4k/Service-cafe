@@ -2,11 +2,9 @@ package com.yulkost.service.service;
 
 import com.yulkost.service.model.Items;
 import com.yulkost.service.model.ItemsInItem;
-import com.yulkost.service.repository.CategoriesRepository;
 import com.yulkost.service.repository.ItemsInItemRepository;
 import com.yulkost.service.repository.ItemsRepository;
 import com.yulkost.service.repository.ProductWeightRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,29 +16,22 @@ import java.util.Optional;
 
 @Service
 public class ItemsService {
-    private ItemsRepository itemsRepository;
-    private CategoriesRepository categoryRepository;
-    private ProductWeightRepository productWeightRepository;
-    private ItemsInItemRepository itemsInItemRepository;
-    @Autowired
-    public void setItemsInItemRepository(ItemsInItemRepository itemsInItemRepository) {
+    private final ItemsRepository itemsRepository;
+    private final ProductWeightRepository productWeightRepository;
+    private final ItemsInItemRepository itemsInItemRepository;
+
+    public ItemsService(ItemsRepository itemsRepository, ProductWeightRepository productWeightRepository, ItemsInItemRepository itemsInItemRepository) {
+        this.itemsRepository = itemsRepository;
+        this.productWeightRepository = productWeightRepository;
         this.itemsInItemRepository = itemsInItemRepository;
     }
 
-    @Autowired
-    public void setProductWeightRepository(ProductWeightRepository productWeightRepository) {
-        this.productWeightRepository = productWeightRepository;
-    }
 
-    public ItemsService(ItemsRepository itemsRepository, CategoriesRepository categoryRepository) {
-        this.itemsRepository = itemsRepository;
-        this.categoryRepository = categoryRepository;
-    }
-    public Iterable<Items> findAll(){
-        return itemsRepository.findAll();
-    }
     public List<Items> findAllList(){
         return itemsRepository.findAll();
+    }
+    public List<Items> findAllExistList(){
+        return itemsRepository.findAllByView(true);
     }
 
     public Items findByNameOfItemAndPrice(String nameOfItems, int price) {
