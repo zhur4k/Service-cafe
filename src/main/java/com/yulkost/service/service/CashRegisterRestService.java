@@ -73,6 +73,7 @@ public class CashRegisterRestService {
         }
         json.append(((float) collection.getSumOfOperation()) / 100).append("}}");
         json.append("]}");
+        System.out.println("sendIO");
         sendPost(json.toString(), "/cgi/chk");
     }
     private void sendPost(String json, String url) {
