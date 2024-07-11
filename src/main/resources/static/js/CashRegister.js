@@ -151,7 +151,7 @@ function showUserAdd() {
 function displaySettings() {
     let headButtons = document.getElementById('buttons-head');
     headButtons.innerHTML = '';
-    let backButton = document.createElement('buttonBack');
+    let backButton = document.createElement('button');
     backButton.classList.add('button-in-header');
     backButton.textContent = '🔙';
     backButton.onclick = function() {
@@ -180,7 +180,8 @@ function displaySettings() {
     xButton.className = 'button-in-settings';
     xButton.textContent = 'X-Отчёт';
     xButton.onclick = function() {
-        xReportSend();
+        xButton.disabled = true;
+        xReportSend(xButton);
     };
     let collectionButton = document.createElement('button');
     collectionButton.type = 'button';
@@ -315,7 +316,8 @@ function displayCheck() {
     submitButton.className = 'button';
     submitButton.textContent = 'Оплатить';
     submitButton.onclick = function() {
-        submitOrder();
+        submitButton.disabled = true;
+        submitOrder(submitButton);
     };
 
     let cancelButton = document.createElement('button');
@@ -337,7 +339,7 @@ function displayCheck() {
     const orderItemTable = document.getElementById("order-items");
     orderItemTable.innerHTML = "";
 
-    orderItems.forEach((item, index) => {
+    orderItems.forEach((item) => {
         const row = document.createElement("tr");
         const itemCell = document.createElement("td");
         const quantityCell = document.createElement("td");
@@ -427,14 +429,16 @@ function showCollection() {
     addCashButton.className = 'button-in-settings';
     addCashButton.textContent = 'Внести';
     addCashButton.onclick = function() {
-        sendCollectionMove(true);
+        addCashButton.disabled = true;
+        sendCollectionMove(addCashButton,true);
     };
     let takeCashButton = document.createElement('button');
     takeCashButton.type = 'button';
     takeCashButton.className = 'button-in-settings';
     takeCashButton.textContent = 'Изъять';
     takeCashButton.onclick = function() {
-        sendCollectionMove(false);
+        takeCashButton.disabled = true;
+        sendCollectionMove(takeCashButton,false);
     };
 
     let sumInCashRegister = document.createElement('div');
@@ -463,7 +467,7 @@ function getSumInCashRegister() {
     xhr.send();
 }
 //Send move of cash in cashRegister
-function sendCollectionMove(collectionType) {
+function sendCollectionMove(button, collectionType) {
     let collection = ({
         typeOfOperation: collectionType,
         sumOfOperation: (parseFloat(document.getElementById('sum-input').innerText).toFixed(2)*100) // Массив с информацией о товарах в заказе
@@ -479,6 +483,9 @@ function sendCollectionMove(collectionType) {
         }else{
             showMessage(xhr.responseText);
         }
+        setTimeout(function() {
+            button.disabled = false;
+        }, 1000);
     };
     xhr.send(JSON.stringify(collection));
 }
@@ -799,7 +806,7 @@ function addUserToShift() {
 }
 
 //Send order to server
-function submitOrder() {
+function submitOrder(button) {
     // Создаем объект заказа
     let orders = ({
         establishmentPaid:establishmentPaid,
@@ -819,6 +826,9 @@ function submitOrder() {
             clearOrder();
         }else{
             showMessage(xhr.responseText);
+            setTimeout(function() {
+                button.disabled = false;
+            }, 1000);
         }
     };
     xhr.send(JSON.stringify(orders));
@@ -841,11 +851,13 @@ function checkShiftButtonState() {
                     if (shift) {
                         shiftButton.textContent = 'Закрыть смену';
                         shiftButton.onclick = function() {
+                            shiftButton.disabled = true;
                             closeShift(shiftButton);
                         };
                     } else {
                         shiftButton.textContent = 'Открыть смену';
                         shiftButton.onclick = function() {
+                            shiftButton.disabled = true;
                             openShift(shiftButton);
                         };
                     }
@@ -877,18 +889,21 @@ function showMessage(message='Откройте смену!!!',color='red'){
 }
 
 //Send GET request to open shift and changing shift button state
-function openShift(shiftButton) {
+function openShift(button) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/openShift', true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             // Обработка успешного ответа от сервера
             shift = JSON.parse(xhr.responseText);
-
             // После получения ответа, проверяем условие
-                shiftButton.textContent = 'Закрыть смену';
-                shiftButton.onclick = function() {
-                    closeShift(shiftButton);
+            button.textContent = 'Закрыть смену';
+            setTimeout(function() {
+                button.disabled = false;
+            }, 5000);
+            button.onclick = function() {
+                button.disabled = true;
+                closeShift(button);
                 };
             }
         };
@@ -897,7 +912,7 @@ function openShift(shiftButton) {
 }
 
 //Send GET request to close shift and changing shift button state
-function closeShift(shiftButton) {
+function closeShift(button) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/closeShift', true);
     xhr.onreadystatechange =  function() {
@@ -905,9 +920,13 @@ function closeShift(shiftButton) {
         if (xhr.readyState === 4 && xhr.status === 200)
             // Обработка успешного ответа от сервера
             console.log(xhr.responseText);
-        shiftButton.textContent = 'Открыть смену';
-        shiftButton.onclick = function() {
-            openShift(shiftButton);
+        button.textContent = 'Открыть смену';
+        setTimeout(function() {
+            button.disabled = false;
+        }, 5000);
+        button.onclick = function() {
+            button.disabled = true;
+            openShift(button);
         };
 
     };
@@ -916,7 +935,7 @@ function closeShift(shiftButton) {
 }
 
 //Sending GET request to X-Report
-function xReportSend(){
+function xReportSend(button){
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getXReport', true);
     xhr.onreadystatechange = function () {
@@ -928,7 +947,9 @@ function xReportSend(){
             console.log(xhr.responseText);
             showMessage(xhr.responseText);
         }
-
+        setTimeout(function() {
+            button.disabled = false;
+        }, 5000);
     };
     // Отправляем запрос
     xhr.send();
