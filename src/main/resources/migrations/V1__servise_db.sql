@@ -93,7 +93,6 @@ create table order_items
     quantity            int          not null,
     type_of_item        bit          null,
     unit                varchar(255) null,
-    unit_price          int          not null,
     order_id            bigint       null,
     constraint FK_order_order_items
         foreign key (order_id) references orders (id)
@@ -133,7 +132,6 @@ create table items
     name_of_items  varchar(255) null,
     price          int          not null,
     type_of_item   bit          null,
-    unit_price     int          not null,
     view           bit          null,
     categories_id  bigint       null,
     unit_id        bigint       null,

@@ -19,7 +19,6 @@ public class OrderItems {
     private String nameOfItems;
     private Boolean typeOfItem;
     private int price;
-    private int unitPrice;
     private LocalDateTime dateOfItemChange;
     private String unit;
     private String category;
@@ -33,21 +32,10 @@ public class OrderItems {
         symbols.setDecimalSeparator('.');
         return new DecimalFormat("0.00",symbols).format(((double)price)/100*((double)this.getQuantity()));
     }
-    public String getQuantityUnitPriceToPage(){
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator('.');
-        return new DecimalFormat("0.000",symbols).format(this.getQuantity()*((double)unitPrice)/1000);
-    }
     public String getPriceToPage() {
-        double pr = (double) price;
+        double pr = price;
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator('.');
         return new DecimalFormat("0.00",symbols).format(pr/100);
-    }
-    public String getUnitPriceToPage() {
-        double pr = (double) unitPrice;
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator('.');
-        return new DecimalFormat("0.000",symbols).format(pr/1000);
     }
 }
