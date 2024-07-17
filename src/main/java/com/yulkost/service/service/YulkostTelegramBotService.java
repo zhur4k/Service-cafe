@@ -34,9 +34,13 @@ public class YulkostTelegramBotService {
     private StringBuilder infoAboutOrderItems(List<OrderItems> orderItems){
         StringBuilder orderItemsInfo = new StringBuilder();
         for (OrderItems item :orderItems) {
-            orderItemsInfo.append(item.getNameOfItems())
-                    .append(" ")
-                    .append(item.getProductVolume())
+            orderItemsInfo.append(item.getNameOfItems());
+            if(item.getProductVolume()!=null){
+                orderItemsInfo
+                        .append(" ")
+                        .append(item.getProductVolume());
+            }
+            orderItemsInfo
                     .append(" - ").append(item.getQuantity())
                     .append(" ")
                     .append(item.getUnit())
@@ -58,9 +62,13 @@ public class YulkostTelegramBotService {
         for (ItemsInItem childItem: item.getChildItems()) {
             productWeightInfo
                     .append(tabulation)
-                    .append(childItem.getItem().getNameOfItems())
-                    .append(" ")
-                    .append(item.getProductVolume())
+                    .append(childItem.getItem().getNameOfItems());
+            if(childItem.getItem().getProductVolume()!=null){
+                productWeightInfo
+                        .append(" ")
+                        .append(childItem.getItem().getProductVolume());
+            }
+            productWeightInfo
                     .append(" - ").append(childItem.getQuantity())
                     .append(" ")
                     .append(childItem.getItem().getUnit().getName())
