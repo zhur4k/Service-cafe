@@ -30,7 +30,7 @@ public class CashRegisterRestService {
                     append(",").append("\"name\":\"").
                     append(orderItem.getNameOfItems()).
                     append(" ").
-                    append(orderItem.getUnitPriceToPage()).
+                    append(orderItem.getQuantity()).
                     append(" ").
                     append(orderItem.getUnit()).
 

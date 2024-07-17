@@ -22,7 +22,6 @@ public class Items {
     private Boolean typeOfItem;
 
     private int price;
-    private int unitPrice;
     private String img;
     private LocalDateTime dateOfChange;
 
@@ -75,21 +74,12 @@ public class Items {
         return new DecimalFormat("0.00",symbols).format(sumOfAllProducts()/100);
     }
     public String getPriceToPage() {
-        double pr = (double) price;
+        double pr = price;
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator('.');
         return new DecimalFormat("0.00",symbols).format(pr/100);
     }
     public void setPriceToPage(String price) {
-        this.price = (int)(Double.parseDouble(price)*100);;
-    }
-    public String getUnitPriceToPage() {
-        double pr = (double) unitPrice;
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator('.');
-        return new DecimalFormat("0.000",symbols).format(pr/1000);
-    }
-    public void setUnitPriceToPage(String price) {
-        this.unitPrice = (int)(Double.parseDouble(price)*1000);;
+        this.price = (int)(Double.parseDouble(price)*100);
     }
 }

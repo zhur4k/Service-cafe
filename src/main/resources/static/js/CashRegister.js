@@ -1,5 +1,3 @@
-// const csrfToken = document.querySelector('meta[name="_csrf"]').content;
-// const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 //All category to page
 let categoryData = [];
 //All items from server
@@ -85,7 +83,6 @@ function setTableNumber(number){
 function showListOfUser(rightContainerChild2) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/getListOfUsers', true);
-    // xhr.setRequestHeader(csrfHeader, csrfToken);
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
@@ -643,7 +640,6 @@ function appendToInput(value) {
     else if (hasDot) {
         // Разбиваем число на целую и десятичную части
         let parts = currentValue.split('.');
-        let integerPart = parts[0];
         let decimalPart = parts[1] || '';
 
         // Если в десятичной части уже есть два знака после точки, не добавляем больше
@@ -685,7 +681,6 @@ function addProduct(id) {
             quantity: 1,
             item: id,
             nameOfItems:items.nameOfItems,
-            unitPrice: items.unitPrice,
             price: items.price,
             unit: items.unit.name,
         });
@@ -710,7 +705,6 @@ function displayOrder() {
 
         itemCell.textContent = item.nameOfItems;
         quantityCellInput.value = item.quantity;
-        // quantityCellInput.value = (item.quantity*(item.unitPrice/1000)).toFixed(3);
         const itemTotal = ((item.price/100) * item.quantity).toFixed(2) + " р";
         totalCell.textContent = itemTotal;
         removeButton.textContent = "Удалить";

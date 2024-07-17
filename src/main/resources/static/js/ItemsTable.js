@@ -78,7 +78,6 @@ function createTableRow(item) {
 
     let nameInput = createInput('text', item,'nameOfItems', true);
     let priceInput = createInput('number', item,'priceToPage', true, 0.01);
-    let unitPriceInput = createInput('number', item,'unitPriceToPage', true, 0.001);
     let markupTd = document.createElement('td');
     markupTd.textContent =item.markup;
     let markupCell = markupTd;
@@ -120,7 +119,6 @@ function createTableRow(item) {
     // Добавляем ячейки в строку
     row.appendChild(nameInput);
     row.appendChild(priceInput);
-    row.appendChild(unitPriceInput);
     row.appendChild(markupCell);
     row.appendChild(viewSelect);
     row.appendChild(typeOfItemSelect);

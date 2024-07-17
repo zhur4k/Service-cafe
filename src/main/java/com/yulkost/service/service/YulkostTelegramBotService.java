@@ -35,7 +35,7 @@ public class YulkostTelegramBotService {
         StringBuilder orderItemsInfo = new StringBuilder();
         for (OrderItems item :orderItems) {
             orderItemsInfo.append(item.getNameOfItems())
-                    .append(" - ").append(item.getQuantity()*Float.parseFloat(item.getUnitPriceToPage()))
+                    .append(" - ").append(item.getQuantity())
                     .append(" ")
                     .append(item.getUnit())
                     .append("\n");

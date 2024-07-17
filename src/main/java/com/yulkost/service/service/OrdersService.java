@@ -62,7 +62,6 @@ public class OrdersService {
             orderItem.setTypeOfItem(item.getTypeOfItem());
             orderItem.setCategory(item.getCategories().getCategoriesName());
             orderItem.setUnit(item.getUnit().getName());
-            orderItem.setUnitPrice(item.getUnitPrice());
             orderItems.add(orderItem);
         }
         newOrder.setOrderItems(orderItems);
