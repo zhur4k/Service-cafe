@@ -20,6 +20,7 @@ public class Items {
     private String nameOfItems;
     private Boolean view;
     private Boolean typeOfItem;
+    private String productVolume;
 
     private int price;
     private String img;

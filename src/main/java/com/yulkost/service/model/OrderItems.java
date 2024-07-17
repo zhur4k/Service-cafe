@@ -18,6 +18,7 @@ public class OrderItems {
 
     private String nameOfItems;
     private Boolean typeOfItem;
+    private String productVolume;
     private int price;
     private LocalDateTime dateOfItemChange;
     private String unit;

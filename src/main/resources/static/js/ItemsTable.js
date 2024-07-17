@@ -2,7 +2,7 @@ let items = [];
 let itemsOnPage = [];
 let category = [];
 let units = [];
-let headers = [ "Имя", "Цена", "Кол-во в ед.", "Наценка (%)", "Видимость", "Тип", "Категория", "Ед. изм.", "Состав","Удалить"];
+let headers = [ "Имя", "Объёмность", "Цена", "Наценка (%)", "Видимость", "Тип", "Категория", "Ед. изм.", "Состав","Удалить"];
 
 getItems();
 
@@ -77,6 +77,7 @@ function createTableRow(item) {
     let row = document.createElement('tr');
 
     let nameInput = createInput('text', item,'nameOfItems', true);
+    let volumeInput = createInput('text', item,'productVolume', true);
     let priceInput = createInput('number', item,'priceToPage', true, 0.01);
     let markupTd = document.createElement('td');
     markupTd.textContent =item.markup;
@@ -118,6 +119,7 @@ function createTableRow(item) {
     deleteButtonTd.appendChild(deleteButton);
     // Добавляем ячейки в строку
     row.appendChild(nameInput);
+    row.appendChild(volumeInput);
     row.appendChild(priceInput);
     row.appendChild(markupCell);
     row.appendChild(viewSelect);
