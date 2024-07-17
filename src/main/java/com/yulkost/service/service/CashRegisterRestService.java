@@ -24,22 +24,26 @@ public class CashRegisterRestService {
                 "{\"C\":{\"cm\":\"Кассир:" + (order.getShift().getUsers().get(0)).getName() + "\"}}");
         for (OrderItems orderItem : order.getOrderItems()) {
             orderItemId++;
-            json.append(",{\"S\":{\"code\":").
-                    append(orderItemId).
+            json
+                    .append(",{\"S\":{\"code\":")
+                    .append(orderItemId)
 
-                    append(",").append("\"name\":\"").
-                    append(orderItem.getNameOfItems()).
-                    append(" ").
-                    append(orderItem.getProductVolume()).
-                    append(" ").
-                    append(orderItem.getQuantity()).
-                    append(" ").
-                    append(orderItem.getUnit()).
-
-                    append("\",").append("\"qty\":").
-                    append(orderItem.getQuantity()).
-
-                    append(",").append("\"price\":").
+                    .append(",").append("\"name\":\"")
+                    .append(orderItem.getNameOfItems());
+                    if(orderItem.getProductVolume()!=null){
+                        json
+                                .append(" ")
+                                .append(orderItem.getProductVolume());
+                    }
+            json
+                    .append(" ")
+                    .append(orderItem.getQuantity())
+                    .append(" ")
+                    .append(orderItem.getUnit())
+                    .append("\",")
+                    .append("\"qty\":")
+                    .append(orderItem.getQuantity())
+                    .append(",").append("\"price\":").
                     append(orderItem.getPriceToPage()).
                     append("}}");
 //            if (orderItem.getDiscount() > 0) {
