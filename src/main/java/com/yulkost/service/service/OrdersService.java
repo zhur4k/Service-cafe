@@ -60,6 +60,7 @@ public class OrdersService {
             orderItem.setNameOfItems(item.getNameOfItems());
             orderItem.setItem(item.getId());
             orderItem.setTypeOfItem(item.getTypeOfItem());
+            orderItem.setProductVolume(item.getProductVolume());
             orderItem.setCategory(item.getCategories().getCategoriesName());
             orderItem.setUnit(item.getUnit().getName());
             orderItems.add(orderItem);

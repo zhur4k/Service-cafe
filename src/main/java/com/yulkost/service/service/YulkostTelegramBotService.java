@@ -35,6 +35,8 @@ public class YulkostTelegramBotService {
         StringBuilder orderItemsInfo = new StringBuilder();
         for (OrderItems item :orderItems) {
             orderItemsInfo.append(item.getNameOfItems())
+                    .append(" ")
+                    .append(item.getProductVolume())
                     .append(" - ").append(item.getQuantity())
                     .append(" ")
                     .append(item.getUnit())
@@ -57,6 +59,8 @@ public class YulkostTelegramBotService {
             productWeightInfo
                     .append(tabulation)
                     .append(childItem.getItem().getNameOfItems())
+                    .append(" ")
+                    .append(item.getProductVolume())
                     .append(" - ").append(childItem.getQuantity())
                     .append(" ")
                     .append(childItem.getItem().getUnit().getName())
