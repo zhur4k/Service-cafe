@@ -4,20 +4,39 @@ getCategories();
 function displayMenu() {
     let bodyElement = document.getElementById("main_body");
     let categoryMain = document.createElement("div");
-    categoryMain.classList.add("main-category"); // Добавляем класс "category" для стилизации
+    categoryMain.classList.add("main-category");
+
+    let columnCount = 2;
+    let columns = [];
+    for (let i = 0; i < columnCount; i++) {
+        let column = document.createElement("div");
+        column.classList.add("column");
+        columns.push(column);
+        categoryMain.appendChild(column);
+    }
+
+    // Calculate approximate heights of categories to distribute them evenly
+    let columnHeights = new Array(columnCount).fill(0);
+
     categories.forEach(category => {
-        categoryMain.appendChild(displayCategory(category));
+        let minColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
+        let categoryElement = displayCategory(category);
+        columns[minColumnIndex].appendChild(categoryElement);
+
+        // Estimate the height of the category element
+        columnHeights[minColumnIndex] += estimateCategoryHeight(category);
     });
+
     bodyElement.appendChild(categoryMain);
 }
 
 function displayCategory(category) {
     let categoryItem = document.createElement("div");
-    categoryItem.classList.add("category"); // Добавляем класс "category" для стилизации
+    categoryItem.classList.add("category");
 
     let categoryName = document.createElement("div");
     categoryName.textContent = category.categoriesName;
-    categoryName.classList.add("category-name"); // Добавляем класс "category-name" для стилизации
+    categoryName.classList.add("category-name");
     categoryItem.appendChild(categoryName);
 
     let itemsList = document.createElement("ul");
@@ -34,6 +53,20 @@ function displayCategory(category) {
 
     return categoryItem;
 }
+
+function estimateCategoryHeight(category) {
+    let baseHeight = 50; // Base height for category name and padding
+    let itemHeight = 30; // Estimated height for each item
+    let childCategoryHeight = 50; // Estimated height for each child category
+
+    let height = baseHeight + category.items.length * itemHeight;
+    category.childCategories.forEach(childCategory => {
+        height += estimateCategoryHeight(childCategory);
+    });
+
+    return height;
+}
+
 function getCategories() {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '/menu/getCategoriesForMenu', true);
