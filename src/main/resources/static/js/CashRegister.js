@@ -493,7 +493,6 @@ function displayMainCategories() {
         if(category.parentCategory==null){
             const categoryDiv = document.createElement('div');
             categoryDiv.classList.add('child-block');
-
             categoryDiv.textContent = category.categoriesName;
             categoryDiv.onclick = function() {
                 displayLeftBlocks(category,category.childCategories);
@@ -541,7 +540,9 @@ function displayLeftBlocks(categories,childCategories) {
 
         let itemNameHeading = document.createElement('div');
         itemNameHeading.textContent = item.nameOfItems;
-
+        if(item.productVolume != null){
+            itemNameHeading.textContent += ' ' + item.productVolume;
+        }
         let itemPriceParagraph = document.createElement('div');
         itemPriceParagraph.textContent = (item.price / 100).toFixed(2) + " руб";
 
