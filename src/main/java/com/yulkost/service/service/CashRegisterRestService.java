@@ -94,32 +94,22 @@ public class CashRegisterRestService {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(CASH_REGISTER_ID + url, request, String.class);
         String errorCode = extractErrorCodeFromResponse(response.getBody());
-        if (!response.getStatusCode().is2xxSuccessful()){
-                // Получаем описание ошибки по коду из карты ошибок
-                String errorDescription = ErrorCodeMapper.getErrorDescription(errorCode);
-
-                System.out.println("Код ошибки: " + errorCode);
-                System.out.println("Описание ошибки: " + errorDescription);
-                throw new RuntimeException(errorDescription);
+        if (errorCode!=null) {
+            // Получаем описание ошибки по коду из карты ошибок
+            throw new RuntimeException(ErrorCodeMapper.getErrorDescription(errorCode));
         }
     }
 
     private void sendGet(String url) {
-            // Отправляем GET-запрос на сервер
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<String> response = restTemplate.getForEntity(CASH_REGISTER_ID + url, String.class);
+        // Отправляем GET-запрос на сервер
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.getForEntity(CASH_REGISTER_ID + url, String.class);
 
-            // Обрабатываем ответ (если нужно)
-            System.out.println("Ответ от сервера: " + response.getBody());
         // Получаем код ошибки из ответа сервера
         String errorCode = extractErrorCodeFromResponse(response.getBody());
-        if (!response.getStatusCode().is2xxSuccessful()){
+        if (errorCode!=null) {
             // Получаем описание ошибки по коду из карты ошибок
-            String errorDescription = ErrorCodeMapper.getErrorDescription(errorCode);
-
-            System.out.println("Код ошибки: " + errorCode);
-            System.out.println("Описание ошибки: " + errorDescription);
-            throw new RuntimeException(errorDescription);
+            throw new RuntimeException(ErrorCodeMapper.getErrorDescription(errorCode));
         }
     }
     public  void sendXReport() {
