@@ -1,0 +1,2 @@
+GET
+/cgi/proc/sound?1000&1000

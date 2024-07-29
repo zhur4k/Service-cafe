@@ -1,0 +1,4 @@
+PUT
+/cgi/tbl/PLU
+[{"Code":1,"Name":"Товар добавлен","Price":2,"Dep":1,"Grp":1,"Tax":1,"Qty":0,"Flg":0}]
+
