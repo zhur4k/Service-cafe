@@ -1,0 +1,2 @@
+DELETE
+/cgi/tbl/PLU/1

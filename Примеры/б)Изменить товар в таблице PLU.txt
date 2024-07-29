@@ -1,0 +1,4 @@
+PATCH
+/cgi/tbl/PLU
+[{"Code":1,"Name":"Товар изменен","Price":222,"Dep":1,"Grp":1,"Tax":1,"Qty":0,"Flg":0}]
+
