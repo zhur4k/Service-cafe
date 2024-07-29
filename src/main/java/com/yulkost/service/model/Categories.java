@@ -16,7 +16,7 @@ public class Categories {
     private Long id;
     private String categoriesName;
     @ToString.Exclude
-    @OneToMany(mappedBy = "categories")
+    @OneToMany(mappedBy = "categories",fetch = FetchType.EAGER)
     private List<Items> items = new ArrayList<>();
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_category_id", referencedColumnName = "id")
