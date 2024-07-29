@@ -42,7 +42,7 @@ function displayCategory(category) {
     let itemsList = document.createElement("ul");
     category.items.forEach(item => {
         let itemElement = document.createElement("li");
-        itemElement.innerHTML = `<span class="item-name">${item.nameOfItems} ${item.productVolume}</span> <span class="item-price">${(item.price / 100).toFixed(2)}</span>`;
+        itemElement.innerHTML = `<span class="item-name">${item.nameOfItems} ${item.productVolume !== null ? item.productVolume : ''}</span> <span class="item-price">${(item.price / 100).toFixed(2)}</span>`;
         itemsList.appendChild(itemElement);
     });
     categoryItem.appendChild(itemsList);
