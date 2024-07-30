@@ -231,7 +231,7 @@ function displayPayBlock(){
     cashContainer.classList.add('child-block-pay');
     cashContainer.textContent = 'Наличные $';
     cashContainer.onclick = function () {
-        cashPaid+= document.getElementById('sum-input').textContent*100;
+        cashPaid+= Math.round(document.getElementById('sum-input').textContent*100);
         setSumAfterPaidOperation();
     }
     rightContainer.appendChild(cashContainer);
@@ -240,7 +240,7 @@ function displayPayBlock(){
     lessCashContainer.classList.add('child-block-pay');
     lessCashContainer.textContent = 'Безналичный $'
     lessCashContainer.onclick = function () {
-        cashLessPaid+= document.getElementById('sum-input').textContent*100;
+        cashLessPaid+= Math.round(document.getElementById('sum-input').textContent*100);
         setSumAfterPaidOperation();
     }
     rightContainer.appendChild(lessCashContainer);
@@ -367,7 +367,7 @@ function displayCheck() {
 }
 
 function setSumAfterPaidOperation(){
-    sumOfChange = (total-cashPaid-cashLessPaid-establishmentPaid).toFixed(2);
+    sumOfChange = Math.round((total - cashPaid - cashLessPaid - establishmentPaid) * 100) / 100;
     if(sumOfChange<=0){
         sumOfChange = Math.abs(sumOfChange);
         return displayCheck();
