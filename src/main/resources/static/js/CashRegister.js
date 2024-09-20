@@ -889,6 +889,7 @@ function openShift(button) {
     xhr.open('GET', '/openShift', true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
+            showMessage(xhr.responseText,'green');
             // Обработка успешного ответа от сервера
             shift = JSON.parse(xhr.responseText);
             // После получения ответа, проверяем условие
@@ -901,6 +902,7 @@ function openShift(button) {
                 closeShift(button);
                 };
             }
+        showMessage(xhr.responseText);
         };
     // Отправляем запрос
     xhr.send();
@@ -912,18 +914,20 @@ function closeShift(button) {
     xhr.open('GET', '/closeShift', true);
     xhr.onreadystatechange =  function() {
         // и статус ответа сервера 200 (OK)
-        if (xhr.readyState === 4 && xhr.status === 200)
+        if (xhr.readyState === 4 && xhr.status === 200) {
             // Обработка успешного ответа от сервера
             console.log(xhr.responseText);
-        button.textContent = 'Открыть смену';
-        setTimeout(function() {
-            button.disabled = false;
-        }, 5000);
-        button.onclick = function() {
-            button.disabled = true;
-            openShift(button);
-        };
-
+            button.textContent = 'Открыть смену';
+            setTimeout(function () {
+                button.disabled = false;
+            }, 5000);
+            button.onclick = function () {
+                button.disabled = true;
+                openShift(button);
+            };
+            showMessage(xhr.responseText,'green');
+        }
+        showMessage(xhr.responseText);
     };
     // Отправляем запрос
     xhr.send();

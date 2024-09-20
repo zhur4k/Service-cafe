@@ -45,7 +45,9 @@ public class ShiftService {
             collection.setSumOfOperation(cashRegisterService.getSumInCashRegisterInteger());
             collection.setShift(shift);
             collection.setTypeOfOperation(true);
-            cashRegisterRestService.sendIOCheck(collection);
+            if(collection.getSumOfOperation()>0){
+                cashRegisterRestService.sendIOCheck(collection);
+            }
             return shiftRepository.save(shift);
         }
         return openShift;
