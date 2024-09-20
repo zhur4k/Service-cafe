@@ -64,7 +64,7 @@ public class CashRegisterRestController {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             // Ошибка, отправьте соответствующий HTTP-статус
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.ok(e.getMessage());
         }
     }
     @GetMapping("/openShift")
