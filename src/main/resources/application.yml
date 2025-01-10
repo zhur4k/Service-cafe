@@ -6,16 +6,16 @@ spring:
   flyway:
     locations: classpath:migrations
     url: jdbc:mysql://localhost:3306/yulkost
-    user: kostya
+    user: root
     password: 19804731205
     baselineOnMigrate: true
   datasource:
     url: jdbc:mysql://localhost:3306/yulkost
-    username: kostya
+    username: root
     password: 19804731205
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
 server:
   address: 0.0.0.0
   port: 8081

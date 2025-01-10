@@ -1,12 +1,12 @@
 spring:
   flyway:
     locations: classpath:migrations
-    url: jdbc:mysql://192.168.1.100:3306/yulkost
-    user: kostya
+    url: jdbc:mysql://db:3306/yulkost
+    user: root
     password: 19804731205
   datasource:
-    url: jdbc:mysql://192.168.1.100:3306/yulkost
-    username: kostya
+    url: jdbc:mysql://db:3306/yulkost
+    username: root
     password: 19804731205
   jpa:
     hibernate:
