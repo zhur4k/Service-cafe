@@ -1,11 +1,11 @@
 spring:
   flyway:
     locations: classpath:migrations
-    url: jdbc:mysql://db:3306/yulkost
+    url: jdbc:mysql://host.docker.internal:3306/yulkost
     user: root
     password: 19804731205
   datasource:
-    url: jdbc:mysql://db:3306/yulkost
+    url: jdbc:mysql://host.docker.internal:3306/yulkost
     username: root
     password: 19804731205
   jpa:
