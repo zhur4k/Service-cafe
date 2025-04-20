@@ -1,4 +1,9 @@
 spring:
+  database:
+    url: mysql.railway.internal
+    name: railway
+    username: root
+    password: HkZmRgcgDpAyYaMIYkRnCECBIfsTHYPc
   flyway:
     locations: classpath:migrations
     url: jdbc:mysql://${spring.database.url}/${spring.database.name}
