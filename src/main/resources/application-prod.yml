@@ -1,23 +1,19 @@
 spring:
-  database:
-    url: mysql.railway.internal
-    name: railway
-    username: root
-    password: sKXxriCmfiRXgcYxBEYxOeKzaoticKbh
-  flyway:
-    locations: classpath:migrations
-    url: jdbc:postgres://${spring.database.url}/${spring.database.name}
-    user: ${spring.database.username}
-    password: ${spring.database.password}
-  datasource:
-    url: jdbc:postgres://${spring.database.url}/${spring.database.name}
-    user: ${spring.database.username}
-    password: ${spring.database.password}
-  jpa:
-    hibernate:
-      ddl-auto: validate
-server:
-  port: 8080
-  servlet:
-    session:
-      timeout: 14h
+   flyway:
+     locations: classpath:migrations
+     url: jdbc:mysql://host.docker.internal:3306/yulkost
+     user: root
+     password: 19804731205
+   datasource:
+     url: jdbc:mysql://host.docker.internal:3306/yulkost
+     username: root
+     password: 19804731205
+   jpa:
+     hibernate:
+       ddl-auto: validate
+ server:
+   address: 0.0.0.0
+   port: 8081
+   servlet:
+     session:
+       timeout: 14h
