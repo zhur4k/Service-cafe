@@ -6,11 +6,11 @@ spring:
     password: sKXxriCmfiRXgcYxBEYxOeKzaoticKbh
   flyway:
     locations: classpath:migrations
-    url: jdbc:mysql://${spring.database.url}/${spring.database.name}
+    url: jdbc:postgres://${spring.database.url}/${spring.database.name}
     user: ${spring.database.username}
     password: ${spring.database.password}
   datasource:
-    url: jdbc:mysql://${spring.database.url}/${spring.database.name}
+    url: jdbc:postgres://${spring.database.url}/${spring.database.name}
     user: ${spring.database.username}
     password: ${spring.database.password}
   jpa:
