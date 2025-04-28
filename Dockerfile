@@ -7,4 +7,4 @@ COPY . /app
 RUN mvn clean package -DskipTests
 FROM openjdk:19 as final
 COPY --from=stage1 /app/target/*.jar app.jar
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar","-Dspring.profiles.active=prod", "app.jar"]
