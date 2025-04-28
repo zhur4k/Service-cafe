@@ -5,12 +5,12 @@ spring:
       max-request-size: 5MB
   flyway:
     locations: classpath:migrations
-    url: jdbc:mysql://localhost:3306/yulkost
+    url: jdbc:postgresql://localhost:5432/yulkost
     user: root
     password: 19804731205
     baselineOnMigrate: true
   datasource:
-    url: jdbc:mysql://localhost:3306/yulkost
+    url: jdbc:postgresql://localhost:5432/yulkost
     username: root
     password: 19804731205
   jpa:

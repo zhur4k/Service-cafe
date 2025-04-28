@@ -1,16 +1,17 @@
 version: '3.8'
 services:
   db:
-    image: mysql:8.0.33
+    image: postgres:16
     container_name: db
     restart: always
     environment:
-      - MYSQL_DATABASE=yulkost
-      - MYSQL_ROOT_PASSWORD=19804731205
+      - POSTGRES_DB=yulkost
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=19804731205
     ports:
-      - '3306:3306'
+      - '5432:5432'
     volumes:
-      - db:/var/lib/mysql
+      - db:/var/lib/postgresql/data
   app:
     container_name: app
     build: .
