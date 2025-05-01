@@ -232,6 +232,22 @@ CREATE TABLE product_weight (
 
 
 INSERT INTO product_weight VALUES (1,500,1,6),(2,500,2,2),(3,500,3,3),(4,1000,198,66),(5,1000,61,67),(6,1000,62,68),(7,1000,63,69),(8,1000,64,70),(9,1000,66,71),(10,1000,65,72),(11,1000,60,73),(12,1000,69,74),(13,1000,68,76),(14,1000,70,77),(15,1000,71,78),(16,1000,222,79),(17,1000,55,80),(18,1000,56,81),(19,1000,57,82),(20,1000,58,83),(21,1000,59,84),(22,1000,158,85),(23,1000,162,86),(24,1000,72,87),(25,1000,73,88),(26,1000,74,89),(27,40,223,56),(28,40,224,21),(29,50,229,26),(30,40,226,33),(31,40,227,35),(32,40,225,41),(33,40,228,90),(34,300,230,58),(35,50,230,52),(36,100,230,56),(37,50,230,17),(38,15,230,41),(39,5,230,91),(40,5,230,43),(41,300,231,58),(42,50,231,52),(43,100,231,56),(44,40,231,30),(45,40,231,17),(46,5,231,43),(47,300,232,58),(48,50,232,52),(49,100,232,56),(50,30,232,33),(51,20,232,16),(52,150,269,88),(53,1000,220,92),(54,1000,281,93),(55,1000,282,94),(56,1000,283,95),(57,1000,284,96),(58,1000,285,97),(59,1000,286,98),(60,1000,287,99),(61,1000,288,100),(62,1000,38,101),(63,1000,39,102),(64,1000,41,103),(65,1000,42,104),(66,1000,43,105),(67,1000,44,106),(68,1000,45,107),(69,1000,47,108),(70,1000,46,109),(71,1000,33,110),(72,1000,34,111),(73,1000,35,112),(74,1000,36,113),(75,1000,37,114),(76,150,26,115),(77,700,28,116),(78,950,251,117),(79,1000,249,118),(80,1000,250,119),(81,1000,252,120),(82,1000,253,121),(83,1,121,122),(84,1,122,123),(85,1,124,124),(86,1,125,125),(87,1,126,126),(88,1,127,127),(89,1,128,128),(90,1,129,129),(91,1,130,130),(92,1,235,131),(93,1,236,132),(94,40,260,133),(95,40,261,134),(96,40,262,135),(97,40,263,136),(98,1,264,137),(99,1,265,138),(100,100,266,139),(101,35,267,140),(102,500,75,141),(103,500,76,142),(104,500,77,143),(105,500,78,144),(106,500,79,145),(107,500,80,146),(108,500,81,147),(109,500,148,148);
+
 --
 -- Dump completed on 2025-01-10 15:58:10
 SET session_replication_role = origin;
+
+SELECT setval('categories_id_seq', COALESCE((SELECT MAX(id) FROM categories), 1));
+SELECT setval('products_id_seq', COALESCE((SELECT MAX(id) FROM products), 1));
+SELECT setval('product_stock_id_seq', COALESCE((SELECT MAX(id) FROM product_stock), 1));
+SELECT setval('shift_id_seq', COALESCE((SELECT MAX(id) FROM shift), 1));
+SELECT setval('collections_id_seq', COALESCE((SELECT MAX(id) FROM collections), 1));
+SELECT setval('orders_id_seq', COALESCE((SELECT MAX(id) FROM orders), 1));
+SELECT setval('cash_register_id_seq', COALESCE((SELECT MAX(id) FROM cash_register), 1));
+SELECT setval('order_items_id_seq', COALESCE((SELECT MAX(id) FROM order_items), 1));
+SELECT setval('product_stock_movement_id_seq', COALESCE((SELECT MAX(id) FROM product_stock_movement), 1));
+SELECT setval('units_id_seq', COALESCE((SELECT MAX(id) FROM units), 1));
+SELECT setval('items_id_seq', COALESCE((SELECT MAX(id) FROM items), 1));
+SELECT setval('items_in_item_id_seq', COALESCE((SELECT MAX(id) FROM items_in_item), 1));
+SELECT setval('product_weight_id_seq', COALESCE((SELECT MAX(id) FROM product_weight), 1));
+SELECT setval('users_id_seq', COALESCE((SELECT MAX(id) FROM users), 1));
